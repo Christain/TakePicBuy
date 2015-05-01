@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        release {
+            keyAlias 'unionbigdata'
+            keyPassword 'unionbigdata'
+            storeFile file('/Users/Christain/Work/AndroidStudioProject/TakePicBuy/take_pic_buy.jks')
+            storePassword 'unionbigdata'
+        }
+    }
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+    defaultConfig {
+        applicationId "com.unionbigdata.takepicbuy"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.facebook.fresco:fresco:0.4.0+'
+    compile files('libs/android-async-http-1.4.5.jar')
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.jakewharton:butterknife:6.1.0'
+    compile files('libs/qq_login.jar')
+    compile files('libs/weibosdkcore.jar')
+    compile files('libs/mta-sdk-1.6.2.jar')
+    compile project(':refreshlibrary')
+}

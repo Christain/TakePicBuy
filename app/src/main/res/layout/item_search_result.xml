@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/llItemAll"
+        android:background="@drawable/shape_goods_compare_item_click_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/view"
+            android:background="@color/bg_app"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_result_padding"/>
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/ivPic"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            fresco:fadeDuration="300"
+            android:background="@drawable/default_image"
+            fresco:actualImageScaleType="centerInside"
+            fresco:placeholderImageScaleType="centerCrop"
+            fresco:placeholderImage="@drawable/default_image"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:lineSpacingExtra="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvTitle"
+                android:maxLines="3"
+                android:minLines="3"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/search_result_title_color"
+                android:textSize="@dimen/search_result_title_text_size"
+                android:text="淘宝月销量之王，今天只要999"/>
+
+            <LinearLayout
+                android:layout_marginTop="7dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:maxLength="12"
+                    android:textSize="@dimen/search_result_price_text_size"
+                    android:textColor="@color/search_result_price_color"
+                    android:text="￥800"/>
+
+                <View
+                    android:layout_width="0.0dp"
+                    android:layout_weight="1.0"
+                    android:layout_height="1dp"/>
+
+                <ImageView
+                    android:id="@+id/ivType"
+                    android:layout_width="@dimen/search_result_icon_size"
+                    android:layout_height="@dimen/search_result_icon_size"
+                    android:src="@mipmap/icon_type_mogu"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSaleNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/search_result_num_text_size"
+                    android:textColor="@color/set_item_text_color"
+                    android:text="销量：20"/>
+
+                <TextView
+                    android:layout_marginLeft="8dp"
+                    android:id="@+id/tvSameNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textSize="@dimen/search_result_num_text_size"
+                    android:textColor="@color/set_item_text_color"
+                    android:text="20件同款"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:background="@color/bg_app"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_result_padding"/>
+    </LinearLayout>
+
+</LinearLayout>

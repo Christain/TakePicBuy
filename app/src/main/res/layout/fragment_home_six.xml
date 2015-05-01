@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/bg_app"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="@dimen/home_image_padding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"
+            android:layout_weight="52.0"
+            android:orientation="horizontal">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/ivOne"
+                android:layout_width="0.0dp"
+                android:layout_weight="1.0"
+                android:layout_height="match_parent"
+                fresco:fadeDuration="300"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:placeholderImage="@drawable/default_image" />
+
+            <View
+                android:layout_width="@dimen/home_image_padding"
+                android:layout_height="match_parent" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/ivTwo"
+                android:layout_width="0.0dp"
+                android:layout_weight="1.0"
+                android:layout_height="match_parent"
+                fresco:fadeDuration="300"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:placeholderImage="@drawable/default_image" />
+
+            <View
+                android:layout_width="@dimen/home_image_padding"
+                android:layout_height="match_parent" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/ivThree"
+                android:layout_width="0.0dp"
+                android:layout_weight="1.0"
+                android:layout_height="match_parent"
+                fresco:fadeDuration="300"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:placeholderImage="@drawable/default_image" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_image_padding" />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/ivFour"
+            android:layout_width="match_parent"
+            android:layout_weight="109.0"
+            android:layout_height="0.0dp"
+            fresco:fadeDuration="300"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:placeholderImageScaleType="centerCrop"
+            fresco:placeholderImage="@drawable/default_image" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_image_padding" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.0dp"
+            android:layout_weight="59.0"
+            android:orientation="horizontal">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/ivFive"
+                android:layout_width="0.0dp"
+                android:layout_weight="1.0"
+                android:layout_height="match_parent"
+                fresco:fadeDuration="300"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:placeholderImageScaleType="centerCrop"
+                fresco:placeholderImage="@drawable/default_image" />
+
+            <View
+                android:layout_width="@dimen/home_image_padding"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:layout_width="0.0dp"
+                android:layout_weight="1.0"
+                android:layout_height="match_parent">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/ivSix"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    fresco:fadeDuration="300"
+                    fresco:actualImageScaleType="centerCrop"
+                    fresco:placeholderImageScaleType="centerCrop"
+                    fresco:placeholderImage="@drawable/default_image" />
+
+                <ImageView
+                    android:id="@+id/ivPager"
+                    android:layout_gravity="bottom|right"
+                    android:layout_width="50dp"
+                    android:scaleType="fitXY"
+                    android:layout_height="75dp"
+                    android:src="@mipmap/icon_pager" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

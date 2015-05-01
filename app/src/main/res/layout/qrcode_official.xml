@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/bg_white"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar" />
+
+
+    <ImageView
+        android:id="@+id/ivQRCode"
+        android:layout_centerInParent="true"
+        android:layout_width="@dimen/official_qrcode_size"
+        android:layout_height="@dimen/official_qrcode_size"
+        android:src="@mipmap/icon_qrcode" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="拍图购"
+        android:textSize="17sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ivQRCode"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/set_item_text_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="点击图片位置保存微信二维码"
+        android:textSize="14sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tvName"
+        android:layout_marginTop="7dp"
+        android:textColor="@color/set_item_text_color" />
+
+</RelativeLayout>

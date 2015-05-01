@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:circleprogress="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/bg_app"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.0dp"
+        android:layout_weight="1.0">
+
+        <LinearLayout
+            android:id="@+id/llCrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.unionbigdata.takepicbuy.cropimage.CropImageView
+                android:id="@+id/crop_image"
+                android:layout_width="match_parent"
+                android:layout_height="0.0dp"
+                android:layout_weight="1.0"/>
+
+            <FrameLayout
+                android:id="@+id/flSearch"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="@dimen/crop_image_search_button_size"
+                android:layout_height="@dimen/crop_image_search_button_size"
+                android:layout_gravity="center"
+                android:background="@mipmap/bg_crop_image_button">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="@dimen/crop_image_search_icon_size"
+                    android:layout_height="@dimen/crop_image_search_icon_size"
+                    android:src="@mipmap/icon_crop_search"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <com.unionbigdata.takepicbuy.widget.CircleProgress
+            android:id="@+id/progress"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_margin="30dp"
+            android:layout_height="wrap_content"
+            circleprogress:color1="@android:color/holo_red_light"
+            circleprogress:color2="@android:color/holo_green_light"
+            circleprogress:color3="@android:color/holo_blue_light" />
+
+    </FrameLayout>
+
+
+</LinearLayout>

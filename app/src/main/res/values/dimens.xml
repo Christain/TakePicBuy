@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="default_circle_view_size">270dp</dimen>
+
+    <!-- 自定义Dialog -->
+    <dimen name="dialog_sure_cancel_high">11dp</dimen>
+    <dimen name="dialog_sure_cancel_text_size">15sp</dimen>
+    <dimen name="dialog_margin_left_right">50dp</dimen>
+
+    <dimen name="toolbar_high">50dp</dimen>
+    <dimen name="line_high">1.0px</dimen>
+    <dimen name="toolbar_icon_menu_size">45dp</dimen>
+    <dimen name="toolbar_icon_menu_padding">12dp</dimen>
+    <dimen name="path_radius">90dp</dimen>
+
+    <!-- 设置-->
+    <dimen name="set_item_high">50dp</dimen>
+    <dimen name="set_item_padding_left_right">20dp</dimen>
+    <dimen name="set_item_text_size">17sp</dimen>
+    <dimen name="set_item_between_item_high">30dp</dimen>
+    <dimen name="set_item_arrow_margin_right">7dp</dimen>
+    <dimen name="set_exit_text_size">19sp</dimen>
+    <dimen name="set_arrow_size">16dp</dimen>
+
+    <!-- 个人中心-->
+    <dimen name="user_center_icon_title_size">50dp</dimen>
+    <dimen name="user_center_user_icon_size">100dp</dimen>
+    <dimen name="user_center_user_name_size">17sp</dimen>
+    <dimen name="user_center_search_text_size">16sp</dimen>
+    <dimen name="user_center_tip_text_size">10sp</dimen>
+    <dimen name="user_center_login_button_margin_left_right">40dp</dimen>
+    <dimen name="user_center_login_icon_size">30dp</dimen>
+    <dimen name="user_center_login_text_size">17sp</dimen>
+    <dimen name="user_center_login_button_high">55dp</dimen>
+    <dimen name="user_center_search_item_high">35dp</dimen>
+    <dimen name="user_center_gridview_padding">7dp</dimen>
+    <dimen name="user_center_gridview_between">8dp</dimen>
+
+    <!-- 首页-->
+    <dimen name="home_image_padding">7dp</dimen>
+    
+    <!-- 搜索结果-->
+    <dimen name="search_result_title_text_size">13sp</dimen>
+    <dimen name="search_result_price_text_size">18sp</dimen>
+    <dimen name="search_result_num_text_size">12sp</dimen>
+    <dimen name="search_result_icon_size">14dp</dimen>
+    <dimen name="search_result_padding">8dp</dimen>
+    <dimen name="search_result_dialog_width">100dp</dimen>
+    <dimen name="search_result_dialog_high">45dp</dimen>
+    <dimen name="search_result_dialog_text_size">16sp</dimen>
+    <dimen name="search_result_dilog_line_margin">13dp</dimen>
+    
+    <!-- 商品对比-->
+    <dimen name="goods_compare_price_text_size">19sp</dimen>
+    <dimen name="goods_compare_title_text_size">17sp</dimen>
+    <dimen name="goods_compare_pic_size">50dp</dimen>
+    <dimen name="goods_compare_padding_left_right">12dp</dimen>
+    <dimen name="goods_compare_type_size">13dp</dimen>
+    <dimen name="goods_compare_num_text_size">12sp</dimen>
+    <dimen name="goods_compare_between_size">5dp</dimen>
+    <dimen name="goods_cpmpare_item_minhigh">82dp</dimen>
+
+    <!-- 上传搜索图片-->
+    <dimen name="crop_image_search_button_size">55dp</dimen>
+    <dimen name="crop_image_search_icon_size">28dp</dimen>
+    <dimen name="crop_image_dialog_width">200dp</dimen>
+
+    <!-- 官方微信-->
+    <dimen name="official_qrcode_size">180dp</dimen>
+
+
+</resources>

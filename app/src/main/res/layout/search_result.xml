@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/bg_app"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar_search_result"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.0dp"
+        android:layout_weight="1.0">
+
+        <com.unionbigdata.takepicbuy.widget.PullToRefreshLayout
+
+            android:id="@+id/refreshView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/refresh_head"/>
+
+            <com.unionbigdata.takepicbuy.widget.PullableGridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="#00000000"
+                android:divider="@null"
+                android:drawSelectorOnTop="false"
+                android:fadingEdge="none"
+                android:numColumns="2"
+                android:scrollbarStyle="outsideOverlay"
+                android:horizontalSpacing="@dimen/search_result_padding"
+                android:paddingLeft="@dimen/search_result_padding"
+                android:paddingRight="@dimen/search_result_padding"
+                android:headerDividersEnabled="false"
+                android:listSelector="#00000000"
+                android:scrollingCache="true">
+            </com.unionbigdata.takepicbuy.widget.PullableGridView>
+
+            <include layout="@layout/load_more"/>
+
+        </com.unionbigdata.takepicbuy.widget.PullToRefreshLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llNoResult"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@mipmap/icon_no_result"/>
+
+            <TextView
+                android:id="@+id/tvNoResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/search_result_title_color"
+                android:layout_marginTop="7dp"
+                android:textSize="15sp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+
+</LinearLayout>

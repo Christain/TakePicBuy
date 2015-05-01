@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fresco="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@color/bg_app"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlHeader"
+        android:background="@mipmap/bg_user_center_header"
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+
+        <ImageView
+            android:id="@+id/ibtBack"
+            android:background="#00000000"
+            android:padding="15dp"
+            android:layout_width="@dimen/user_center_icon_title_size"
+            android:layout_height="@dimen/user_center_icon_title_size"
+            android:src="@mipmap/icon_toolbar_white_back"/>
+
+        <ImageView
+            android:id="@+id/ibtSet"
+            android:background="#00000000"
+            android:padding="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/user_center_icon_title_size"
+            android:layout_height="@dimen/user_center_icon_title_size"
+            android:src="@mipmap/icon_toolbar_set"/>
+
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/ivUserIcon"
+            android:layout_centerInParent="true"
+            fresco:roundAsCircle="true"
+            fresco:fadeDuration="100"
+            fresco:actualImageScaleType="center"
+            android:layout_width="@dimen/user_center_user_icon_size"
+            android:layout_height="@dimen/user_center_user_icon_size"
+            fresco:placeholderImage="@mipmap/icon_user_default"/>
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/ivUserIcon"
+            android:text="名字"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:singleLine="true"
+            android:textSize="@dimen/user_center_user_name_size"
+            android:textColor="@color/bg_white"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.0dp"
+        android:layout_weight="1.0">
+
+        <LinearLayout
+            android:visibility="visible"
+            android:id="@+id/llNoLogin"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rlSina"
+                android:background="@mipmap/bg_login_button"
+                android:layout_marginLeft="@dimen/user_center_login_button_margin_left_right"
+                android:layout_marginRight="@dimen/user_center_login_button_margin_left_right"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/user_center_login_button_high"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSina"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="新浪微博登录"
+                    android:textSize="@dimen/user_center_login_text_size"
+                    android:textColor="@color/set_item_text_color"
+                    android:layout_centerInParent="true"/>
+
+                <ImageView
+                    android:layout_toLeftOf="@id/tvSina"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/icon_login_sina"
+                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/user_center_login_icon_size"
+                    android:layout_height="@dimen/user_center_login_icon_size"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlTencent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@mipmap/bg_login_button"
+                android:layout_marginLeft="@dimen/user_center_login_button_margin_left_right"
+                android:layout_marginRight="@dimen/user_center_login_button_margin_left_right"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/user_center_login_button_high"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvTencent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="QQ登录          "
+                    android:textSize="@dimen/user_center_login_text_size"
+                    android:textColor="@color/set_item_text_color"
+                    android:layout_centerInParent="true"/>
+
+                <ImageView
+                    android:layout_toLeftOf="@id/tvTencent"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/icon_login_qq"
+                    android:layout_centerVertical="true"
+                    android:padding="2dp"
+                    android:layout_width="@dimen/user_center_login_icon_size"
+                    android:layout_height="@dimen/user_center_login_icon_size"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llHasLogin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/llSearchBar"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/user_center_search_item_high"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSearch"
+                    android:paddingRight="7dp"
+                    android:paddingLeft="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="历史搜索 >"
+                    android:textSize="@dimen/user_center_search_text_size"
+                    android:textColor="@color/set_item_text_color"/>
+
+                <TextView
+                    android:layout_marginRight="7dp"
+                    android:layout_width="0.0dp"
+                    android:layout_weight="1.0"
+                    android:singleLine="true"
+                    android:gravity="right"
+                    android:layout_marginTop="2dp"
+                    android:layout_height="wrap_content"
+                    android:text="应用里没有找到满意的商品？微博微信找小拍，人工帮您找同款"
+                    android:textSize="@dimen/user_center_tip_text_size"
+                    android:textColor="@color/set_item_text_color"/>
+            </LinearLayout>
+
+
+            <GridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="none"
+                android:listSelector="#00000000"
+                android:numColumns="3"
+                android:paddingLeft="@dimen/user_center_gridview_padding"
+                android:paddingBottom="@dimen/user_center_gridview_padding"
+                android:paddingRight="@dimen/user_center_gridview_padding"
+                android:scrollbarStyle="outsideOverlay">
+            </GridView>
+
+            <LinearLayout
+                android:id="@+id/llNoSearch"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:src="@mipmap/icon_no_result"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="您还没有搜索历史"
+                    android:textSize="13sp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/set_item_text_color"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

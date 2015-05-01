@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="?attr/actionBarSize"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/ivItem"
+        android:background="@drawable/toolbar_menu_click_style"
+        android:layout_width="@dimen/toolbar_icon_menu_size"
+        android:layout_height="@dimen/toolbar_icon_menu_size"
+        android:padding="@dimen/toolbar_icon_menu_padding"
+        android:src="@mipmap/icon_add" />
+</LinearLayout>
+
+
+
