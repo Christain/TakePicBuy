@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/ibtBack"
-            android:background="#00000000"
+            android:background="@drawable/user_center_menu_click_style"
             android:padding="15dp"
             android:layout_width="@dimen/user_center_icon_title_size"
             android:layout_height="@dimen/user_center_icon_title_size"
@@ -22,13 +22,12 @@
 
         <ImageView
             android:id="@+id/ibtSet"
-            android:background="#00000000"
+            android:background="@drawable/user_center_menu_click_style"
             android:padding="15dp"
             android:layout_alignParentRight="true"
             android:layout_width="@dimen/user_center_icon_title_size"
             android:layout_height="@dimen/user_center_icon_title_size"
             android:src="@mipmap/icon_toolbar_set"/>
-
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/ivUserIcon"
@@ -158,7 +157,7 @@
                     android:gravity="right"
                     android:layout_marginTop="2dp"
                     android:layout_height="wrap_content"
-                    android:text="应用里没有找到满意的商品？微博微信找小拍，人工帮您找同款"
+                    android:text="没找到满意的商品？微博微信找小拍，人工帮你找同款"
                     android:textSize="@dimen/user_center_tip_text_size"
                     android:textColor="@color/set_item_text_color"/>
             </LinearLayout>

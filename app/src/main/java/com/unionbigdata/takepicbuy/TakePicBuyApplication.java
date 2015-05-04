@@ -27,7 +27,7 @@ public class TakePicBuyApplication extends Application {
                 .setBaseDirectoryName("cache")
                 .setMaxCacheSize(50 * 1024 * 1024)
                 .setMaxCacheSizeOnLowDiskSpace(30 * 1024 * 1024)
-                .setMaxCacheSizeOnVeryLowDiskSpace(20 * 1024 * 1024)
+                .setMaxCacheSizeOnVeryLowDiskSpace(15 * 1024 * 1024)
                 .setVersion(1)
                 .build();
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(INSTANCE)

@@ -83,16 +83,31 @@ public class SearchHistory extends BaseActivity {
                         if (isCancelStatus) {
                             CancelDismiss();
                         } else {
-                            toast("搜索");
+                            if (!ClickUtil.isFastClick()) {
+                                Intent intent = new Intent(SearchHistory.this, SearchResult.class);
+                                intent.putExtra("IMGURL", getImageUrl(position));
+                                startActivity(intent);
+                            }
                         }
                     }
                 }
             });
-
         } else {
             toast("获取搜索历史错误");
             finish();
         }
+    }
+
+    /**
+     * 根据文件名，获得图片在服务器的url
+     */
+    private String getImageUrl(int position) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://www.paitogo.com:80/upload/");
+        String filePath = adapter.getItem(position).getImg();
+        sb.append(filePath.substring(filePath.lastIndexOf("/"), filePath.lastIndexOf("_")));
+        sb.append(".jpg");
+        return sb.toString();
     }
 
     private void CancelDismiss() {

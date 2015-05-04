@@ -230,15 +230,15 @@ public class SearchResult extends BaseActivity {
         View parentView = getLayoutInflater().inflate(R.layout.toolbar_search_result, null);
         View popView = getLayoutInflater().inflate(R.layout.dialog_select_type, null);
 
-        TextView mTextViews[] = new TextView[6];
+        TextView mTextViews[] = new TextView[4];
         mTextViews[0] = (TextView) popView.findViewById(R.id.tvAll);
         mTextViews[1] = (TextView) popView.findViewById(R.id.tvTaobao);
         mTextViews[2] = (TextView) popView.findViewById(R.id.tvTMall);
         mTextViews[3] = (TextView) popView.findViewById(R.id.tvJD);
-        mTextViews[4] = (TextView) popView.findViewById(R.id.tvMoGu);
-        mTextViews[5] = (TextView) popView.findViewById(R.id.tvBeautiful);
+//        mTextViews[4] = (TextView) popView.findViewById(R.id.tvMoGu);
+//        mTextViews[5] = (TextView) popView.findViewById(R.id.tvBeautiful);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 4; i++) {
             if (type == i) {
                 mTextViews[i].setTextColor(0xFFFE5C71);
             } else {
@@ -304,18 +304,18 @@ public class SearchResult extends BaseActivity {
                             filterString = "jd";
                             clickPupWindow();
                             break;
-                        case 4:
-                            toast("暂未开放");
+//                        case 4:
+//                            toast("暂未开放");
 //                            tvType.setText("蘑菇街");
 //                            type = index;
 //                            filterString = "";
-                            break;
-                        case 5:
-                            toast("暂未开放");
+//                            break;
+//                        case 5:
+//                            toast("暂未开放");
 //                            tvType.setText("美丽说");
 //                            type = index;
 //                            filterString = "";
-                            break;
+//                            break;
                     }
                 }
                 if (popWind != null && popWind.isShowing()) {

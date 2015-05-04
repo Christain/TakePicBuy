@@ -61,40 +61,40 @@
             android:gravity="center"
             android:layout_width="@dimen/search_result_dialog_width"
             android:layout_height="@dimen/search_result_dialog_high"
-            android:background="@drawable/shape_select_type_mid"
+            android:background="@drawable/shape_select_type_buttom"
             android:text="京东"
             android:textColor="@drawable/dialog_select_type_text_color"
             android:textSize="@dimen/search_result_dialog_text_size"/>
-        <View
-            android:layout_marginLeft="@dimen/search_result_dilog_line_margin"
-            android:layout_marginRight="@dimen/search_result_dilog_line_margin"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_high"
-            android:background="@color/set_line_color"/>
-        <TextView
-            android:id="@+id/tvMoGu"
-            android:gravity="center"
-            android:layout_width="@dimen/search_result_dialog_width"
-            android:layout_height="@dimen/search_result_dialog_high"
-            android:background="@drawable/shape_select_type_mid"
-            android:text="蘑菇街"
-            android:textColor="@drawable/dialog_select_type_text_color"
-            android:textSize="@dimen/search_result_dialog_text_size"/>
-        <View
-            android:layout_marginLeft="@dimen/search_result_dilog_line_margin"
-            android:layout_marginRight="@dimen/search_result_dilog_line_margin"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_high"
-            android:background="@color/set_line_color"/>
-        <TextView
-            android:id="@+id/tvBeautiful"
-            android:gravity="center"
-            android:layout_width="@dimen/search_result_dialog_width"
-            android:layout_height="@dimen/search_result_dialog_high"
-            android:background="@drawable/shape_select_type_buttom"
-            android:text="美丽说"
-            android:textColor="@drawable/dialog_select_type_text_color"
-            android:textSize="@dimen/search_result_dialog_text_size"/>
+        <!--<View-->
+            <!--android:layout_marginLeft="@dimen/search_result_dilog_line_margin"-->
+            <!--android:layout_marginRight="@dimen/search_result_dilog_line_margin"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/line_high"-->
+            <!--android:background="@color/set_line_color"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/tvMoGu"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="@dimen/search_result_dialog_width"-->
+            <!--android:layout_height="@dimen/search_result_dialog_high"-->
+            <!--android:background="@drawable/shape_select_type_mid"-->
+            <!--android:text="蘑菇街"-->
+            <!--android:textColor="@drawable/dialog_select_type_text_color"-->
+            <!--android:textSize="@dimen/search_result_dialog_text_size"/>-->
+        <!--<View-->
+            <!--android:layout_marginLeft="@dimen/search_result_dilog_line_margin"-->
+            <!--android:layout_marginRight="@dimen/search_result_dilog_line_margin"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/line_high"-->
+            <!--android:background="@color/set_line_color"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/tvBeautiful"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="@dimen/search_result_dialog_width"-->
+            <!--android:layout_height="@dimen/search_result_dialog_high"-->
+            <!--android:background="@drawable/shape_select_type_buttom"-->
+            <!--android:text="美丽说"-->
+            <!--android:textColor="@drawable/dialog_select_type_text_color"-->
+            <!--android:textSize="@dimen/search_result_dialog_text_size"/>-->
         </LinearLayout>
 
 </LinearLayout>

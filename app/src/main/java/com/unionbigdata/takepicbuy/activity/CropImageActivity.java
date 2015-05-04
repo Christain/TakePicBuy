@@ -219,6 +219,8 @@ public class CropImageActivity extends MonitoredActivity {
                         progress.stopAnim();
                         JSONObject object = new JSONObject(result);
                         String imgUrl = object.getString("srcimageurl");
+                        String fileName = imgUrl.substring(imgUrl.lastIndexOf("/"), imgUrl.lastIndexOf("."));
+                        file.renameTo(new File(Constant.UPLOAD_FILES_DIR_PATH + fileName + "_SEARCH.jpg"));
                         Intent intent = new Intent(CropImageActivity.this, SearchResult.class);
                         intent.putExtra("IMGURL", imgUrl);
                         startActivity(intent);
@@ -226,7 +228,7 @@ public class CropImageActivity extends MonitoredActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                         progress.stopAnim();
-                        if (file != null && file.exists()) {
+                        if (file.exists()) {
                             file.delete();
                         }
                         toast("搜索失败，请重试");
@@ -237,7 +239,7 @@ public class CropImageActivity extends MonitoredActivity {
                 @Override
                 public void onResponseFailed(int returnCode, String errorMsg) {
                     progress.stopAnim();
-                    if (file != null && file.exists()) {
+                    if (file.exists()) {
                         file.delete();
                     }
                     toast("搜索失败，请重试");

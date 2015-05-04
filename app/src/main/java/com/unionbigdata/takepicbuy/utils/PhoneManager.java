@@ -54,7 +54,7 @@ public class PhoneManager {
      * @return
      */
     public static String getSdCardRootPath() {
-        return Environment.getExternalStorageDirectory().getPath();
+        return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
     /**
