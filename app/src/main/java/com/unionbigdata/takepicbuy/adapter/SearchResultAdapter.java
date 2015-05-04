@@ -164,7 +164,7 @@ public class SearchResultAdapter extends SuperAdapter {
         }
         if (list.size() > 1) {
             holder.tvSameNum.setVisibility(View.VISIBLE);
-            holder.tvSameNum.setText((list.size() - 1) + "件同款");
+            holder.tvSameNum.setText((list.size()) + "件同款");
         } else {
             holder.tvSameNum.setVisibility(View.GONE);
         }

@@ -1,21 +1,34 @@
 package com.unionbigdata.takepicbuy.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.unionbigdata.takepicbuy.AppPreference;
 import com.unionbigdata.takepicbuy.R;
+import com.unionbigdata.takepicbuy.TakePicBuyApplication;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
-import com.unionbigdata.takepicbuy.constant.Constant;
 import com.unionbigdata.takepicbuy.dialog.DialogChoiceBuilder;
+import com.unionbigdata.takepicbuy.dialog.DialogTipsBuilder;
+import com.unionbigdata.takepicbuy.dialog.DialogVersionUpdate;
 import com.unionbigdata.takepicbuy.dialog.Effectstype;
 import com.unionbigdata.takepicbuy.dialog.LoadingDialog;
+import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
+import com.unionbigdata.takepicbuy.http.ResponseHandler;
+import com.unionbigdata.takepicbuy.model.VersionModel;
+import com.unionbigdata.takepicbuy.params.UpdateVersionParam;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 
@@ -30,8 +43,10 @@ public class SetActivity extends BaseActivity {
 
     @InjectView(R.id.tvClean)
     TextView tvClean;
-    @InjectView(R.id.tvVersion)
-    TextView tvVersion;
+    @InjectView(R.id.llVersion)
+    TextView llVersion;
+    @InjectView(R.id.ivVersion)
+    ImageView ivVersion;
     @InjectView(R.id.llFeedback)
     LinearLayout llFeedback;
     @InjectView(R.id.llWeibo)
@@ -42,6 +57,8 @@ public class SetActivity extends BaseActivity {
     TextView tvExit;
 
     private LoadingDialog mLoadingDialog;
+    private DialogTipsBuilder dialog;
+    private boolean hasLogin = false;
 
     @Override
     protected int layoutResId() {
@@ -51,6 +68,7 @@ public class SetActivity extends BaseActivity {
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
         this.mLoadingDialog = LoadingDialog.createDialog(SetActivity.this, true);
+        this.dialog = DialogTipsBuilder.getInstance(SetActivity.this);
         getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
         getToolbar().setTitle(R.string.set);
         getToolbar().setTitleTextColor(0xFFFFFFFF);
@@ -61,9 +79,27 @@ public class SetActivity extends BaseActivity {
                 finish();
             }
         });
+        this.initView();
     }
 
-    @OnClick ({R.id.tvClean, R.id.tvVersion, R.id.llFeedback, R.id.llWeibo, R.id.llWechat, R.id.tvExit})
+    private void initView() {
+        if (hasLogin) {
+            tvExit.setVisibility(View.VISIBLE);
+        } else {
+            tvExit.setVisibility(View.GONE);
+        }
+        if (!TakePicBuyApplication.getInstance().isCheckViersion()) {
+            getVersionInfo();
+        } else {
+            if (AppPreference.getUserPersistentInt(SetActivity.this, AppPreference.VERSION_CODE) > PhoneManager.getVersionInfo().versionCode) {
+                ivVersion.setVisibility(View.VISIBLE);
+            } else {
+                ivVersion.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @OnClick ({R.id.tvClean, R.id.llVersion, R.id.llFeedback, R.id.llWeibo, R.id.llWechat, R.id.tvExit})
     void OnItemClick(View v) {
         if (!ClickUtil.isFastClick()) {
             switch (v.getId()) {
@@ -77,8 +113,12 @@ public class SetActivity extends BaseActivity {
                         }
                     }).show();
                     break;
-                case R.id.tvVersion:
-                    toast("检测版本更新");
+                case R.id.llVersion:
+                    if (ivVersion.isShown() && TakePicBuyApplication.getInstance().isCheckViersion()) {
+                        updateVersionDialog(AppPreference.getVersionInfo(SetActivity.this));
+                    } else {
+                        toast("当前已是最新版本");
+                    }
                     break;
                 case R.id.llFeedback:
                     Intent intent = new Intent(SetActivity.this, Feedback.class);
@@ -101,12 +141,68 @@ public class SetActivity extends BaseActivity {
                         public void onClick(View arg0) {
                             dialog.dismiss();
                             AppPreference.clearInfo(SetActivity.this);
-                            exitApp();
+                            hasLogin = false;
+                            tvExit.setVisibility(View.VISIBLE);
                         }
                     }).show();
                     break;
             }
         }
+    }
+
+    /**
+     * 获取版本信息
+     */
+    private void getVersionInfo() {
+        UpdateVersionParam param = new UpdateVersionParam();
+        AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
+            @Override
+            public void onResponseSuccess(int returnCode, Header[] headers, String result) {
+                try {
+                    JSONObject object = new JSONObject(result);
+                    if (object.getString("app").length() > 2) {
+                        Gson gson = new Gson();
+                        VersionModel versionModel = gson.fromJson(object.getString("app"), VersionModel.class);
+                        if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
+                            AppPreference.setVersionInfo(SetActivity.this, versionModel);
+                            ivVersion.setVisibility(View.VISIBLE);
+                        } else {
+                            ivVersion.setVisibility(View.GONE);
+                            toast("当前已是最新版本");
+                        }
+                        TakePicBuyApplication.getInstance().setCheckViersion(true);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    if (dialog != null && !dialog.isShowing()) {
+                        dialog.setMessage("版本数据格式错误").withEffect(Effectstype.Shake).show();
+                    }
+                    TakePicBuyApplication.getInstance().setCheckViersion(false);
+                }
+            }
+
+            @Override
+            public void onResponseFailed(int returnCode, String errorMsg) {
+                if (dialog != null && !dialog.isShowing()) {
+                    dialog.setMessage(errorMsg).withEffect(Effectstype.Shake).show();
+                }
+                TakePicBuyApplication.getInstance().setCheckViersion(false);
+            }
+        });
+    }
+
+    /**
+     * 版本更新
+     */
+    private void updateVersionDialog(final VersionModel versionModel) {
+        DialogVersionUpdate versionUpdate = new DialogVersionUpdate(SetActivity.this, R.style.dialog_untran);
+        versionUpdate.withDuration(400).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + "5M").setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+            @Override
+            public void onUpdateListener() {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionModel.getVer_url()));
+                startActivity(intent);
+            }
+        }).show();
     }
 
     /**

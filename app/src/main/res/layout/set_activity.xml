@@ -32,17 +32,32 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_high" />
 
-    <TextView
-        android:id="@+id/tvVersion"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:layout_height="@dimen/set_item_high"
-        android:background="@drawable/shape_set_item_click_style"
-        android:paddingLeft="@dimen/set_item_padding_left_right"
-        android:paddingRight="@dimen/set_item_padding_left_right"
-        android:textSize="@dimen/set_item_text_size"
-        android:textColor="@color/set_item_text_color"
-        android:text="检查更新" />
+        <LinearLayout
+            android:background="@drawable/shape_set_item_click_style"
+            android:id="@+id/llVersion"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/set_item_padding_left_right"
+            android:paddingRight="@dimen/set_item_padding_left_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0.0dp"
+                android:layout_weight="1.0"
+                android:gravity="center_vertical"
+                android:layout_height="@dimen/set_item_high"
+                android:textSize="@dimen/set_item_text_size"
+                android:textColor="@color/set_item_text_color"
+                android:text="检查更新" />
+
+            <ImageView
+                android:id="@+id/ivVersion"
+                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
+                android:layout_gravity="center_vertical"
+                android:layout_width="@dimen/set_arrow_size"
+                android:layout_height="@dimen/set_arrow_size"
+                android:src="@mipmap/icon_set_gray_arrow"/>
+        </LinearLayout>
 
     <View
         android:layout_marginLeft="@dimen/set_item_padding_left_right"

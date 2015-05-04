@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.unionbigdata.takepicbuy.model.UserInfoModel;
+import com.unionbigdata.takepicbuy.model.VersionModel;
 
 /**
  * Created by Christain on 15/4/19.
@@ -30,6 +31,13 @@ public class AppPreference {
     /******************* 登录平台TYPE **************************/
     public static final int TYPE_SINA = 101; // 新浪登录
     public static final int TYPE_QQ = 102; // QQ登录
+
+    /******************* 版本信息***************************/
+    public static final String VERSION_CODE = "VERSION_CODE";
+    public static final String VERSION_NAME = "VERSION_NAME";
+    public static final String VERSION_SIZE = "VERSION_SIZE";
+    public static final String VERSION_DESCRI = "VERSION_DESCRI";
+    public static final String VERSION_URL = "VERSION_URL";
 
     private static void getInstance(Context context) {
         if (preferences == null) {
@@ -133,6 +141,36 @@ public class AppPreference {
 //        model.setQq_expires_in(preferences.getLong(QQ_EXPIRES, 0));
 //        model.setQq_token(preferences.getString(QQ_TOKEN, ""));
 //        model.setQq_openid(preferences.getString(QQ_ID, ""));
+        return model;
+    }
+
+    /**
+     * 保存版本信息
+     * @param context
+     * @param versionModel
+     */
+    public static void setVersionInfo(Context context, VersionModel versionModel) {
+        getInstance(context);
+        SharedPreferences.Editor mEditor = preferences.edit();
+        mEditor.putInt(VERSION_CODE, versionModel.getCode());
+        mEditor.putString(VERSION_NAME, versionModel.getName());
+        mEditor.putString(VERSION_SIZE, versionModel.getSize());
+        mEditor.putString(VERSION_DESCRI, versionModel.getDescri());
+        mEditor.putString(VERSION_URL, versionModel.getVer_url());
+        mEditor.commit();
+    }
+
+    /**
+     * 获取版本信息
+     */
+    public static VersionModel getVersionInfo(Context context) {
+        VersionModel model = new VersionModel();
+        getInstance(context);
+        model.setCode(preferences.getInt(VERSION_CODE, 0));
+        model.setName(preferences.getString(VERSION_NAME, ""));
+        model.setSize(preferences.getString(VERSION_SIZE, ""));
+        model.setDescri(preferences.getString(VERSION_DESCRI, ""));
+        model.setVer_url(preferences.getString(VERSION_URL, ""));
         return model;
     }
 

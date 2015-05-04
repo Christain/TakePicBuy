@@ -16,7 +16,7 @@
         android:padding="10dp"
         android:maxLength="200"
         android:textColor="@color/bg_black_light"
-        android:hint="请输入您的意见及建议(200字以内)"
+        android:hint="请写下你的问题或意见(200字以内)"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_white" />

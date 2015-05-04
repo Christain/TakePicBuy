@@ -13,17 +13,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.unionbigdata.takepicbuy.AppPreference;
 import com.unionbigdata.takepicbuy.R;
+import com.unionbigdata.takepicbuy.TakePicBuyApplication;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
 import com.unionbigdata.takepicbuy.fragment.HomeFragment;
 import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
+import com.unionbigdata.takepicbuy.model.VersionModel;
 import com.unionbigdata.takepicbuy.params.HomeParams;
+import com.unionbigdata.takepicbuy.params.UpdateVersionParam;
 import com.unionbigdata.takepicbuy.utils.DoubleClickExitHelper;
+import com.unionbigdata.takepicbuy.utils.PhoneManager;
 import com.unionbigdata.takepicbuy.widget.ComposerLayout;
 import com.unionbigdata.takepicbuy.widget.PullToRefreshViewPager;
 
 import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.InjectView;
 import christain.refreshlibrary.library.PullToRefreshBase;
@@ -71,6 +79,8 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(0);
         viewPager.setCurrentItem(0);
+
+        getVersionInfo();
     }
 
     @Override
@@ -172,6 +182,37 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
             @Override
             public void onResponseFailed(int returnCode, String errorMsg) {
 
+            }
+        });
+    }
+
+    /**
+     * 获取版本信息
+     */
+    private void getVersionInfo() {
+        UpdateVersionParam param = new UpdateVersionParam();
+        AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
+            @Override
+            public void onResponseSuccess(int returnCode, Header[] headers, String result) {
+                try {
+                    JSONObject object = new JSONObject(result);
+                    if (object.getString("app").length() > 2) {
+                        Gson gson = new Gson();
+                        VersionModel versionModel = gson.fromJson(object.getString("app"), VersionModel.class);
+                        if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
+                            AppPreference.setVersionInfo(IndexHome.this, versionModel);
+                        }
+                        TakePicBuyApplication.getInstance().setCheckViersion(true);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    TakePicBuyApplication.getInstance().setCheckViersion(false);
+                }
+            }
+
+            @Override
+            public void onResponseFailed(int returnCode, String errorMsg) {
+                TakePicBuyApplication.getInstance().setCheckViersion(false);
             }
         });
     }

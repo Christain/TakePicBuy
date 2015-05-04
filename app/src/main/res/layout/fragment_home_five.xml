@@ -114,13 +114,6 @@
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:placeholderImage="@drawable/default_image" />
 
-            <ImageView
-                android:id="@+id/ivPager"
-                android:layout_gravity="bottom|right"
-                android:layout_width="50dp"
-                android:scaleType="fitXY"
-                android:layout_height="75dp"
-                android:src="@mipmap/icon_pager" />
         </FrameLayout>
     </LinearLayout>
 

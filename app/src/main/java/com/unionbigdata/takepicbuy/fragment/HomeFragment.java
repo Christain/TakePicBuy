@@ -90,7 +90,6 @@ public class HomeFragment extends BaseFragment {
                 break;
         }
 
-
         ivOne.setImageURI(Uri.parse("http://a.hiphotos.baidu.com/image/pic/item/09fa513d269759ee154e5cc6b0fb43166d22dfa4.jpg"));
         ivTwo.setImageURI(Uri.parse("http://h.hiphotos.baidu.com/image/pic/item/267f9e2f0708283830200feebc99a9014c08f11f.jpg"));
         ivThree.setImageURI(Uri.parse("http://h.hiphotos.baidu.com/image/pic/item/267f9e2f0708283830200feebc99a9014c08f11f.jpg"));

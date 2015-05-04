@@ -15,6 +15,7 @@ import java.io.File;
 public class TakePicBuyApplication extends Application {
 
     private static TakePicBuyApplication INSTANCE;
+    private boolean isCheckViersion = false;
 
     @Override
     public void onCreate() {
@@ -50,5 +51,13 @@ public class TakePicBuyApplication extends Application {
 
     public static synchronized TakePicBuyApplication getInstance() {
         return INSTANCE;
+    }
+
+    public boolean isCheckViersion() {
+        return isCheckViersion;
+    }
+
+    public void setCheckViersion(boolean isCheckViersion) {
+        this.isCheckViersion = isCheckViersion;
     }
 }

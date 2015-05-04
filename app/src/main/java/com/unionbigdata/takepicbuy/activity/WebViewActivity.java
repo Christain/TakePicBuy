@@ -50,7 +50,6 @@ public class WebViewActivity extends BaseActivity {
             });
             pbWebView.setVisibility(View.VISIBLE);
             pbWebView.setMax(100);
-            webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setSupportZoom(true);
             webView.getSettings().setBuiltInZoomControls(true);
             webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
