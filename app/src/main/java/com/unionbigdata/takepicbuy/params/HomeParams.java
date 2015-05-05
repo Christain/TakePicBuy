@@ -9,7 +9,7 @@ import com.unionbigdata.takepicbuy.baseclass.BaseParams;
 public class HomeParams extends BaseParams {
 
     public HomeParams(int page, int size) {
-        super("getHomepageInfo.action");
+        super("getHomePageData.action");
         put("page", page);
         put("size", size);
     }

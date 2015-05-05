@@ -14,6 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.activity.SearchResult;
 import com.unionbigdata.takepicbuy.baseclass.BaseFragment;
+import com.unionbigdata.takepicbuy.utils.ClickUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -108,9 +109,48 @@ public class HomeFragment extends BaseFragment {
     }
 
     @OnClick({R.id.ivOne, R.id.ivTwo, R.id.ivThree, R.id.ivFour, R.id.ivFive, R.id.ivSix})
-    void onImageClick() {
-        Intent intent = new Intent(getActivity(), SearchResult.class);
-        getActivity().startActivity(intent);
+    void onImageClick(View view) {
+        if (!ClickUtil.isFastClick()) {
+            Intent intent = null;
+            switch (view.getId()) {
+                case R.id.ivOne:
+                    intent = new Intent(getActivity(), SearchResult.class);
+                    intent.putExtra("IMGURL", "");
+                    intent.putExtra("FROM", "HOME");
+                    getActivity().startActivity(intent);
+                    break;
+                case R.id.ivTwo:
+                    intent = new Intent(getActivity(), SearchResult.class);
+                    intent.putExtra("IMGURL", "");
+                    intent.putExtra("FROM", "HOME");
+                    getActivity().startActivity(intent);
+                    break;
+                case R.id.ivThree:
+                    intent = new Intent(getActivity(), SearchResult.class);
+                    intent.putExtra("IMGURL", "");
+                    intent.putExtra("FROM", "HOME");
+                    getActivity().startActivity(intent);
+                    break;
+                case R.id.ivFour:
+                    intent = new Intent(getActivity(), SearchResult.class);
+                    intent.putExtra("IMGURL", "");
+                    intent.putExtra("FROM", "HOME");
+                    getActivity().startActivity(intent);
+                    break;
+                case R.id.ivFive:
+                    intent = new Intent(getActivity(), SearchResult.class);
+                    intent.putExtra("IMGURL", "");
+                    intent.putExtra("FROM", "HOME");
+                    getActivity().startActivity(intent);
+                    break;
+                case R.id.ivSix:
+                    intent = new Intent(getActivity(), SearchResult.class);
+                    intent.putExtra("IMGURL", "");
+                    intent.putExtra("FROM", "HOME");
+                    getActivity().startActivity(intent);
+                    break;
+            }
+        }
     }
 
     @Override

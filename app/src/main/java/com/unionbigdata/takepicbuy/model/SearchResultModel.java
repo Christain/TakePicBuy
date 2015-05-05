@@ -1,6 +1,7 @@
 package com.unionbigdata.takepicbuy.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Created by Christain on 2015/4/27.
@@ -8,27 +9,14 @@ import java.io.Serializable;
 public class SearchResultModel implements Serializable {
 
     private String img_url;//图片地址
-
     private int id;//商品Id
-
-    private String title;//	AMII极简2015新款飘逸显瘦长裙雪纺半身裙长裙11480107 绿色 L
-
+    private String title;//AMII极简2015新款飘逸显瘦长裙雪纺半身裙长裙11480107 绿色 L
     private double distance;//9836.7099609375
-
-    private String price;//	239
-
+    private double price;//	239
     private int cate_id;//01010302
-
-//    feature		[0]
-
-    private int salesnum;//	5
-
-    private String url;//商品网址	http://item.jd.com/1171357130.html
-
-    private String key_id;//	jd_1171357130
-
-//    comments	:
-
+    private int salesnum;
+    private String url;//商品网址
+    private String key_id;//jd_1171357130
     private int orig_id;//3
 
     public String getImg_url() {
@@ -63,11 +51,13 @@ public class SearchResultModel implements Serializable {
         this.distance = distance;
     }
 
-    public String getPrice() {
-        return (price != null ? price : "");
+    public double getPrice() {
+        BigDecimal b = new BigDecimal(price);
+        double f1 = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

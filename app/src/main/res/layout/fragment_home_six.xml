@@ -24,6 +24,7 @@
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
                 fresco:fadeDuration="300"
+                fresco:pressedStateOverlayImage="@color/image_click_color"
                 fresco:actualImageScaleType="centerCrop"
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:placeholderImage="@drawable/default_image" />
@@ -38,6 +39,7 @@
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
                 fresco:fadeDuration="300"
+                fresco:pressedStateOverlayImage="@color/image_click_color"
                 fresco:actualImageScaleType="centerCrop"
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:placeholderImage="@drawable/default_image" />
@@ -52,6 +54,7 @@
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
                 fresco:fadeDuration="300"
+                fresco:pressedStateOverlayImage="@color/image_click_color"
                 fresco:actualImageScaleType="centerCrop"
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:placeholderImage="@drawable/default_image" />
@@ -69,6 +72,7 @@
             android:layout_weight="109.0"
             android:layout_height="0.0dp"
             fresco:fadeDuration="300"
+            fresco:pressedStateOverlayImage="@color/image_click_color"
             fresco:actualImageScaleType="centerCrop"
             fresco:placeholderImageScaleType="centerCrop"
             fresco:placeholderImage="@drawable/default_image" />
@@ -89,6 +93,7 @@
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
                 fresco:fadeDuration="300"
+                fresco:pressedStateOverlayImage="@color/image_click_color"
                 fresco:actualImageScaleType="centerCrop"
                 fresco:placeholderImageScaleType="centerCrop"
                 fresco:placeholderImage="@drawable/default_image" />
@@ -107,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     fresco:fadeDuration="300"
+                    fresco:pressedStateOverlayImage="@color/image_click_color"
                     fresco:actualImageScaleType="centerCrop"
                     fresco:placeholderImageScaleType="centerCrop"
                     fresco:placeholderImage="@drawable/default_image" />

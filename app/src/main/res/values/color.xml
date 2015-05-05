@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="style_color_primary">#fffe5c71</color>
-    <color name="style_color_primary_dark">#fffe5c71</color>
+    <color name="style_color_primary_dark">#fffe264d</color>
     <color name="style_color_accent">#fffe5c71</color>
 
     <color name="transparent">#00000000</color>
-    <color name="toolbar_menu_click_bg">#40ffffff</color>
+    <color name="toolbar_menu_click_bg">#FFD7566B</color>
     <color name="set_item_text_color">#FF919191</color>
     <color name="bg_app">#FFF1F1F1</color>
     <color name="bg_white">#FFFFFFFF</color>
@@ -14,4 +14,6 @@
     <color name="login_text">#ff696969</color>
     <color name="search_result_title_color">#FF777777</color>
     <color name="search_result_price_color">#FFFF0000</color>
+    <color name="image_click_color">#25000000</color>
+    <color name="no_result_text_color">#ffc3c2c2</color>
 </resources>

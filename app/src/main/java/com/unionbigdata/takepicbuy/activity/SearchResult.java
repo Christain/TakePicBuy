@@ -56,9 +56,10 @@ public class SearchResult extends BaseActivity {
 
     private SearchResultAdapter adapter;
     private PopupWindow popWind;
-    private String filterString = "all";
+    private String filterString = "all";//平台分类
     private int type = 0;
-    private String imgUrl = "";
+    private String imgUrl = "";//搜索图片的url
+    private int fromType = 0;//首页搜索还是上传搜索HOME = 1,SEARCH = 2
     private LoadingDialog mLoadingDialog;
 
     @Override
@@ -68,108 +69,115 @@ public class SearchResult extends BaseActivity {
 
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
-        this.mLoadingDialog = LoadingDialog.createDialog(SearchResult.this, true);
-        getToolbar().setTitle("");
-        getToolbar().setTitleTextColor(0xFFFFFFFF);
-        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-        setSupportActionBar(getToolbar());
-        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
+        Intent intent = getIntent();
+        if (intent.hasExtra("IMGURL") && intent.hasExtra("FROM")) {
+            imgUrl = intent.getStringExtra("IMGURL");
+            if (intent.getStringExtra("FROM").equals("HOME")) {
+                fromType = 1;
+            } else {
+                fromType = 2;
             }
-        });
-        this.refreshHeader = (RelativeLayout) findViewById(R.id.head_view);
-        this.refreshFooter = (RelativeLayout) findViewById(R.id.loadmore_view);
-        this.refreshHeader.setBackgroundColor(0xFFEEEEEE);
-        this.refreshFooter.setBackgroundColor(0xFFEEEEEE);
-
-        this.adapter = new SearchResultAdapter(SearchResult.this);
-        this.gridView.setAdapter(adapter);
-
-        this.refreshLayout.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
-
-            }
-
-            @Override
-            public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-                adapter.loadMore();
-            }
-        });
-        this.adapter.setRefreshOverListener(new OnAdapterRefreshOverListener() {
-            @Override
-            public void refreshOver(int code, String msg) {
-                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-                    mLoadingDialog.dismiss();
+            this.mLoadingDialog = LoadingDialog.createDialog(SearchResult.this, true);
+            getToolbar().setTitle("");
+            getToolbar().setTitleTextColor(0xFFFFFFFF);
+            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+            setSupportActionBar(getToolbar());
+            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
                 }
-                gridView.setContentOver(adapter.getIsOver());
-                gridView.smoothScrollToPosition(0);
-                if (code == -1) {
-                    if (!llNoResult.isShown()) {
-                        llNoResult.setVisibility(View.VISIBLE);
-                        tvNoResult.setText("搜索商品失败");
+            });
+            this.refreshHeader = (RelativeLayout) findViewById(R.id.head_view);
+            this.refreshFooter = (RelativeLayout) findViewById(R.id.loadmore_view);
+            this.refreshHeader.setBackgroundColor(0xFFEEEEEE);
+            this.refreshFooter.setBackgroundColor(0xFFEEEEEE);
+
+            this.adapter = new SearchResultAdapter(SearchResult.this);
+            this.gridView.setAdapter(adapter);
+
+            this.refreshLayout.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+
+                }
+
+                @Override
+                public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+                    adapter.loadMore();
+                }
+            });
+            this.adapter.setRefreshOverListener(new OnAdapterRefreshOverListener() {
+                @Override
+                public void refreshOver(int code, String msg) {
+                    if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
                     }
-                    if (refreshLayout.isShown()) {
-                        refreshLayout.setVisibility(View.INVISIBLE);
-                    }
-                } else {
-                    if (msg.equals(SuperAdapter.ISNULL)) {
+                    gridView.setContentOver(adapter.getIsOver());
+                    gridView.smoothScrollToPosition(0);
+                    if (code == -1) {
                         if (!llNoResult.isShown()) {
                             llNoResult.setVisibility(View.VISIBLE);
-                            tvNoResult.setText("没有搜索到商品");
+                            tvNoResult.setText("  搜索商品失败");
                         }
                         if (refreshLayout.isShown()) {
                             refreshLayout.setVisibility(View.INVISIBLE);
                         }
                     } else {
-                        if (llNoResult.isShown()) {
-                            llNoResult.setVisibility(View.GONE);
-                        }
-                        if (!refreshLayout.isShown()) {
-                            refreshLayout.setVisibility(View.VISIBLE);
+                        if (msg.equals(SuperAdapter.ISNULL)) {
+                            if (!llNoResult.isShown()) {
+                                llNoResult.setVisibility(View.VISIBLE);
+                                tvNoResult.setText("  没有搜索到商品");
+                            }
+                            if (refreshLayout.isShown()) {
+                                refreshLayout.setVisibility(View.INVISIBLE);
+                            }
+                        } else {
+                            if (llNoResult.isShown()) {
+                                llNoResult.setVisibility(View.GONE);
+                            }
+                            if (!refreshLayout.isShown()) {
+                                refreshLayout.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
-            }
-        });
-        this.adapter.setLoadMoreOverListener(new OnAdapterLoadMoreOverListener() {
-            @Override
-            public void loadMoreOver(int code, String msg) {
-                gridView.setContentOver(adapter.getIsOver());
-                refreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
-                if (code == -1) {
-                    toast("加载失败，请重试");
-                } else {
-                    if (msg.equals(SuperAdapter.ISNULL)) {
-                        if (!llNoResult.isShown()) {
-                            llNoResult.setVisibility(View.VISIBLE);
-                            tvNoResult.setText("没有搜索到商品");
-                        }
-                        if (refreshLayout.isShown()) {
-                            refreshLayout.setVisibility(View.INVISIBLE);
-                        }
+            });
+            this.adapter.setLoadMoreOverListener(new OnAdapterLoadMoreOverListener() {
+                @Override
+                public void loadMoreOver(int code, String msg) {
+                    gridView.setContentOver(adapter.getIsOver());
+                    refreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    if (code == -1) {
+                        toast("加载失败，请重试");
                     } else {
-                        if (llNoResult.isShown()) {
-                            llNoResult.setVisibility(View.GONE);
-                        }
-                        if (!refreshLayout.isShown()) {
-                            refreshLayout.setVisibility(View.VISIBLE);
+                        if (msg.equals(SuperAdapter.ISNULL)) {
+                            if (!llNoResult.isShown()) {
+                                llNoResult.setVisibility(View.VISIBLE);
+                                tvNoResult.setText("  没有搜索到商品");
+                            }
+                            if (refreshLayout.isShown()) {
+                                refreshLayout.setVisibility(View.INVISIBLE);
+                            }
+                        } else {
+                            if (llNoResult.isShown()) {
+                                llNoResult.setVisibility(View.GONE);
+                            }
+                            if (!refreshLayout.isShown()) {
+                                refreshLayout.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
-            }
-        });
-        if (getIntent().hasExtra("IMGURL")) {
-            imgUrl = getIntent().getStringExtra("IMGURL");
+            });
             if (mLoadingDialog != null && !mLoadingDialog.isShowing()) {
                 mLoadingDialog.setMessage("加载中...");
                 mLoadingDialog.show();
             }
-            adapter.searchResultList(imgUrl, filterString);
+            adapter.searchResultList(imgUrl, filterString, fromType);
         } else {
-
+            toast("无效的搜索");
+            finish();
         }
     }
 
@@ -329,7 +337,7 @@ public class SearchResult extends BaseActivity {
                 mLoadingDialog.setMessage("加载中...");
                 mLoadingDialog.show();
             }
-            adapter.searchResultList(imgUrl, filterString);
+            adapter.searchResultList(imgUrl, filterString, fromType);
         }
     }
 }
