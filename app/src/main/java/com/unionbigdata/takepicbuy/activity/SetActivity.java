@@ -28,8 +28,6 @@ import com.unionbigdata.takepicbuy.utils.ClickUtil;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
 
 import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 
@@ -87,6 +85,7 @@ public class SetActivity extends BaseActivity {
     }
 
     private void initView() {
+        hasLogin = AppPreference.hasLogin(SetActivity.this);
         if (hasLogin) {
             tvExit.setVisibility(View.VISIBLE);
         } else {
@@ -98,12 +97,14 @@ public class SetActivity extends BaseActivity {
             if (AppPreference.getUserPersistentInt(SetActivity.this, AppPreference.VERSION_CODE) > PhoneManager.getVersionInfo().versionCode) {
                 ivVersion.setVisibility(View.VISIBLE);
             } else {
-                ivVersion.setVisibility(View.GONE);
+                if (ivVersion.isShown()) {
+                    ivVersion.setVisibility(View.GONE);
+                }
             }
         }
     }
 
-    @OnClick ({R.id.tvClean, R.id.llVersion, R.id.llFeedback, R.id.llWeibo, R.id.llWechat, R.id.tvExit})
+    @OnClick({R.id.tvClean, R.id.llVersion, R.id.llFeedback, R.id.llWeibo, R.id.llWechat, R.id.tvExit})
     void OnItemClick(View v) {
         if (!ClickUtil.isFastClick()) {
             switch (v.getId()) {
@@ -163,22 +164,19 @@ public class SetActivity extends BaseActivity {
         AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
             @Override
             public void onResponseSuccess(int returnCode, Header[] headers, String result) {
-                try {
-                    JSONObject object = new JSONObject(result);
-                    if (object.getString("app").length() > 2) {
-                        Gson gson = new Gson();
-                        VersionModel versionModel = gson.fromJson(object.getString("app"), VersionModel.class);
-                        if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
-                            AppPreference.setVersionInfo(SetActivity.this, versionModel);
-                            ivVersion.setVisibility(View.VISIBLE);
-                        } else {
+                Gson gson = new Gson();
+                VersionModel versionModel = gson.fromJson(result, VersionModel.class);
+                if (versionModel != null) {
+                    if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
+                        AppPreference.setVersionInfo(SetActivity.this, versionModel);
+                        ivVersion.setVisibility(View.VISIBLE);
+                    } else {
+                        if (ivVersion.isShown()) {
                             ivVersion.setVisibility(View.GONE);
-                            toast("当前已是最新版本");
                         }
-                        TakePicBuyApplication.getInstance().setCheckViersion(true);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    TakePicBuyApplication.getInstance().setCheckViersion(true);
+                } else {
                     TakePicBuyApplication.getInstance().setCheckViersion(false);
                 }
             }
@@ -195,7 +193,7 @@ public class SetActivity extends BaseActivity {
      */
     private void updateVersionDialog(final VersionModel versionModel) {
         DialogVersionUpdate versionUpdate = new DialogVersionUpdate(SetActivity.this, R.style.dialog_untran);
-        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize()).setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize() + "M").setVersionContent("更新内容\n\n" + versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
             @Override
             public void onUpdateListener() {
                 if (versionModel.getVer_url().startsWith("http")) {
@@ -249,17 +247,17 @@ public class SetActivity extends BaseActivity {
     }
 
     private void deleteFile(File file) {
-        if(file.isFile()){
+        if (file.isFile()) {
             file.delete();
             return;
         }
-        if(file.isDirectory()){
+        if (file.isDirectory()) {
             File[] childFile = file.listFiles();
-            if(childFile == null || childFile.length == 0){
+            if (childFile == null || childFile.length == 0) {
                 file.delete();
                 return;
             }
-            for(File f : childFile){
+            for (File f : childFile) {
                 deleteFile(f);
             }
             file.delete();
@@ -270,7 +268,7 @@ public class SetActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (loginStatusChanged) {
-               setResult(RESULT_OK);
+                setResult(RESULT_OK);
             }
             finish();
         }

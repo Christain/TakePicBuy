@@ -15,11 +15,11 @@ public class AppPreference {
     private static SharedPreferences preferences;
 
     /******************* 用户信息 **************************/
-    public final static String USER_ID = "USER_ID"; // 用户ID
+//    public final static String USER_ID = "USER_ID"; // 用户ID
     public static final String USER_PHOTO = "USER_PHOTO"; // 头像
-    public static final String USER_SEX = "USER_SEX"; // 性别
+//    public static final String USER_SEX = "USER_SEX"; // 性别
     public static final String NICK_NAME = "NICK_NAME"; // 昵称
-    public static final String USER_PWD = "USER_PWD"; // 密码
+//    public static final String USER_PWD = "USER_PWD"; // 密码
     public static final String LOGIN_TYPE = "LOGIN_TYPE"; // 登录方式
     public static final String SINA_ID = "SINA_ID"; // 新浪openid
     public static final String SINA_TOKEN = "SINA_TOKEN"; // 新浪access_token
@@ -118,8 +118,8 @@ public class AppPreference {
     public static void saveUserInfo(Context context, UserInfoModel model) {
         getInstance(context);
         SharedPreferences.Editor mEditor = preferences.edit();
-        mEditor.putString(USER_ID, model.getUserId());
-        mEditor.putInt(USER_SEX, model.getSex());
+//        mEditor.putString(USER_ID, model.getUserId());
+//        mEditor.putInt(USER_SEX, model.getSex());
         mEditor.putString(NICK_NAME, model.getName());
         mEditor.putString(USER_PHOTO, model.getUser_photo());
         mEditor.commit();
@@ -131,16 +131,10 @@ public class AppPreference {
     public static UserInfoModel getUserInfo(Context context) {
         UserInfoModel model = new UserInfoModel();
         getInstance(context);
-        model.setUserId(preferences.getString(USER_ID, ""));
-        model.setSex(preferences.getInt(USER_SEX, 0));
+//        model.setUserId(preferences.getString(USER_ID, ""));
+//        model.setSex(preferences.getInt(USER_SEX, 0));
         model.setName(preferences.getString(NICK_NAME, ""));
         model.setUser_photo(preferences.getString(USER_PHOTO, ""));
-//        model.setSina_expires_in(preferences.getLong(SINA_EXPIRES, 0));
-//        model.setSina_token(preferences.getString(SINA_TOKEN, ""));
-//        model.setSina_openid(preferences.getString(SINA_ID, ""));
-//        model.setQq_expires_in(preferences.getLong(QQ_EXPIRES, 0));
-//        model.setQq_token(preferences.getString(QQ_TOKEN, ""));
-//        model.setQq_openid(preferences.getString(QQ_ID, ""));
         return model;
     }
 

@@ -35,8 +35,6 @@ import com.unionbigdata.takepicbuy.widget.ComposerLayout;
 import com.unionbigdata.takepicbuy.widget.PullToRefreshViewPager;
 
 import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.InjectView;
 import christain.refreshlibrary.library.PullToRefreshBase;
@@ -217,19 +215,15 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
         AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
             @Override
             public void onResponseSuccess(int returnCode, Header[] headers, String result) {
-                try {
-                    JSONObject object = new JSONObject(result);
-                    if (object.getString("app").length() > 2) {
-                        Gson gson = new Gson();
-                        VersionModel versionModel = gson.fromJson(object.getString("app"), VersionModel.class);
-                        if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
-                            AppPreference.setVersionInfo(IndexHome.this, versionModel);
-                            updateVersionDialog(versionModel);
-                        }
-                        TakePicBuyApplication.getInstance().setCheckViersion(true);
+                Gson gson = new Gson();
+                VersionModel versionModel = gson.fromJson(result, VersionModel.class);
+                if (versionModel != null) {
+                    if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
+                        AppPreference.setVersionInfo(IndexHome.this, versionModel);
+                        updateVersionDialog(versionModel);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    TakePicBuyApplication.getInstance().setCheckViersion(true);
+                } else {
                     TakePicBuyApplication.getInstance().setCheckViersion(false);
                 }
             }
@@ -246,7 +240,7 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
      */
     private void updateVersionDialog(final VersionModel versionModel) {
         DialogVersionUpdate versionUpdate = new DialogVersionUpdate(IndexHome.this, R.style.dialog_untran);
-        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize()).setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize() + "M").setVersionContent("更新内容\n\n" + versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
             @Override
             public void onUpdateListener() {
                 if (versionModel.getVer_url().startsWith("http")) {

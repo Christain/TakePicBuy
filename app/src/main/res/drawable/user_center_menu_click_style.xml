@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--drawable/btn_default_light.xml-->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/toolbar_menu_click_bg" android:state_pressed="true" />
-    <item android:drawable="@color/toolbar_menu_click_bg" android:state_focused="true" />
+    <item android:drawable="@color/user_center_toolbar_menu_click_bg" android:state_pressed="true" />
+    <item android:drawable="@color/user_center_toolbar_menu_click_bg" android:state_focused="true" />
 </selector>

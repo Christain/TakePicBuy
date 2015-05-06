@@ -9,7 +9,7 @@ import com.unionbigdata.takepicbuy.baseclass.BaseParams;
 public class FeedBackParam extends BaseParams {
 
     public FeedBackParam(String content) {
-        super("UserFeedbackAction.action");
+        super("feedBack.action");
         put("content", content);
     }
 }
