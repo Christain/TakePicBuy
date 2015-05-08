@@ -66,6 +66,10 @@
             android:name=".activity.UploadFileProgress"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".activity.CropImage"
+            android:screenOrientation="portrait">
+        </activity>
 
 
         <activity

@@ -75,7 +75,6 @@ public abstract class BaseActivity extends ActionBarActivity {
 
 	/**
 	 * toast message
-	 * 
 	 * @param text
 	 */
 	protected void toast(String text) {

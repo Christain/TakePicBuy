@@ -243,7 +243,7 @@ public class SearchResultAdapter extends SuperAdapter {
                 this.isRequest = true;
                 this.loadType = LOADMORE;
                 if (fromType == 1) {
-                    HomePicSearchParam param = new HomePicSearchParam(imgUrl, filterString, page, limit);
+                    HomePicSearchParam param = new HomePicSearchParam(imgUrl);
                     AsyncHttpTask.post(param.getUrl(), param, responseHandler);
                 } else {
                     SearchResultParam param = new SearchResultParam(imgUrl, filterString, page, limit);
@@ -270,7 +270,7 @@ public class SearchResultAdapter extends SuperAdapter {
             this.filterString = filterString;
             this.fromType = fromType;
             if (fromType == 1) {
-                HomePicSearchParam param = new HomePicSearchParam(imgUrl, filterString, page, limit);
+                HomePicSearchParam param = new HomePicSearchParam(imgUrl);
                 AsyncHttpTask.post(param.getUrl(), param, responseHandler);
             } else {
                 SearchResultParam param = new SearchResultParam(imgUrl, filterString, page, limit);

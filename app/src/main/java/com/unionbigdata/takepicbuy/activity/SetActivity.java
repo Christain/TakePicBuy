@@ -193,7 +193,7 @@ public class SetActivity extends BaseActivity {
      */
     private void updateVersionDialog(final VersionModel versionModel) {
         DialogVersionUpdate versionUpdate = new DialogVersionUpdate(SetActivity.this, R.style.dialog_untran);
-        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize() + "M").setVersionContent("更新内容\n\n" + versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize() + "M").setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
             @Override
             public void onUpdateListener() {
                 if (versionModel.getVer_url().startsWith("http")) {

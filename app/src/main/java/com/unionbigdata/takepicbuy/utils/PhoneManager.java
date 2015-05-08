@@ -3,6 +3,7 @@ package com.unionbigdata.takepicbuy.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -24,6 +26,9 @@ import android.widget.ListView;
 import com.unionbigdata.takepicbuy.TakePicBuyApplication;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -305,6 +310,33 @@ public class PhoneManager {
         matrix.postScale(scaleWidth, scaleHeight);
         Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width, (int) height, matrix, true);
         return bitmap;
+    }
+
+    /**
+     * 将bitmap保存为本地图片
+     *
+     * @param context
+     * @param format
+     * @param orgBmp
+     * @param file
+     * @param quality
+     * @return
+     */
+    public static boolean saveBitmapToImageFile(Context context, Bitmap.CompressFormat format, Bitmap orgBmp, File file, int quality) {
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            orgBmp.compress(format, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            file.setLastModified(System.currentTimeMillis());
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getPath())));
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**

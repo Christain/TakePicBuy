@@ -268,8 +268,8 @@ public class UserCenter extends BaseActivity {
                 model.setLastModified(f.lastModified());
                 list.add(model);
             }
-            Collections.sort(list, new FileComparator());
         }
+        Collections.sort(list, new FileComparator());
         return list;
     }
 

@@ -17,6 +17,7 @@
         android:maxLength="1000"
         android:textColor="@color/bg_black_light"
         android:hint="请写下你的问题或意见"
+        android:textColorHint="#ffc0bfbf"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_white" />

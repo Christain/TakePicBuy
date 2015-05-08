@@ -7,10 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -36,7 +34,7 @@ import butterknife.OnClick;
  */
 public class SearchResult extends BaseActivity {
 
-    private MenuItem menuItemSet, menuItemUser, menuItemPic;
+//    private MenuItem menuItemSet, menuItemUser;
 
     @InjectView(R.id.tvType)
     TextView tvType;
@@ -110,6 +108,20 @@ public class SearchResult extends BaseActivity {
             this.adapter.setRefreshOverListener(new OnAdapterRefreshOverListener() {
                 @Override
                 public void refreshOver(int code, String msg) {
+                    switch (type) {
+                        case 0:
+                            tvType.setText("全部结果");
+                            break;
+                        case 1:
+                            tvType.setText("淘宝");
+                            break;
+                        case 2:
+                            tvType.setText("天猫");
+                            break;
+                        case 3:
+                            tvType.setText("京东");
+                            break;
+                    }
                     if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
                         mLoadingDialog.dismiss();
                     }
@@ -183,43 +195,31 @@ public class SearchResult extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search_result, menu);
-        menuItemSet = menu.findItem(R.id.set);
-        menuItemUser = menu.findItem(R.id.user);
-        menuItemPic = menu.findItem(R.id.pic);
-        menuItemSet.setActionView(R.layout.menu_item_view);
-        menuItemUser.setActionView(R.layout.menu_item_view);
-        menuItemPic.setActionView(R.layout.menu_item_view);
-        LinearLayout setLayout = (LinearLayout) menuItemSet.getActionView();
-        ImageView set = (ImageView) setLayout.findViewById(R.id.ivItem);
-        set.setImageResource(R.mipmap.icon_toolbar_set);
-        set.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchResult.this, SetActivity.class);
-                startActivity(intent);
-            }
-        });
-        LinearLayout userlayout = (LinearLayout) menuItemUser.getActionView();
-        ImageView user = (ImageView) userlayout.findViewById(R.id.ivItem);
-        user.setImageResource(R.mipmap.icon_toolbar_user);
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchResult.this, UserCenter.class);
-                startActivity(intent);
-            }
-        });
-        LinearLayout picLayout = (LinearLayout) menuItemPic.getActionView();
-        ImageView pic = (ImageView) picLayout.findViewById(R.id.ivItem);
-        pic.setImageResource(R.mipmap.icon_toolbar_select_pic);
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchResult.this, CropImageActivity.class);
-                startActivity(intent);
-            }
-        });
+//        getMenuInflater().inflate(R.menu.menu_search_result, menu);
+//        menuItemSet = menu.findItem(R.id.set);
+//        menuItemUser = menu.findItem(R.id.user);
+//        menuItemSet.setActionView(R.layout.menu_item_view);
+//        menuItemUser.setActionView(R.layout.menu_item_view);
+//        LinearLayout setLayout = (LinearLayout) menuItemSet.getActionView();
+//        ImageView set = (ImageView) setLayout.findViewById(R.id.ivItem);
+//        set.setImageResource(R.mipmap.icon_toolbar_set);
+//        set.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(SearchResult.this, SetActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        LinearLayout userlayout = (LinearLayout) menuItemUser.getActionView();
+//        ImageView user = (ImageView) userlayout.findViewById(R.id.ivItem);
+//        user.setImageResource(R.mipmap.icon_toolbar_user);
+//        user.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(SearchResult.this, UserCenter.class);
+//                startActivity(intent);
+//            }
+//        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -289,38 +289,30 @@ public class SearchResult extends BaseActivity {
                 if (type != index) {
                     switch (index) {
                         case 0:
-                            tvType.setText("全部结果");
                             type = index;
                             filterString = "all";
                             clickPupWindow();
                             break;
                         case 1:
-                            tvType.setText("淘宝");
                             type = index;
                             filterString = "taobao";
                             clickPupWindow();
                             break;
                         case 2:
-                            tvType.setText("天猫");
                             type = index;
                             filterString = "tmall";
                             clickPupWindow();
                             break;
                         case 3:
-                            tvType.setText("京东");
                             type = index;
                             filterString = "jd";
                             clickPupWindow();
                             break;
 //                        case 4:
-//                            toast("暂未开放");
-//                            tvType.setText("蘑菇街");
 //                            type = index;
 //                            filterString = "";
 //                            break;
 //                        case 5:
-//                            toast("暂未开放");
-//                            tvType.setText("美丽说");
 //                            type = index;
 //                            filterString = "";
 //                            break;

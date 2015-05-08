@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,6 +85,7 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
         viewPager.setCurrentItem(0);
 
         getVersionInfo();
+        getHomeImage();
     }
 
     @Override
@@ -128,11 +130,11 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
         @Override
         public void onClick(View v) {
             if (v.getId() == 100 + 0) {
-                Intent intent = new Intent(IndexHome.this, CropImageActivity.class);
+                Intent intent = new Intent(IndexHome.this, CropImage.class);
                 intent.putExtra("TYPE","CAMERA");
                 startActivity(intent);
             } else if (v.getId() == 100 + 1) {
-                Intent intent = new Intent(IndexHome.this, CropImageActivity.class);
+                Intent intent = new Intent(IndexHome.this, CropImage.class);
                 intent.putExtra("TYPE","ALBUM");
                 startActivity(intent);
             }
@@ -193,16 +195,16 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
      * 获取首页图片
      */
     private void getHomeImage() {
-        HomeParams params = new HomeParams(page, size);
+        HomeParams params = new HomeParams(0, 18, 1);
         AsyncHttpTask.post(params.getUrl(), params, new ResponseHandler() {
             @Override
             public void onResponseSuccess(int returnCode, Header[] headers, String result) {
-
+                Log.e("aa", result);
             }
 
             @Override
             public void onResponseFailed(int returnCode, String errorMsg) {
-
+                Log.e("aa", "false");
             }
         });
     }
@@ -240,7 +242,7 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
      */
     private void updateVersionDialog(final VersionModel versionModel) {
         DialogVersionUpdate versionUpdate = new DialogVersionUpdate(IndexHome.this, R.style.dialog_untran);
-        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize() + "M").setVersionContent("更新内容\n\n" + versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize() + "M").setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
             @Override
             public void onUpdateListener() {
                 if (versionModel.getVer_url().startsWith("http")) {

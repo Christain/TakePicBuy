@@ -2,30 +2,30 @@ package com.unionbigdata.takepicbuy.model;
 
 public class VersionModel {
 
-	private int code;
-	private String version;
+	private int versionCode;
+	private String versionName;
 	private String size;
 	private String feature;
-	private String ver_url;
+	private String downloadUrl;
 
 	public int getCode() {
-		return code;
+		return versionCode;
 	}
 
 	public void setCode(int code) {
-		this.code = code;
+		this.versionCode = code;
 	}
 
 	public String getName() {
-		if (version != null) {
-			return version;
+		if (versionName != null) {
+			return versionName;
 		} else {
 			return "";
 		}
 	}
 
 	public void setName(String name) {
-		this.version = name;
+		this.versionName = name;
 	}
 
 	public String getDescri() {
@@ -41,15 +41,15 @@ public class VersionModel {
 	}
 
 	public String getVer_url() {
-		if (ver_url != null) {
-			return ver_url;
+		if (downloadUrl != null) {
+			return downloadUrl;
 		} else {
 			return "";
 		}
 	}
 
 	public void setVer_url(String ver_url) {
-		this.ver_url = ver_url;
+		this.downloadUrl = ver_url;
 	}
 
 	public String getSize() {
