@@ -122,7 +122,6 @@ public class StartActivity extends BaseActivity implements Runnable {
                     if (needGuide) {
                         intent = new Intent(StartActivity.this, GuideActivity.class);
                     } else {
-                        // 跳首页
                         intent = new Intent(StartActivity.this, IndexHome.class);
                     }
                     startActivity(intent);

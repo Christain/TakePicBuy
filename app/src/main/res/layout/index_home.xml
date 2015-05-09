@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_app"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar_home" />
 
@@ -10,23 +11,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.unionbigdata.takepicbuy.widget.PullToRefreshViewPager
-            xmlns:ptr="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/view_pager"
+        <com.unionbigdata.takepicbuy.widget.PullToRefreshLayout
+            android:id="@+id/refreshView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            ptr:ptrAnimationStyle="flip"
-            ptr:ptrHeaderBackground="@color/bg_app"
-            ptr:ptrMode="both" />
+            android:layout_height="match_parent">
+
+            <include layout="@layout/refresh_head" />
+
+            <com.unionbigdata.takepicbuy.widget.PullableListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="#00000000"
+                android:divider="@null"
+                android:drawSelectorOnTop="false"
+                android:fadingEdge="none"
+                android:headerDividersEnabled="false"
+                android:listSelector="#00000000"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollingCache="true"></com.unionbigdata.takepicbuy.widget.PullableListView>
+
+            <include layout="@layout/load_more" />
+
+        </com.unionbigdata.takepicbuy.widget.PullToRefreshLayout>
+
+        <!--<com.unionbigdata.takepicbuy.widget.PullToRefreshViewPager-->
+        <!--xmlns:ptr="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/view_pager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--ptr:ptrAnimationStyle="flip"-->
+        <!--ptr:ptrHeaderBackground="@color/bg_app"-->
+        <!--ptr:ptrMode="both" />-->
 
         <com.unionbigdata.takepicbuy.widget.ComposerLayout
             android:id="@+id/path"
             android:layout_width="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_height="wrap_content" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp" />
     </RelativeLayout>
 
 </LinearLayout>

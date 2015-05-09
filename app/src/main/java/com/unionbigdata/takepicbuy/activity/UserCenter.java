@@ -35,6 +35,7 @@ import com.unionbigdata.takepicbuy.dialog.LoadingDialog;
 import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
 import com.unionbigdata.takepicbuy.model.SearchPicModel;
+import com.unionbigdata.takepicbuy.model.UserInfoModel;
 import com.unionbigdata.takepicbuy.params.LoginParam;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
@@ -103,6 +104,7 @@ public class UserCenter extends BaseActivity {
         params.height = PhoneManager.getDisplayMetrics(UserCenter.this).heightPixels - PhoneManager.getStatusBarHigh() - params.width - getResources().getDimensionPixelOffset(R.dimen.user_center_search_item_high) + getResources().getDimensionPixelOffset(R.dimen.user_center_gridview_padding);
         rlHeader.setLayoutParams(params);
 
+        this.hasLogin = AppPreference.hasLogin(UserCenter.this);
         if (hasLogin) {
             isLoginView();
         } else {
@@ -117,8 +119,8 @@ public class UserCenter extends BaseActivity {
     private void isLoginView() {
         llHasLogin.setVisibility(View.VISIBLE);
         llNoLogin.setVisibility(View.GONE);
-        ivUserIcon.setImageURI(Uri.parse("http://h.hiphotos.baidu.com/image/pic/item/267f9e2f0708283830200feebc99a9014c08f11f.jpg"));
-        tvUserName.setText("已登录");
+        ivUserIcon.setImageURI(Uri.parse(AppPreference.getUserPersistent(UserCenter.this, AppPreference.USER_PHOTO)));
+        tvUserName.setText(AppPreference.getUserPersistent(UserCenter.this, AppPreference.NICK_NAME));
         this.adapter = new SearchPicAdapter(UserCenter.this, "9");
         this.gridView.setAdapter(adapter);
 
@@ -212,7 +214,6 @@ public class UserCenter extends BaseActivity {
                         if (!ClickUtil.isFastClick()) {
                             Intent intent = new Intent(UserCenter.this, SearchResult.class);
                             intent.putExtra("IMGURL", getImageUrl(position));
-                            intent.putExtra("FROM", "SEARCH");
                             startActivity(intent);
                         }
                     }
@@ -266,8 +267,8 @@ public class UserCenter extends BaseActivity {
                 model.setLastModified(f.lastModified());
                 list.add(model);
             }
-            Collections.sort(list, new FileComparator());
         }
+        Collections.sort(list, new FileComparator());
         return list;
     }
 
@@ -287,7 +288,7 @@ public class UserCenter extends BaseActivity {
     /**
      * 登录
      */
-    private void Login(int type, String opendId, String access_token) {
+    private void Login(final int type, final String opendId, final String access_token) {
         if (mLoadingDialog != null && !mLoadingDialog.isShowing()) {
             mLoadingDialog.setMessage("登录中...");
             mLoadingDialog.show();
@@ -299,7 +300,33 @@ public class UserCenter extends BaseActivity {
                 if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
                     mLoadingDialog.dismiss();
                 }
-                isLoginView();
+                if (type == 0) {
+                    try {
+                        JSONObject object = new JSONObject(result);
+                        UserInfoModel model = new UserInfoModel();
+                        model.setName(object.getString("screen_name"));
+                        model.setUser_photo(object.getString("avatar_large"));
+                        AppPreference.saveUserInfo(UserCenter.this, model);
+                        AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_SINA, mAccessToken.getUid(), mAccessToken.getToken(), mAccessToken.getExpiresTime());
+                        isLoginView();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        toast("登录失败，请重试");
+                    }
+                } else if (type == 1) {
+                    try {
+                        JSONObject object = new JSONObject(result);
+                        UserInfoModel model = new UserInfoModel();
+                        model.setName(object.getString("nickname"));
+                        model.setUser_photo(object.getString("figureurl"));
+                        AppPreference.saveUserInfo(UserCenter.this, model);
+                        AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_QQ, opendId, access_token, Long.parseLong(AppPreference.getUserPersistent(UserCenter.this, AppPreference.QQ_EXPIRES)));
+                        isLoginView();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        toast("登录失败，请重试");
+                    }
+                }
             }
 
             @Override
@@ -355,7 +382,7 @@ public class UserCenter extends BaseActivity {
                     String openid = object.getString("openid");
                     String token = object.getString("access_token");
                     String expires_in = object.getString("expires_in");
-                    AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_QQ, openid, token, Long.parseLong(expires_in));
+                    AppPreference.save(UserCenter.this, AppPreference.QQ_EXPIRES, expires_in);
                     if (Constant.SHOW_LOG) {
                         Log.e("QQ验证", arg0.toString());
                     }
@@ -367,7 +394,7 @@ public class UserCenter extends BaseActivity {
 
             @Override
             public void onError(UiError arg0) {
-                toast(arg0.toString());
+                toast("QQ登录错误");
             }
         };
         mTencent.login(UserCenter.this, "get_simple_userinfo", listener);
@@ -392,8 +419,6 @@ public class UserCenter extends BaseActivity {
             if (Constant.SHOW_LOG) {
                 Log.e("微博验证", "uid: " + mAccessToken.getUid() + "\n" + "token:" + mAccessToken.getToken() + "\n" + "expirestime: " + mAccessToken.getExpiresTime());
             }
-            AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_SINA, mAccessToken.getUid(), mAccessToken.getToken(), mAccessToken.getExpiresTime());
-            isLoginView();
             Login(0, mAccessToken.getUid(), mAccessToken.getToken());
         }
 

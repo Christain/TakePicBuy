@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -451,7 +450,6 @@ public class PullToRefreshLayout extends RelativeLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        Log.d("Test", "Test");
         if (!isLayout) {
             // 这里是第一次进来的时候做一些初始化
             refreshView = getChildAt(0);

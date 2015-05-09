@@ -8,9 +8,10 @@ import com.unionbigdata.takepicbuy.baseclass.BaseParams;
  */
 public class HomeParams extends BaseParams {
 
-    public HomeParams(int page, int size) {
+    public HomeParams(int pageno, int pagesize, int plate) {
         super("getHomePageData.action");
-        put("page", page);
-        put("size", size);
+        put("pageno", pageno);
+        put("pagesize", pagesize);
+        put("plate", plate);
     }
 }

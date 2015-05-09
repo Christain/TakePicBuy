@@ -86,7 +86,6 @@ public class SearchHistory extends BaseActivity {
                             if (!ClickUtil.isFastClick()) {
                                 Intent intent = new Intent(SearchHistory.this, SearchResult.class);
                                 intent.putExtra("IMGURL", getImageUrl(position));
-                                intent.putExtra("FROM", "SEARCH");
                                 startActivity(intent);
                             }
                         }

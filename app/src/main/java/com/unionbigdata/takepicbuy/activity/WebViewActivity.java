@@ -2,6 +2,7 @@ package com.unionbigdata.takepicbuy.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -11,6 +12,7 @@ import android.widget.ProgressBar;
 
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
+import com.unionbigdata.takepicbuy.utils.ClickUtil;
 
 import butterknife.InjectView;
 
@@ -45,13 +47,18 @@ public class WebViewActivity extends BaseActivity {
             getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    if (webView.canGoBack()) {
+                        webView.goBack();
+                    } else {
+                        finish();
+                    }
                 }
             });
             pbWebView.setVisibility(View.VISIBLE);
             pbWebView.setMax(100);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setSupportZoom(true);
+            webView.getSettings().setDisplayZoomControls(false);
             webView.getSettings().setBuiltInZoomControls(true);
             webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
@@ -80,5 +87,19 @@ public class WebViewActivity extends BaseActivity {
             toast("网页信息错误");
             finish();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!ClickUtil.isFastClick()) {
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                } else {
+                    finish();
+                }
+            }
+        }
+        return true;
     }
 }

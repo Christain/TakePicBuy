@@ -3,61 +3,63 @@ package com.unionbigdata.takepicbuy.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.unionbigdata.takepicbuy.AppPreference;
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.TakePicBuyApplication;
+import com.unionbigdata.takepicbuy.adapter.HomeAdapter;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
+import com.unionbigdata.takepicbuy.baseclass.SuperAdapter;
 import com.unionbigdata.takepicbuy.dialog.DialogVersionUpdate;
 import com.unionbigdata.takepicbuy.dialog.Effectstype;
-import com.unionbigdata.takepicbuy.fragment.HomeFragment;
 import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
+import com.unionbigdata.takepicbuy.http.OnAdapterLoadMoreOverListener;
+import com.unionbigdata.takepicbuy.http.OnAdapterRefreshOverListener;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
 import com.unionbigdata.takepicbuy.model.VersionModel;
-import com.unionbigdata.takepicbuy.params.HomeParams;
 import com.unionbigdata.takepicbuy.params.UpdateVersionParam;
 import com.unionbigdata.takepicbuy.utils.DoubleClickExitHelper;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
 import com.unionbigdata.takepicbuy.widget.ComposerLayout;
-import com.unionbigdata.takepicbuy.widget.PullToRefreshViewPager;
+import com.unionbigdata.takepicbuy.widget.PullToRefreshLayout;
+import com.unionbigdata.takepicbuy.widget.PullableListView;
 
 import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.InjectView;
-import christain.refreshlibrary.library.PullToRefreshBase;
 
 /**
  * 首页
  * Created by Christain on 15/4/19.
  */
-public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefreshListener2<ViewPager> {
+public class IndexHome extends BaseActivity {
 
     private DoubleClickExitHelper doubleClickExitHelper;
 
     @InjectView(R.id.path)
     ComposerLayout pathButton;
-    @InjectView(R.id.view_pager)
-    PullToRefreshViewPager refreshViewPager;
-    private ViewPagerAdapter adapter;
+    @InjectView(R.id.listView)
+    PullableListView listView;
+    @InjectView(R.id.head_view)
+    RelativeLayout refreshHeader;
+    @InjectView(R.id.loadmore_view)
+    RelativeLayout refreshFooter;
+    @InjectView(R.id.refreshView)
+    PullToRefreshLayout refreshLayout;
 
+    private HomeAdapter adapter;
     private MenuItem menuItemSet, menuItemUser;
+    private int toolbarHigh;
 
-    private int page = 0, size = 18;
 
     @Override
     protected int layoutResId() {
@@ -76,66 +78,103 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
                 getResources().getDimensionPixelOffset(R.dimen.path_radius), 300);
         pathButton.setButtonsOnClickListener(new PathOnClickListener());
 
-        this.adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        refreshViewPager.setOnRefreshListener(this);
+        this.refreshHeader = (RelativeLayout) findViewById(R.id.head_view);
+        this.refreshFooter = (RelativeLayout) findViewById(R.id.loadmore_view);
+        this.refreshHeader.setBackgroundColor(0xFFF1F1F1);
+        this.refreshFooter.setBackgroundColor(0xFFF1F1F1);
 
-        ViewPager viewPager = refreshViewPager.getRefreshableView();
-        viewPager.setAdapter(adapter);
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(0);
-        viewPager.setCurrentItem(0);
-
-        getVersionInfo();
-    }
-
-    @Override
-    public void onPullDownToRefresh(PullToRefreshBase<ViewPager> refreshView) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(4000);
-                   mHandler.sendEmptyMessage(0);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            refreshViewPager.onRefreshComplete();
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(R.attr.actionBarSize, tv, true)) {
+            toolbarHigh = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
         }
-    };
+        this.adapter = new HomeAdapter(IndexHome.this, toolbarHigh);
+        this.listView.setAdapter(adapter);
 
-    @Override
-    public void onPullUpToRefresh(PullToRefreshBase<ViewPager> refreshView) {
-        new Thread(new Runnable() {
+        this.refreshLayout.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
             @Override
-            public void run() {
-                try {
-                    Thread.sleep(4000);
-                    mHandler.sendEmptyMessage(0);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
+                adapter.getHomeList(1);
+            }
+
+            @Override
+            public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
+                adapter.loadMore();
+            }
+        });
+        this.adapter.setRefreshOverListener(new OnAdapterRefreshOverListener() {
+            @Override
+            public void refreshOver(int code, String msg) {
+                listView.setContentOver(adapter.getIsOver());
+                refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                if (code == -1) {
+//                    if (!llNoResult.isShown()) {
+//                        llNoResult.setVisibility(View.VISIBLE);
+//                        tvNoResult.setText("  搜索商品失败");
+//                    }
+                    if (refreshLayout.isShown()) {
+                        refreshLayout.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    if (msg.equals(SuperAdapter.ISNULL)) {
+//                        if (!llNoResult.isShown()) {
+//                            llNoResult.setVisibility(View.VISIBLE);
+//                            tvNoResult.setText("  没有搜索到商品");
+//                        }
+                        if (refreshLayout.isShown()) {
+                            refreshLayout.setVisibility(View.INVISIBLE);
+                        }
+                    } else {
+//                        if (llNoResult.isShown()) {
+//                            llNoResult.setVisibility(View.GONE);
+//                        }
+                        if (!refreshLayout.isShown()) {
+                            refreshLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
                 }
             }
-        }).start();
+        });
+        this.adapter.setLoadMoreOverListener(new OnAdapterLoadMoreOverListener() {
+            @Override
+            public void loadMoreOver(int code, String msg) {
+                listView.setContentOver(adapter.getIsOver());
+                refreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                if (code == -1) {
+                    toast("加载失败，请重试");
+                } else {
+                    if (msg.equals(SuperAdapter.ISNULL)) {
+//                        if (!llNoResult.isShown()) {
+//                            llNoResult.setVisibility(View.VISIBLE);
+//                            tvNoResult.setText("  没有搜索到商品");
+//                        }
+                        if (refreshLayout.isShown()) {
+                            refreshLayout.setVisibility(View.INVISIBLE);
+                        }
+                    } else {
+//                        if (llNoResult.isShown()) {
+//                            llNoResult.setVisibility(View.GONE);
+//                        }
+                        if (!refreshLayout.isShown()) {
+                            refreshLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+        });
+        adapter.getHomeList(1);
+        getVersionInfo();
     }
 
     private class PathOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             if (v.getId() == 100 + 0) {
-                Intent intent = new Intent(IndexHome.this, CropImageActivity.class);
-                intent.putExtra("TYPE","CAMERA");
+                Intent intent = new Intent(IndexHome.this, CropImage.class);
+                intent.putExtra("TYPE", "CAMERA");
                 startActivity(intent);
             } else if (v.getId() == 100 + 1) {
-                Intent intent = new Intent(IndexHome.this, CropImageActivity.class);
-                intent.putExtra("TYPE","ALBUM");
+                Intent intent = new Intent(IndexHome.this, CropImage.class);
+                intent.putExtra("TYPE", "ALBUM");
                 startActivity(intent);
             }
         }
@@ -171,44 +210,6 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
         return super.onCreateOptionsMenu(menu);
     }
 
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
-        public ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int arg0) {
-            HomeFragment fragment = new HomeFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("TYPE", arg0 + 1);
-            fragment.setArguments(bundle);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return 6;
-        }
-    }
-
-    /**
-     * 获取首页图片
-     */
-    private void getHomeImage() {
-        HomeParams params = new HomeParams(page, size);
-        AsyncHttpTask.post(params.getUrl(), params, new ResponseHandler() {
-            @Override
-            public void onResponseSuccess(int returnCode, Header[] headers, String result) {
-
-            }
-
-            @Override
-            public void onResponseFailed(int returnCode, String errorMsg) {
-
-            }
-        });
-    }
-
     /**
      * 获取版本信息
      */
@@ -217,19 +218,15 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
         AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
             @Override
             public void onResponseSuccess(int returnCode, Header[] headers, String result) {
-                try {
-                    JSONObject object = new JSONObject(result);
-                    if (object.getString("app").length() > 2) {
-                        Gson gson = new Gson();
-                        VersionModel versionModel = gson.fromJson(object.getString("app"), VersionModel.class);
-                        if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
-                            AppPreference.setVersionInfo(IndexHome.this, versionModel);
-                            updateVersionDialog(versionModel);
-                        }
-                        TakePicBuyApplication.getInstance().setCheckViersion(true);
+                Gson gson = new Gson();
+                VersionModel versionModel = gson.fromJson(result, VersionModel.class);
+                if (versionModel != null) {
+                    if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
+                        AppPreference.setVersionInfo(IndexHome.this, versionModel);
+                        updateVersionDialog(versionModel);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    TakePicBuyApplication.getInstance().setCheckViersion(true);
+                } else {
                     TakePicBuyApplication.getInstance().setCheckViersion(false);
                 }
             }
@@ -246,7 +243,7 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
      */
     private void updateVersionDialog(final VersionModel versionModel) {
         DialogVersionUpdate versionUpdate = new DialogVersionUpdate(IndexHome.this, R.style.dialog_untran);
-        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize()).setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize() + "M").setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
             @Override
             public void onUpdateListener() {
                 if (versionModel.getVer_url().startsWith("http")) {

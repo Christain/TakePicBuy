@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
@@ -27,8 +26,6 @@ import butterknife.OnClick;
  */
 public class Feedback extends BaseActivity {
 
-    @InjectView(R.id.tvSubmit)
-    TextView tvSubmit;
     @InjectView(R.id.etContent)
     EditText etContent;
 

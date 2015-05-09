@@ -39,6 +39,8 @@
 
     <!-- 首页-->
     <dimen name="home_image_padding">7dp</dimen>
+    <dimen name="home_image_padding_top">4dp</dimen>
+    <dimen name="noresult_text_size">14sp</dimen>
     
     <!-- 搜索结果-->
     <dimen name="search_result_title_text_size">13sp</dimen>

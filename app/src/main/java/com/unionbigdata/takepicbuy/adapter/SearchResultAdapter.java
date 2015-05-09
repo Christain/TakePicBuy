@@ -21,7 +21,6 @@ import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
 import com.unionbigdata.takepicbuy.model.SearchResultListModel;
 import com.unionbigdata.takepicbuy.model.SearchResultModel;
-import com.unionbigdata.takepicbuy.params.HomePicSearchParam;
 import com.unionbigdata.takepicbuy.params.SearchResultParam;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
 
@@ -38,12 +37,11 @@ import butterknife.InjectView;
  */
 public class SearchResultAdapter extends SuperAdapter {
 
-    private int page = 0, isOver = 0, maxPage, fromType = 0;
+    private int page = 0, isOver = 0, maxPage;
     public int limit = 20;
     private String imgUrl = "", filterString = "all";
     private ResponseHandler responseHandler;
     private Context mContext;
-    private boolean isRequest = false;
 
     public SearchResultAdapter(Context context) {
         super(context);
@@ -242,13 +240,8 @@ public class SearchResultAdapter extends SuperAdapter {
             if (!isRequest) {
                 this.isRequest = true;
                 this.loadType = LOADMORE;
-                if (fromType == 1) {
-                    HomePicSearchParam param = new HomePicSearchParam(imgUrl, filterString, page, limit);
-                    AsyncHttpTask.post(param.getUrl(), param, responseHandler);
-                } else {
-                    SearchResultParam param = new SearchResultParam(imgUrl, filterString, page, limit);
-                    AsyncHttpTask.post(param.getUrl(), param, responseHandler);
-                }
+                SearchResultParam param = new SearchResultParam(imgUrl, filterString, page, limit);
+                AsyncHttpTask.post(param.getUrl(), param, responseHandler);
             }
         }
     }
@@ -260,7 +253,7 @@ public class SearchResultAdapter extends SuperAdapter {
     /**
      * 搜索第一次加载分类
      */
-    public void searchResultList(String imgUrl, String filterString, int fromType) {
+    public void searchResultList(String imgUrl, String filterString) {
         if (!isRequest) {
             this.isRequest = true;
             this.loadType = REFRESH;
@@ -268,14 +261,8 @@ public class SearchResultAdapter extends SuperAdapter {
             isOver = 0;
             this.imgUrl = imgUrl;
             this.filterString = filterString;
-            this.fromType = fromType;
-            if (fromType == 1) {
-                HomePicSearchParam param = new HomePicSearchParam(imgUrl, filterString, page, limit);
-                AsyncHttpTask.post(param.getUrl(), param, responseHandler);
-            } else {
-                SearchResultParam param = new SearchResultParam(imgUrl, filterString, page, limit);
-                AsyncHttpTask.post(param.getUrl(), param, responseHandler);
-            }
+            SearchResultParam param = new SearchResultParam(imgUrl, filterString, page, limit);
+            AsyncHttpTask.post(param.getUrl(), param, responseHandler);
         }
     }
 }

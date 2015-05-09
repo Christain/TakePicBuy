@@ -7,10 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -36,7 +34,7 @@ import butterknife.OnClick;
  */
 public class SearchResult extends BaseActivity {
 
-    private MenuItem menuItemSet, menuItemUser, menuItemPic;
+//    private MenuItem menuItemSet, menuItemUser;
 
     @InjectView(R.id.tvType)
     TextView tvType;
@@ -49,6 +47,8 @@ public class SearchResult extends BaseActivity {
     @InjectView(R.id.refreshView)
     PullToRefreshLayout refreshLayout;
 
+    @InjectView(R.id.llLoading)
+    LinearLayout llLoading;
     @InjectView(R.id.llNoResult)
     LinearLayout llNoResult;
     @InjectView(R.id.tvNoResult)
@@ -59,7 +59,6 @@ public class SearchResult extends BaseActivity {
     private String filterString = "all";//平台分类
     private int type = 0;
     private String imgUrl = "";//搜索图片的url
-    private int fromType = 0;//首页搜索还是上传搜索HOME = 1,SEARCH = 2
     private LoadingDialog mLoadingDialog;
 
     @Override
@@ -70,13 +69,8 @@ public class SearchResult extends BaseActivity {
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        if (intent.hasExtra("IMGURL") && intent.hasExtra("FROM")) {
+        if (intent.hasExtra("IMGURL")) {
             imgUrl = intent.getStringExtra("IMGURL");
-            if (intent.getStringExtra("FROM").equals("HOME")) {
-                fromType = 1;
-            } else {
-                fromType = 2;
-            }
             this.mLoadingDialog = LoadingDialog.createDialog(SearchResult.this, true);
             getToolbar().setTitle("");
             getToolbar().setTitleTextColor(0xFFFFFFFF);
@@ -90,8 +84,8 @@ public class SearchResult extends BaseActivity {
             });
             this.refreshHeader = (RelativeLayout) findViewById(R.id.head_view);
             this.refreshFooter = (RelativeLayout) findViewById(R.id.loadmore_view);
-            this.refreshHeader.setBackgroundColor(0xFFEEEEEE);
-            this.refreshFooter.setBackgroundColor(0xFFEEEEEE);
+            this.refreshHeader.setBackgroundColor(0xFFF1F1F1);
+            this.refreshFooter.setBackgroundColor(0xFFF1F1F1);
 
             this.adapter = new SearchResultAdapter(SearchResult.this);
             this.gridView.setAdapter(adapter);
@@ -110,8 +104,25 @@ public class SearchResult extends BaseActivity {
             this.adapter.setRefreshOverListener(new OnAdapterRefreshOverListener() {
                 @Override
                 public void refreshOver(int code, String msg) {
+                    switch (type) {
+                        case 0:
+                            tvType.setText("全部结果");
+                            break;
+                        case 1:
+                            tvType.setText("淘宝");
+                            break;
+                        case 2:
+                            tvType.setText("天猫");
+                            break;
+                        case 3:
+                            tvType.setText("京东");
+                            break;
+                    }
                     if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
                         mLoadingDialog.dismiss();
+                    }
+                    if (llLoading.isShown()) {
+                        llLoading.setVisibility(View.GONE);
                     }
                     gridView.setContentOver(adapter.getIsOver());
                     gridView.smoothScrollToPosition(0);
@@ -147,7 +158,7 @@ public class SearchResult extends BaseActivity {
                 @Override
                 public void loadMoreOver(int code, String msg) {
                     gridView.setContentOver(adapter.getIsOver());
-                    refreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+                    refreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                     if (code == -1) {
                         toast("加载失败，请重试");
                     } else {
@@ -170,11 +181,8 @@ public class SearchResult extends BaseActivity {
                     }
                 }
             });
-            if (mLoadingDialog != null && !mLoadingDialog.isShowing()) {
-                mLoadingDialog.setMessage("加载中...");
-                mLoadingDialog.show();
-            }
-            adapter.searchResultList(imgUrl, filterString, fromType);
+            llLoading.setVisibility(View.VISIBLE);
+            adapter.searchResultList(imgUrl, filterString);
         } else {
             toast("无效的搜索");
             finish();
@@ -183,43 +191,31 @@ public class SearchResult extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search_result, menu);
-        menuItemSet = menu.findItem(R.id.set);
-        menuItemUser = menu.findItem(R.id.user);
-        menuItemPic = menu.findItem(R.id.pic);
-        menuItemSet.setActionView(R.layout.menu_item_view);
-        menuItemUser.setActionView(R.layout.menu_item_view);
-        menuItemPic.setActionView(R.layout.menu_item_view);
-        LinearLayout setLayout = (LinearLayout) menuItemSet.getActionView();
-        ImageView set = (ImageView) setLayout.findViewById(R.id.ivItem);
-        set.setImageResource(R.mipmap.icon_toolbar_set);
-        set.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchResult.this, SetActivity.class);
-                startActivity(intent);
-            }
-        });
-        LinearLayout userlayout = (LinearLayout) menuItemUser.getActionView();
-        ImageView user = (ImageView) userlayout.findViewById(R.id.ivItem);
-        user.setImageResource(R.mipmap.icon_toolbar_user);
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchResult.this, UserCenter.class);
-                startActivity(intent);
-            }
-        });
-        LinearLayout picLayout = (LinearLayout) menuItemPic.getActionView();
-        ImageView pic = (ImageView) picLayout.findViewById(R.id.ivItem);
-        pic.setImageResource(R.mipmap.icon_toolbar_select_pic);
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchResult.this, CropImageActivity.class);
-                startActivity(intent);
-            }
-        });
+//        getMenuInflater().inflate(R.menu.menu_search_result, menu);
+//        menuItemSet = menu.findItem(R.id.set);
+//        menuItemUser = menu.findItem(R.id.user);
+//        menuItemSet.setActionView(R.layout.menu_item_view);
+//        menuItemUser.setActionView(R.layout.menu_item_view);
+//        LinearLayout setLayout = (LinearLayout) menuItemSet.getActionView();
+//        ImageView set = (ImageView) setLayout.findViewById(R.id.ivItem);
+//        set.setImageResource(R.mipmap.icon_toolbar_set);
+//        set.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(SearchResult.this, SetActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        LinearLayout userlayout = (LinearLayout) menuItemUser.getActionView();
+//        ImageView user = (ImageView) userlayout.findViewById(R.id.ivItem);
+//        user.setImageResource(R.mipmap.icon_toolbar_user);
+//        user.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(SearchResult.this, UserCenter.class);
+//                startActivity(intent);
+//            }
+//        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -289,38 +285,30 @@ public class SearchResult extends BaseActivity {
                 if (type != index) {
                     switch (index) {
                         case 0:
-                            tvType.setText("全部结果");
                             type = index;
                             filterString = "all";
                             clickPupWindow();
                             break;
                         case 1:
-                            tvType.setText("淘宝");
                             type = index;
                             filterString = "taobao";
                             clickPupWindow();
                             break;
                         case 2:
-                            tvType.setText("天猫");
                             type = index;
                             filterString = "tmall";
                             clickPupWindow();
                             break;
                         case 3:
-                            tvType.setText("京东");
                             type = index;
                             filterString = "jd";
                             clickPupWindow();
                             break;
 //                        case 4:
-//                            toast("暂未开放");
-//                            tvType.setText("蘑菇街");
 //                            type = index;
 //                            filterString = "";
 //                            break;
 //                        case 5:
-//                            toast("暂未开放");
-//                            tvType.setText("美丽说");
 //                            type = index;
 //                            filterString = "";
 //                            break;
@@ -337,7 +325,7 @@ public class SearchResult extends BaseActivity {
                 mLoadingDialog.setMessage("加载中...");
                 mLoadingDialog.show();
             }
-            adapter.searchResultList(imgUrl, filterString, fromType);
+            adapter.searchResultList(imgUrl, filterString);
         }
     }
 }

@@ -7,7 +7,11 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:padding="@dimen/home_image_padding"
+        android:id="@+id/llItemAll"
+        android:paddingLeft="@dimen/home_image_padding"
+        android:paddingRight="@dimen/home_image_padding"
+        android:paddingBottom="@dimen/home_image_padding_top"
+        android:paddingTop="@dimen/home_image_padding_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
