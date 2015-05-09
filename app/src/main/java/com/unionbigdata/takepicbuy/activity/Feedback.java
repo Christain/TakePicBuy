@@ -10,7 +10,13 @@ import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
 import com.unionbigdata.takepicbuy.dialog.DialogTipsBuilder;
 import com.unionbigdata.takepicbuy.dialog.Effectstype;
+import com.unionbigdata.takepicbuy.dialog.LoadingDialog;
+import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
+import com.unionbigdata.takepicbuy.http.ResponseHandler;
+import com.unionbigdata.takepicbuy.params.FeedBackParam;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
+
+import org.apache.http.Header;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -27,6 +33,7 @@ public class Feedback extends BaseActivity {
     EditText etContent;
 
     private DialogTipsBuilder dialog;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected int layoutResId() {
@@ -35,6 +42,7 @@ public class Feedback extends BaseActivity {
 
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
+        this.mLoadingDialog = LoadingDialog.createDialog(Feedback.this, true);
         getToolbar().setTitle("意见反馈");
         getToolbar().setTitleTextColor(0xFFFFFFFF);
         getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
@@ -58,7 +66,36 @@ public class Feedback extends BaseActivity {
                 }
                 return;
             }
-            toast("提交");
+            Submit(content);
         }
+    }
+
+    /**
+     * 提交意见反馈
+     */
+    private void Submit(String content) {
+        if (mLoadingDialog != null && !mLoadingDialog.isShowing()) {
+            mLoadingDialog.setMessage("提交中...");
+            mLoadingDialog.show();
+        }
+        FeedBackParam param = new FeedBackParam(content);
+        AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
+            @Override
+            public void onResponseSuccess(int returnCode, Header[] headers, String result) {
+                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+                toast("提交成功");
+                finish();
+            }
+
+            @Override
+            public void onResponseFailed(int returnCode, String errorMsg) {
+                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+                toast("提交失败，请重试");
+            }
+        });
     }
 }

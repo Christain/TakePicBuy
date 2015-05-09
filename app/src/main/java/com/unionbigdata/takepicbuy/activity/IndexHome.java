@@ -1,7 +1,10 @@
 package com.unionbigdata.takepicbuy.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,6 +21,8 @@ import com.unionbigdata.takepicbuy.AppPreference;
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.TakePicBuyApplication;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
+import com.unionbigdata.takepicbuy.dialog.DialogVersionUpdate;
+import com.unionbigdata.takepicbuy.dialog.Effectstype;
 import com.unionbigdata.takepicbuy.fragment.HomeFragment;
 import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
@@ -85,22 +90,40 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
 
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<ViewPager> refreshView) {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        refreshViewPager.onRefreshComplete();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(4000);
+                   mHandler.sendEmptyMessage(0);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            refreshViewPager.onRefreshComplete();
+        }
+    };
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase<ViewPager> refreshView) {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        refreshViewPager.onRefreshComplete();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(4000);
+                    mHandler.sendEmptyMessage(0);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private class PathOnClickListener implements View.OnClickListener {
@@ -201,6 +224,7 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
                         VersionModel versionModel = gson.fromJson(object.getString("app"), VersionModel.class);
                         if (versionModel.getCode() > PhoneManager.getVersionInfo().versionCode) {
                             AppPreference.setVersionInfo(IndexHome.this, versionModel);
+                            updateVersionDialog(versionModel);
                         }
                         TakePicBuyApplication.getInstance().setCheckViersion(true);
                     }
@@ -215,6 +239,24 @@ public class IndexHome extends BaseActivity implements PullToRefreshBase.OnRefre
                 TakePicBuyApplication.getInstance().setCheckViersion(false);
             }
         });
+    }
+
+    /**
+     * 版本更新
+     */
+    private void updateVersionDialog(final VersionModel versionModel) {
+        DialogVersionUpdate versionUpdate = new DialogVersionUpdate(IndexHome.this, R.style.dialog_untran);
+        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize()).setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+            @Override
+            public void onUpdateListener() {
+                if (versionModel.getVer_url().startsWith("http")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionModel.getVer_url()));
+                    startActivity(intent);
+                } else {
+                    toast("更新地址错误");
+                }
+            }
+        }).show();
     }
 
     @Override

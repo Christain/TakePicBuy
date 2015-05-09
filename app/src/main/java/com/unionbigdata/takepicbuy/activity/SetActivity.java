@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +45,7 @@ public class SetActivity extends BaseActivity {
     @InjectView(R.id.tvClean)
     TextView tvClean;
     @InjectView(R.id.llVersion)
-    TextView llVersion;
+    LinearLayout llVersion;
     @InjectView(R.id.ivVersion)
     ImageView ivVersion;
     @InjectView(R.id.llFeedback)
@@ -58,7 +59,7 @@ public class SetActivity extends BaseActivity {
 
     private LoadingDialog mLoadingDialog;
     private DialogTipsBuilder dialog;
-    private boolean hasLogin = false;
+    private boolean hasLogin = true, loginStatusChanged = false;
 
     @Override
     protected int layoutResId() {
@@ -76,6 +77,9 @@ public class SetActivity extends BaseActivity {
         getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (loginStatusChanged) {
+                    setResult(RESULT_OK);
+                }
                 finish();
             }
         });
@@ -142,7 +146,8 @@ public class SetActivity extends BaseActivity {
                             dialog.dismiss();
                             AppPreference.clearInfo(SetActivity.this);
                             hasLogin = false;
-                            tvExit.setVisibility(View.VISIBLE);
+                            loginStatusChanged = true;
+                            tvExit.setVisibility(View.GONE);
                         }
                     }).show();
                     break;
@@ -174,18 +179,12 @@ public class SetActivity extends BaseActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    if (dialog != null && !dialog.isShowing()) {
-                        dialog.setMessage("版本数据格式错误").withEffect(Effectstype.Shake).show();
-                    }
                     TakePicBuyApplication.getInstance().setCheckViersion(false);
                 }
             }
 
             @Override
             public void onResponseFailed(int returnCode, String errorMsg) {
-                if (dialog != null && !dialog.isShowing()) {
-                    dialog.setMessage(errorMsg).withEffect(Effectstype.Shake).show();
-                }
                 TakePicBuyApplication.getInstance().setCheckViersion(false);
             }
         });
@@ -196,11 +195,15 @@ public class SetActivity extends BaseActivity {
      */
     private void updateVersionDialog(final VersionModel versionModel) {
         DialogVersionUpdate versionUpdate = new DialogVersionUpdate(SetActivity.this, R.style.dialog_untran);
-        versionUpdate.withDuration(400).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + "5M").setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
+        versionUpdate.withDuration(300).withEffect(Effectstype.Fadein).setCancel("以后再说").setSure("立即更新").setVersionName("最新版本：" + versionModel.getName()).setVersionSize("新版本大小：" + versionModel.getSize()).setVersionContent(versionModel.getDescri()).setOnSureClick(new DialogVersionUpdate.OnUpdateClickListener() {
             @Override
             public void onUpdateListener() {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionModel.getVer_url()));
-                startActivity(intent);
+                if (versionModel.getVer_url().startsWith("http")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(versionModel.getVer_url()));
+                    startActivity(intent);
+                } else {
+                    toast("更新地址错误");
+                }
             }
         }).show();
     }
@@ -219,7 +222,7 @@ public class SetActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             File file = new File(PhoneManager.getAppRootPath());
-            if (file != null && file.exists()) {
+            if (file.exists()) {
                 deleteFile(file);
             } else {
                 if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
@@ -261,5 +264,16 @@ public class SetActivity extends BaseActivity {
             }
             file.delete();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (loginStatusChanged) {
+               setResult(RESULT_OK);
+            }
+            finish();
+        }
+        return true;
     }
 }

@@ -12,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,28 +58,18 @@ import butterknife.OnClick;
  */
 public class UserCenter extends BaseActivity {
 
-    @InjectView(R.id.ibtBack)
-    ImageView ibtBack;
-    @InjectView(R.id.ibtSet)
-    ImageView ibtSet;
     @InjectView(R.id.ivUserIcon)
     SimpleDraweeView ivUserIcon;
     @InjectView(R.id.tvUserName)
     TextView tvUserName;
     @InjectView(R.id.rlHeader)
     RelativeLayout rlHeader;
-    @InjectView(R.id.tvSearch)
-    TextView tvSearch;
     @InjectView(R.id.gridView)
     GridView gridView;
     @InjectView(R.id.llNoSearch)
     LinearLayout llNosearch;
     @InjectView(R.id.llSearchBar)
     LinearLayout llSearchBar;
-    @InjectView(R.id.rlSina)
-    RelativeLayout rlSina;
-    @InjectView(R.id.rlTencent)
-    RelativeLayout rlTencent;
     @InjectView(R.id.llNoLogin)
     LinearLayout llNoLogin;
     @InjectView(R.id.llHasLogin)
@@ -148,9 +137,12 @@ public class UserCenter extends BaseActivity {
     private void noLoginView() {
         llHasLogin.setVisibility(View.GONE);
         llNoLogin.setVisibility(View.VISIBLE);
+        ivUserIcon.setImageURI(Uri.parse(""));
         tvUserName.setText("");
-        this.mTencent = Tencent.createInstance(Constant.TENCENT_APPID, this.getApplicationContext());
-        this.mWeiboAuth = new WeiboAuth(this, Constant.SINA_APPID, Constant.SINA_CALLBACK_URL, Constant.SINA_SCOPE);
+        if (mTencent == null) {
+            this.mTencent = Tencent.createInstance(Constant.TENCENT_APPID, this.getApplicationContext());
+            this.mWeiboAuth = new WeiboAuth(this, Constant.SINA_APPID, Constant.SINA_CALLBACK_URL, Constant.SINA_SCOPE);
+        }
     }
 
     @OnClick({R.id.ibtBack, R.id.ibtSet, R.id.tvSearch, R.id.rlHeader, R.id.rlSina, R.id.rlTencent})
@@ -166,7 +158,7 @@ public class UserCenter extends BaseActivity {
                     break;
                 case R.id.ibtSet:
                     Intent intent = new Intent(UserCenter.this, SetActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, 500);
                     break;
                 case R.id.tvSearch:
                     if (list != null && list.size() > 0) {
@@ -220,6 +212,7 @@ public class UserCenter extends BaseActivity {
                         if (!ClickUtil.isFastClick()) {
                             Intent intent = new Intent(UserCenter.this, SearchResult.class);
                             intent.putExtra("IMGURL", getImageUrl(position));
+                            intent.putExtra("FROM", "SEARCH");
                             startActivity(intent);
                         }
                     }
@@ -364,9 +357,9 @@ public class UserCenter extends BaseActivity {
                     String expires_in = object.getString("expires_in");
                     AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_QQ, openid, token, Long.parseLong(expires_in));
                     if (Constant.SHOW_LOG) {
-                        Log.e("QQ证", arg0.toString());
+                        Log.e("QQ验证", arg0.toString());
                     }
-                    Login(2, openid, token);
+                    Login(1, openid, token);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -401,7 +394,7 @@ public class UserCenter extends BaseActivity {
             }
             AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_SINA, mAccessToken.getUid(), mAccessToken.getToken(), mAccessToken.getExpiresTime());
             isLoginView();
-            Login(1, mAccessToken.getUid(), mAccessToken.getToken());
+            Login(0, mAccessToken.getUid(), mAccessToken.getToken());
         }
 
         @Override
@@ -442,11 +435,16 @@ public class UserCenter extends BaseActivity {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
         if (resultCode == RESULT_OK) {
-            if (requestCode == 100) {
-                if (data.hasExtra("LIST")) {
-                    list = (ArrayList<SearchPicModel>) data.getSerializableExtra("LIST");
-                    adapter.setSearchList(list);
-                }
+            switch (requestCode) {
+                case 100://历史搜索页有删除操作
+                    if (data.hasExtra("LIST")) {
+                        list = (ArrayList<SearchPicModel>) data.getSerializableExtra("LIST");
+                        adapter.setSearchList(list);
+                    }
+                    break;
+                case 500://设置页有退出操作
+                    noLoginView();
+                    break;
             }
         }
     }

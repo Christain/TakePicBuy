@@ -223,6 +223,7 @@ public class CropImageActivity extends MonitoredActivity {
                         file.renameTo(new File(Constant.UPLOAD_FILES_DIR_PATH + fileName + "_SEARCH.jpg"));
                         Intent intent = new Intent(CropImageActivity.this, SearchResult.class);
                         intent.putExtra("IMGURL", imgUrl);
+                        intent.putExtra("FROM", "SEARCH");
                         startActivity(intent);
                         finish();
                     } catch (JSONException e) {
@@ -287,11 +288,11 @@ public class CropImageActivity extends MonitoredActivity {
         }
         String fileName = String.valueOf(System.currentTimeMillis()) + "_SEARCH.jpg";
         File cropFile = new File(mTempDir, fileName);
-        aspectX = 1;
-        aspectY = 1;
+        aspectX = 0;
+        aspectY = 0;
         maxX = 0;
         maxY = 0;
-        isCircleCrop = true;
+        isCircleCrop = false;
         saveUri = Uri.fromFile(cropFile);
         sourceUri = source;
         if (sourceUri != null) {
@@ -395,7 +396,7 @@ public class CropImageActivity extends MonitoredActivity {
             @SuppressWarnings("SuspiciousNameCombination")
             int cropHeight = cropWidth;
 
-            if (isCircleCrop && aspectX != 0 && aspectY != 0) {
+            if (!isCircleCrop && aspectX != 0 && aspectY != 0) {
                 if (aspectX > aspectY) {
                     cropHeight = cropWidth * aspectY / aspectX;
                 } else {
@@ -453,8 +454,15 @@ public class CropImageActivity extends MonitoredActivity {
         if (IN_MEMORY_CROP && rotateBitmap != null) {
             croppedImage = inMemoryCrop(rotateBitmap, croppedImage, r, width, height, outWidth, outHeight);
             if (croppedImage != null) {
-                if (croppedImage.getWidth() > 300) {
-                    croppedImage = PhoneManager.zoomImage(croppedImage, 300, 300);
+                float scale = (float) croppedImage.getWidth() / (float) croppedImage.getHeight();
+                if (scale > 1) {
+                    if (croppedImage.getWidth() > 300) {
+                        croppedImage = PhoneManager.zoomImage(croppedImage, (float) 300, ((float) 300) / scale);
+                    }
+                } else {
+                    if (croppedImage.getHeight() > 300) {
+                        croppedImage = PhoneManager.zoomImage(croppedImage, ((float) 300) * scale, (float) 300);
+                    }
                 }
                 imageView.setImageBitmapResetBase(croppedImage, true);
                 imageView.center(true, true);
@@ -463,7 +471,7 @@ public class CropImageActivity extends MonitoredActivity {
         } else {
             try {
                 croppedImage = decodeRegionCrop(croppedImage, r);
-                if (!isCircleCrop) {
+                if (isCircleCrop) {
                     croppedImage = cropCircleView(croppedImage);
                 }
             } catch (IllegalArgumentException e) {
@@ -473,8 +481,15 @@ public class CropImageActivity extends MonitoredActivity {
             }
 
             if (croppedImage != null) {
-                if (croppedImage.getWidth() > 300) {
-                    croppedImage = PhoneManager.zoomImage(croppedImage, 300, 300);
+                float scale = (float) croppedImage.getWidth() / (float) croppedImage.getHeight();
+                if (scale > 1) {
+                    if (croppedImage.getWidth() > 300) {
+                        croppedImage = PhoneManager.zoomImage(croppedImage, (float)300, ((float) 300) / scale);
+                    }
+                } else {
+                    if (croppedImage.getHeight() > 300) {
+                        croppedImage = PhoneManager.zoomImage(croppedImage, ((float) 300) * scale, (float) 300);
+                    }
                 }
                 imageView.setImageRotateBitmapResetBase(new RotateBitmap(croppedImage, exifRotation), true);
                 imageView.center(true, true);
@@ -549,7 +564,7 @@ public class CropImageActivity extends MonitoredActivity {
             Matrix m = new Matrix();
             m.setRectToRect(new RectF(r), dstRect, Matrix.ScaleToFit.FILL);
             m.preConcat(rotateBitmap.getRotateMatrix());
-            if (!isCircleCrop) {
+            if (isCircleCrop) {
                 return cropCircleView(rotateBitmap.getBitmap(), croppedImage, m);
             }
             Canvas canvas = new Canvas(croppedImage);
@@ -586,18 +601,18 @@ public class CropImageActivity extends MonitoredActivity {
                             Bitmap bMapRotate =
                                     Bitmap.createBitmap(croppedImage, 0, 0, croppedImage.getWidth(), croppedImage.getHeight(), matrix,
                                             true);
-                            bMapRotate.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                            bMapRotate.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            croppedImage.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                            croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                         } finally {
                             if (croppedImage != null && !croppedImage.isRecycled()) {
                                 croppedImage.recycle();
                             }
                         }
                     } else {
-                        croppedImage.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                        croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                     }
                 }
 

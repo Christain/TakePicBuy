@@ -54,9 +54,10 @@
                 android:id="@+id/ivVersion"
                 android:layout_marginRight="@dimen/set_item_arrow_margin_right"
                 android:layout_gravity="center_vertical"
-                android:layout_width="@dimen/set_arrow_size"
-                android:layout_height="@dimen/set_arrow_size"
-                android:src="@mipmap/icon_set_gray_arrow"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone"
+                android:src="@mipmap/icon_version_new"/>
         </LinearLayout>
 
     <View

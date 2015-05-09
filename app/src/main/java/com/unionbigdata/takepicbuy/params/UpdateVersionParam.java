@@ -1,7 +1,6 @@
 package com.unionbigdata.takepicbuy.params;
 
 import com.unionbigdata.takepicbuy.baseclass.BaseParams;
-import com.unionbigdata.takepicbuy.utils.PhoneManager;
 
 /**
  * 版本更新
@@ -10,7 +9,6 @@ import com.unionbigdata.takepicbuy.utils.PhoneManager;
 public class UpdateVersionParam extends BaseParams{
 
     public UpdateVersionParam() {
-        super("");
-        put("versionCode", PhoneManager.getVersionInfo().versionCode);
+        super("getCurrentVersion.action");
     }
 }

@@ -4,13 +4,7 @@
     <item android:state_pressed="true">
         <shape>
 
-            <solid android:color="#FFE5E5E5" />
-        </shape>
-    </item>
-
-    <item>
-        <shape>
-            <gradient android:angle="90" android:endColor="#FFFFFFFF" android:startColor="#FFFFFFFF" />
+            <solid android:color="@color/image_click_color"/>
         </shape>
     </item>
 

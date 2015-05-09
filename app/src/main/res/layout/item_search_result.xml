@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:id="@+id/llItemAll"
-        android:background="@drawable/shape_goods_compare_item_click_style"
+        android:background="@color/bg_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -24,8 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             fresco:fadeDuration="300"
-            android:background="@drawable/default_image"
-            fresco:actualImageScaleType="centerInside"
+            fresco:pressedStateOverlayImage="@color/image_click_color"
+            fresco:actualImageScaleType="fitCenter"
             fresco:placeholderImageScaleType="centerCrop"
             fresco:placeholderImage="@drawable/default_image"/>
 
@@ -34,6 +34,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:background="@drawable/shape_goods_compare_item_click_style"
             android:paddingRight="5dp">
 
             <TextView
@@ -43,7 +45,6 @@
                 android:id="@+id/tvTitle"
                 android:maxLines="3"
                 android:minLines="3"
-                android:layout_marginTop="5dp"
                 android:textColor="@color/search_result_title_color"
                 android:textSize="@dimen/search_result_title_text_size"
                 android:text="淘宝月销量之王，今天只要999"/>
@@ -74,7 +75,7 @@
                     android:id="@+id/ivType"
                     android:layout_width="@dimen/search_result_icon_size"
                     android:layout_height="@dimen/search_result_icon_size"
-                    android:src="@mipmap/icon_type_mogu"/>
+                    android:src="@mipmap/icon_type_taobao"/>
             </LinearLayout>
 
             <LinearLayout

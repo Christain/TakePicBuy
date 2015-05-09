@@ -13,7 +13,7 @@
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:background="@drawable/toolbar_menu_click_style"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="42dp">
 
         <TextView
             android:layout_gravity="center"
@@ -30,6 +30,7 @@
             android:layout_marginLeft="3dp"
             android:layout_width="10dp"
             android:layout_height="10dp"
+            android:layout_marginRight="3dp"
             android:src="@mipmap/icon_search_result_type"/>
     </LinearLayout>
 </android.support.v7.widget.Toolbar>
