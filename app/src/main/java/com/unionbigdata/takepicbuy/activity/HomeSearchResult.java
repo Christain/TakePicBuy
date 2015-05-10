@@ -38,7 +38,7 @@ public class HomeSearchResult extends BaseActivity {
     TextView tvNoResult;
 
     private Animation alphaIn;
-    private String imgUrl;
+    private String imageId;
     private HomeSearchResultAdapter adapter;
 
     @Override
@@ -49,8 +49,8 @@ public class HomeSearchResult extends BaseActivity {
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        if (intent.hasExtra("IMGURL")) {
-            this.imgUrl = intent.getStringExtra("IMGURL");
+        if (intent.hasExtra("IAMGEID")) {
+            this.imageId = intent.getStringExtra("IAMGEID");
             this.alphaIn = AnimationUtils.loadAnimation(this, R.anim.alpha_in);
             getToolbar().setTitle("搜索结果");
             getToolbar().setTitleTextColor(0xFFFFFFFF);
@@ -80,7 +80,7 @@ public class HomeSearchResult extends BaseActivity {
      * 获取首页图片搜索结果
      */
     private void getHomeSearchList() {
-        HomePicSearchParam param = new HomePicSearchParam(imgUrl);
+        HomePicSearchParam param = new HomePicSearchParam(imageId);
         AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
             @Override
             public void onResponseSuccess(int returnCode, Header[] headers, String result) {

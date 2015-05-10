@@ -7,6 +7,7 @@ import android.widget.ListView;
 public class PullableListView extends ListView implements Pullable {
 
     private boolean isOver = false;
+    private boolean isRefresh = false;
 
     public PullableListView(Context context) {
         super(context);
@@ -22,7 +23,7 @@ public class PullableListView extends ListView implements Pullable {
 
     @Override
     public boolean canPullDown() {
-        if (getCount() == 0) {
+        if (getCount() == 1) {
             return false;
         } else if (getFirstVisiblePosition() == 0 && getChildAt(0).getTop() >= 0) {
             // 滑到ListView的顶部了

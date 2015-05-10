@@ -3,14 +3,18 @@ package com.unionbigdata.takepicbuy.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.unionbigdata.takepicbuy.AppPreference;
@@ -56,6 +60,13 @@ public class IndexHome extends BaseActivity {
     @InjectView(R.id.refreshView)
     PullToRefreshLayout refreshLayout;
 
+    private LinearLayout llFooter;
+    private LinearLayout llEmpty;
+    private LinearLayout llLoading;
+    private TextView tvEmpty;
+    private boolean isFooterVisible = false;
+
+    private View footerView;
     private HomeAdapter adapter;
     private MenuItem menuItemSet, menuItemUser;
     private int toolbarHigh;
@@ -78,6 +89,12 @@ public class IndexHome extends BaseActivity {
                 getResources().getDimensionPixelOffset(R.dimen.path_radius), 300);
         pathButton.setButtonsOnClickListener(new PathOnClickListener());
 
+        this.footerView = LayoutInflater.from(IndexHome.this).inflate(R.layout.empty_view, null);
+        this.llFooter = (LinearLayout) footerView.findViewById(R.id.llFooter);
+        this.llEmpty = (LinearLayout) footerView.findViewById(R.id.llEmpty);
+        this.llLoading = (LinearLayout) footerView.findViewById(R.id.llLoading);
+        this.tvEmpty = (TextView) footerView.findViewById(R.id.empty_text);
+
         this.refreshHeader = (RelativeLayout) findViewById(R.id.head_view);
         this.refreshFooter = (RelativeLayout) findViewById(R.id.loadmore_view);
         this.refreshHeader.setBackgroundColor(0xFFF1F1F1);
@@ -88,6 +105,7 @@ public class IndexHome extends BaseActivity {
             toolbarHigh = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
         }
         this.adapter = new HomeAdapter(IndexHome.this, toolbarHigh);
+        this.listView.addFooterView(footerView);
         this.listView.setAdapter(adapter);
 
         this.refreshLayout.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
@@ -107,28 +125,19 @@ public class IndexHome extends BaseActivity {
                 listView.setContentOver(adapter.getIsOver());
                 refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                 if (code == -1) {
-//                    if (!llNoResult.isShown()) {
-//                        llNoResult.setVisibility(View.VISIBLE);
-//                        tvNoResult.setText("  搜索商品失败");
-//                    }
-                    if (refreshLayout.isShown()) {
-                        refreshLayout.setVisibility(View.INVISIBLE);
+                    if (!isFooterVisible) {
+                        EmptyViewVisible();
                     }
+                    tvEmpty.setText("获取出错啦~~");
                 } else {
                     if (msg.equals(SuperAdapter.ISNULL)) {
-//                        if (!llNoResult.isShown()) {
-//                            llNoResult.setVisibility(View.VISIBLE);
-//                            tvNoResult.setText("  没有搜索到商品");
-//                        }
-                        if (refreshLayout.isShown()) {
-                            refreshLayout.setVisibility(View.INVISIBLE);
+                        if (!isFooterVisible) {
+                            EmptyViewVisible();
                         }
+                        tvEmpty.setText("没有获取到数据");
                     } else {
-//                        if (llNoResult.isShown()) {
-//                            llNoResult.setVisibility(View.GONE);
-//                        }
-                        if (!refreshLayout.isShown()) {
-                            refreshLayout.setVisibility(View.VISIBLE);
+                        if (isFooterVisible) {
+                            EmptyViewGone();
                         }
                     }
                 }
@@ -143,26 +152,47 @@ public class IndexHome extends BaseActivity {
                     toast("加载失败，请重试");
                 } else {
                     if (msg.equals(SuperAdapter.ISNULL)) {
-//                        if (!llNoResult.isShown()) {
-//                            llNoResult.setVisibility(View.VISIBLE);
-//                            tvNoResult.setText("  没有搜索到商品");
-//                        }
-                        if (refreshLayout.isShown()) {
-                            refreshLayout.setVisibility(View.INVISIBLE);
+                        if (!isFooterVisible) {
+                            EmptyViewVisible();
                         }
+                        tvEmpty.setText("没有获取到数据");
                     } else {
-//                        if (llNoResult.isShown()) {
-//                            llNoResult.setVisibility(View.GONE);
-//                        }
-                        if (!refreshLayout.isShown()) {
-                            refreshLayout.setVisibility(View.VISIBLE);
+                        if (isFooterVisible) {
+                            EmptyViewGone();
                         }
                     }
                 }
             }
         });
+        LoadingVisible();
         adapter.getHomeList(1);
         getVersionInfo();
+    }
+
+    private void LoadingVisible() {
+        listView.setContentOver(true);
+        isFooterVisible = true;
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        this.footerView.setLayoutParams(new AbsListView.LayoutParams(metrics.widthPixels, metrics.heightPixels - PhoneManager.getStatusBarHigh() - toolbarHigh));
+        llLoading.setVisibility(View.VISIBLE);
+        llEmpty.setVisibility(View.GONE);
+        llFooter.setVisibility(View.VISIBLE);
+    }
+
+    private void EmptyViewVisible() {
+        listView.setContentOver(true);
+        isFooterVisible = true;
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        this.footerView.setLayoutParams(new AbsListView.LayoutParams(metrics.widthPixels, metrics.heightPixels - PhoneManager.getStatusBarHigh() - toolbarHigh));
+        llLoading.setVisibility(View.GONE);
+        llEmpty.setVisibility(View.VISIBLE);
+        llFooter.setVisibility(View.VISIBLE);
+    }
+
+    private void EmptyViewGone() {
+        isFooterVisible = false;
+        this.footerView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 1));
+        llFooter.setVisibility(View.GONE);
     }
 
     private class PathOnClickListener implements View.OnClickListener {

@@ -272,37 +272,30 @@ public class HomeAdapter extends SuperAdapter {
             switch (model.get(i).getPosition()) {
                 case 1:
                     holder.ivOne.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivOne.setOnClickListener(new OnPicClickListener(model.get(i).getSearchUrl()));
+                    holder.ivOne.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
                     break;
                 case 2:
                     holder.ivTwo.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivTwo.setOnClickListener(new OnPicClickListener(model.get(i).getSearchUrl()));
+                    holder.ivTwo.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
                     break;
                 case 3:
                     holder.ivThree.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivThree.setOnClickListener(new OnPicClickListener(model.get(i).getSearchUrl()));
+                    holder.ivThree.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
                     break;
                 case 4:
                     holder.ivFour.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivFour.setOnClickListener(new OnPicClickListener(model.get(i).getSearchUrl()));
+                    holder.ivFour.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
                     break;
                 case 5:
                     holder.ivFive.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivFive.setOnClickListener(new OnPicClickListener(model.get(i).getSearchUrl()));
+                    holder.ivFive.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
                     break;
                 case 6:
                     holder.ivSix.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivSix.setOnClickListener(new OnPicClickListener(model.get(i).getSearchUrl()));
+                    holder.ivSix.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
                     break;
             }
         }
-
-//        holder.ivOne.setImageURI(Uri.parse("http://a.hiphotos.baidu.com/image/pic/item/09fa513d269759ee154e5cc6b0fb43166d22dfa4.jpg"));
-//        holder.ivTwo.setImageURI(Uri.parse("http://h.hiphotos.baidu.com/image/pic/item/267f9e2f0708283830200feebc99a9014c08f11f.jpg"));
-//        holder.ivThree.setImageURI(Uri.parse("http://h.hiphotos.baidu.com/image/pic/item/267f9e2f0708283830200feebc99a9014c08f11f.jpg"));
-//        holder.ivFour.setImageURI(Uri.parse("http://a.hiphotos.baidu.com/image/pic/item/09fa513d269759ee154e5cc6b0fb43166d22dfa4.jpg"));
-//        holder.ivFive.setImageURI(Uri.parse("http://a.hiphotos.baidu.com/image/pic/item/09fa513d269759ee154e5cc6b0fb43166d22dfa4.jpg"));
-//        holder.ivSix.setImageURI(Uri.parse("http://h.hiphotos.baidu.com/image/pic/item/267f9e2f0708283830200feebc99a9014c08f11f.jpg"));
 
         return convertView;
     }
@@ -341,18 +334,22 @@ public class HomeAdapter extends SuperAdapter {
 
     private class OnPicClickListener implements View.OnClickListener {
 
-        private String searchUrl;
+        private String imageId;
 
-        public OnPicClickListener(String searchUrl) {
-            this.searchUrl = searchUrl;
+        public OnPicClickListener(String imageId) {
+            this.imageId = imageId;
         }
 
         @Override
         public void onClick(View view) {
             if (!ClickUtil.isFastClick()) {
-                Intent intent = new Intent(mContext, HomeSearchResult.class);
-                intent.putExtra("IMGURL", searchUrl);
-                mContext.startActivity(intent);
+                if (!imageId.equals("")) {
+                    Intent intent = new Intent(mContext, HomeSearchResult.class);
+                    intent.putExtra("IAMGEID", imageId);
+                    mContext.startActivity(intent);
+                } else {
+                    toast("无效的搜索图片");
+                }
             }
         }
     }
