@@ -7,13 +7,49 @@ import java.util.ArrayList;
  */
 public class HomeListModel {
 
-    private ArrayList<ArrayList<HomeModel>> homeresult;
+    private int totalrecord;
+    private int totalpage;
+    private int pageno;
+    private int pagesize;
+    private ArrayList<HomeOrgModel> obj;
 
-    public ArrayList<ArrayList<HomeModel>> getHomeresult() {
-        return homeresult;
+    public int getTotalrecord() {
+        return totalrecord;
     }
 
-    public void setHomeresult(ArrayList<ArrayList<HomeModel>> homeresult) {
-        this.homeresult = homeresult;
+    public void setTotalrecord(int totalrecord) {
+        this.totalrecord = totalrecord;
+    }
+
+    public int getTotalpage() {
+        return totalpage;
+    }
+
+    public void setTotalpage(int totalpage) {
+        this.totalpage = totalpage;
+    }
+
+    public int getPageno() {
+        return pageno;
+    }
+
+    public void setPageno(int pageno) {
+        this.pageno = pageno;
+    }
+
+    public int getPagesize() {
+        return pagesize;
+    }
+
+    public void setPagesize(int pagesize) {
+        this.pagesize = pagesize;
+    }
+
+    public ArrayList<HomeOrgModel> getObj() {
+        return (obj != null ? obj : new ArrayList<HomeOrgModel>());
+    }
+
+    public void setObj(ArrayList<HomeOrgModel> obj) {
+        this.obj = obj;
     }
 }

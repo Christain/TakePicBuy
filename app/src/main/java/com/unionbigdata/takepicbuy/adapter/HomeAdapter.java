@@ -18,6 +18,7 @@ import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
 import com.unionbigdata.takepicbuy.model.HomeListModel;
 import com.unionbigdata.takepicbuy.model.HomeModel;
+import com.unionbigdata.takepicbuy.model.HomeOrgModel;
 import com.unionbigdata.takepicbuy.params.HomeParams;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
@@ -158,10 +159,10 @@ public class HomeAdapter extends SuperAdapter {
                         "  }";
                 Gson gson = new Gson();
                 HomeListModel list = gson.fromJson(result, HomeListModel.class);
-                if (list != null && list.getHomeresult() != null) {
+                if (list != null && list.getObj() != null) {
                     switch (loadType) {
                         case REFRESH:
-                            if (list.getHomeresult().size() == 0) {
+                            if (list.getObj().size() == 0) {
                                 refreshOver(code, ISNULL);
                             } else if (page == maxPage) {
                                 isOver = 1;
@@ -170,7 +171,7 @@ public class HomeAdapter extends SuperAdapter {
                                 page++;
                                 refreshOver(code, CLICK_MORE);
                             }
-                            refreshItems(list.getHomeresult());
+                            refreshItems(list.getObj());
                             break;
                         case LOADMORE:
                             if (page != maxPage) {
@@ -180,7 +181,7 @@ public class HomeAdapter extends SuperAdapter {
                                 isOver = 1;
                                 loadMoreOver(code, ISOVER);
                             }
-                            addItems(list.getHomeresult());
+                            addItems(list.getObj());
                             break;
                     }
                 } else {
@@ -267,32 +268,33 @@ public class HomeAdapter extends SuperAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        ArrayList<HomeModel> model = (ArrayList<HomeModel>)getItem(position);
-        for (int i = 0; i < model.size(); i++) {
-            switch (model.get(i).getPosition()) {
+        HomeOrgModel orgmodel = (HomeOrgModel) getItem(position);
+        for (int i = 0; i < orgmodel.getGroupData().size(); i++) {
+            HomeModel model = orgmodel.getGroupData().get(i);
+            switch (model.getPosition()) {
                 case 1:
-                    holder.ivOne.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivOne.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
+                    holder.ivOne.setImageURI(Uri.parse(model.getUrl()));
+                    holder.ivOne.setOnClickListener(new OnPicClickListener(model.getId()));
                     break;
                 case 2:
-                    holder.ivTwo.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivTwo.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
+                    holder.ivTwo.setImageURI(Uri.parse(model.getUrl()));
+                    holder.ivTwo.setOnClickListener(new OnPicClickListener(model.getId()));
                     break;
                 case 3:
-                    holder.ivThree.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivThree.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
+                    holder.ivThree.setImageURI(Uri.parse(model.getUrl()));
+                    holder.ivThree.setOnClickListener(new OnPicClickListener(model.getId()));
                     break;
                 case 4:
-                    holder.ivFour.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivFour.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
+                    holder.ivFour.setImageURI(Uri.parse(model.getUrl()));
+                    holder.ivFour.setOnClickListener(new OnPicClickListener(model.getId()));
                     break;
                 case 5:
-                    holder.ivFive.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivFive.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
+                    holder.ivFive.setImageURI(Uri.parse(model.getUrl()));
+                    holder.ivFive.setOnClickListener(new OnPicClickListener(model.getId()));
                     break;
                 case 6:
-                    holder.ivSix.setImageURI(Uri.parse(model.get(i).getUrl()));
-                    holder.ivSix.setOnClickListener(new OnPicClickListener(model.get(i).getId()));
+                    holder.ivSix.setImageURI(Uri.parse(model.getUrl()));
+                    holder.ivSix.setOnClickListener(new OnPicClickListener(model.getId()));
                     break;
             }
         }
@@ -368,6 +370,7 @@ public class HomeAdapter extends SuperAdapter {
                 this.isRequest = true;
                 this.loadType = LOADMORE;
                 if (plate == 6) {
+                    page++;
                     plate = 1;
                 } else {
                     plate++;

@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginLeft="7dp"
+                android:layout_marginLeft="5dp"
                 android:textColor="@color/no_result_text_color"
                 android:textSize="@dimen/noresult_text_size" />
         </LinearLayout>
