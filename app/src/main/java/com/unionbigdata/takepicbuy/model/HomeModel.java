@@ -37,7 +37,7 @@ public class HomeModel {
     }
 
     public String getSearchUrl() {
-        return (searchUrl != null ? searchUrl : "");
+        return (searchUrl != null ? "http://www.paitogo.com/manager/" + searchUrl : "");
     }
 
     public void setSearchUrl(String searchUrl) {
@@ -45,7 +45,7 @@ public class HomeModel {
     }
 
     public String getUrl() {
-        return (url != null ? url : "");
+        return (url != null ? "http://www.paitogo.com/manager/" + url : "");
     }
 
     public void setUrl(String url) {

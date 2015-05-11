@@ -42,6 +42,8 @@ public class CutView extends View {
     private final int DOUBLE_POINT_DOWN = 5;
     private int m_event = NONE_EVENT;
 
+    private float max_x = 0f, max_y = 0f, max_w = 0f, max_h = 0f;
+
     public CutView(Context context) {
         super(context);
     }
@@ -323,6 +325,7 @@ public class CutView extends View {
                 y = m_rect.m_y;
                 w = m_rect.m_w;
                 h = m_rect.m_h;
+
                 if (temp_dst[0] >= m_rect.m_x && temp_dst[1] >= m_rect.m_y
                         && temp_dst[0] <= m_rect.m_x + m_rect.m_w
                         && temp_dst[1] <= m_rect.m_y + m_rect.m_h) {
@@ -466,16 +469,45 @@ public class CutView extends View {
                     }
                 } else if (mode == DOUBLE_POINT_ZOOM) {
                     if (m_scale == FREESCALE) {
+                        m_rect.m_x = x - dist_x / 2;
+                        m_rect.m_y = y - dist_y / 2;
                         m_rect.m_w = w + dist_x;
                         m_rect.m_h = h + dist_y;
+
                         if (m_rect.m_w <= MIN_LEN)
                             m_rect.m_w = MIN_LEN;
                         if (m_rect.m_h <= MIN_LEN)
                             m_rect.m_h = MIN_LEN;
-                        if (m_rect.m_x + m_rect.m_w >= 1f)
-                            m_rect.m_w = 1f - m_rect.m_x;
-                        if (m_rect.m_y + m_rect.m_h >= 1f)
-                            m_rect.m_h = 1f - m_rect.m_y;
+                        if (m_rect.m_x <= 0)
+                            m_rect.m_x = 0;
+                        if (m_rect.m_y <= 0)
+                            m_rect.m_y = 0;
+                        if (m_rect.m_x + m_rect.m_w >= 1f) {
+                            if (max_x == 0) {
+                                max_x = m_rect.m_x;
+                            } else {
+                                m_rect.m_x = max_x;
+                            }
+
+                            if (max_w == 0) {
+                                max_w = 1f - m_rect.m_x;
+                            } else {
+                                m_rect.m_w = max_w;
+                            }
+                        }
+                        if (m_rect.m_y + m_rect.m_h >= 1f) {
+                            if (max_y == 0) {
+                                max_y = m_rect.m_y;
+                            } else {
+                                m_rect.m_y = max_y;
+                            }
+
+                            if (max_h == 0) {
+                                max_h = 1f - m_rect.m_y;
+                            } else {
+                                m_rect.m_h = max_h;
+                            }
+                        }
                     } else {
                         setRbScale(m_scale);
                     }
@@ -483,6 +515,10 @@ public class CutView extends View {
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
+                max_x = 0f;
+                max_y = 0f;
+                max_w = 0f;
+                max_h = 0f;
                 mode = NONE;
                 m_event = NONE_EVENT;
                 invalidate();

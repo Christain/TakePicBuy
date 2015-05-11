@@ -31,6 +31,7 @@ import com.unionbigdata.takepicbuy.http.OnAdapterRefreshOverListener;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
 import com.unionbigdata.takepicbuy.model.VersionModel;
 import com.unionbigdata.takepicbuy.params.UpdateVersionParam;
+import com.unionbigdata.takepicbuy.utils.ClickUtil;
 import com.unionbigdata.takepicbuy.utils.DoubleClickExitHelper;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
 import com.unionbigdata.takepicbuy.widget.ComposerLayout;
@@ -125,15 +126,11 @@ public class IndexHome extends BaseActivity {
                 listView.setContentOver(adapter.getIsOver());
                 refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                 if (code == -1) {
-                    if (!isFooterVisible) {
-                        EmptyViewVisible();
-                    }
+                    EmptyViewVisible();
                     tvEmpty.setText("获取出错啦~~");
                 } else {
                     if (msg.equals(SuperAdapter.ISNULL)) {
-                        if (!isFooterVisible) {
-                            EmptyViewVisible();
-                        }
+                        EmptyViewVisible();
                         tvEmpty.setText("没有获取到数据");
                     } else {
                         if (isFooterVisible) {
@@ -151,15 +148,8 @@ public class IndexHome extends BaseActivity {
                 if (code == -1) {
                     toast("加载失败，请重试");
                 } else {
-                    if (msg.equals(SuperAdapter.ISNULL)) {
-                        if (!isFooterVisible) {
-                            EmptyViewVisible();
-                        }
-                        tvEmpty.setText("没有获取到数据");
-                    } else {
-                        if (isFooterVisible) {
-                            EmptyViewGone();
-                        }
+                    if (isFooterVisible) {
+                        EmptyViewGone();
                     }
                 }
             }
@@ -199,13 +189,17 @@ public class IndexHome extends BaseActivity {
         @Override
         public void onClick(View v) {
             if (v.getId() == 100 + 0) {
-                Intent intent = new Intent(IndexHome.this, CropImage.class);
-                intent.putExtra("TYPE", "CAMERA");
-                startActivity(intent);
+                if (!ClickUtil.isFastClick()) {
+                    Intent intent = new Intent(IndexHome.this, CropImage.class);
+                    intent.putExtra("TYPE", "CAMERA");
+                    startActivity(intent);
+                }
             } else if (v.getId() == 100 + 1) {
-                Intent intent = new Intent(IndexHome.this, CropImage.class);
-                intent.putExtra("TYPE", "ALBUM");
-                startActivity(intent);
+                if (!ClickUtil.isFastClick()) {
+                    Intent intent = new Intent(IndexHome.this, CropImage.class);
+                    intent.putExtra("TYPE", "ALBUM");
+                    startActivity(intent);
+                }
             }
         }
     }
@@ -223,8 +217,10 @@ public class IndexHome extends BaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IndexHome.this, SetActivity.class);
-                startActivity(intent);
+                if (!ClickUtil.isFastClick()) {
+                    Intent intent = new Intent(IndexHome.this, SetActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         LinearLayout userlayout = (LinearLayout) menuItemUser.getActionView();
@@ -233,8 +229,10 @@ public class IndexHome extends BaseActivity {
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IndexHome.this, UserCenter.class);
-                startActivity(intent);
+                if (!ClickUtil.isFastClick()) {
+                    Intent intent = new Intent(IndexHome.this, UserCenter.class);
+                    startActivity(intent);
+                }
             }
         });
         return super.onCreateOptionsMenu(menu);

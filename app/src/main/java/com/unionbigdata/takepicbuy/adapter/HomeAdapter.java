@@ -36,150 +36,56 @@ import butterknife.InjectView;
  */
 public class HomeAdapter extends SuperAdapter {
 
-    private int page = 1, isOver = 0, maxPage, plate;
+    private int page = 1, maxPage, plate;
     public int limit = 18;
     private ResponseHandler responseHandler;
     private Context mContext;
     private int toolbarHigh;
+    private ArrayList<Integer> overStyle;
 
     public HomeAdapter(Context context, int toolbarHigh) {
         super(context);
         this.mContext = context;
         this.toolbarHigh = toolbarHigh;
         this.initListener();
+        this.overStyle = new ArrayList<Integer>();
     }
 
     private void initListener() {
         responseHandler = new ResponseHandler() {
             @Override
             public void onResponseSuccess(int code, Header[] headers, String result) {
-                result = "{\n" +
-                        "    \"homeresult\": [\n" +
-                        "      [\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"1\",\n" +
-                        "          \"id\": \"jRwMG7bc1YEi5Z3zHbT\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/7ce39244aeb243789cdf2ad3e4709e91.jpg\",\n" +
-                        "          \"url\": \"file/pictures/0dade70a804b4ad699985538623732fa.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"2\",\n" +
-                        "          \"id\": \"ymyCsnoGek9dcNEjCGb\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/c956a15b2dc7456ba26aa5b098c15116.jpg\",\n" +
-                        "          \"url\": \"file/pictures/9bdca5c8dd744588a928faef1e399bdd.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"3\",\n" +
-                        "          \"id\": \"bjvWpdphcAniJTbcxW3\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/pictures/94bd4420692d43c1ab320fb8f23ca24b.jpg\",\n" +
-                        "          \"url\": \"file/pictures/94bd4420692d43c1ab320fb8f23ca24b.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"4\",\n" +
-                        "          \"id\": \"OJ6v2F9MN4M0FQ5BMlG\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/4b105f8e014846109e4521d6eff787f9.jpg\",\n" +
-                        "          \"url\": \"file/pictures/953e4bf357594187b3d18b0b69355463.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"5\",\n" +
-                        "          \"id\": \"J25HKelRJeR13Sj0NKJ\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/962a5d6b95a646b5a6ba7145a4d3854f.jpg\",\n" +
-                        "          \"url\": \"file/pictures/33b5559c54e44b0980ac8744f329ceb3.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"6\",\n" +
-                        "          \"id\": \"b8VK349u5ljLMxo8VWo\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/0bb441f5fe634dc3975b7d3a03da967f.jpg\",\n" +
-                        "          \"url\": \"file/pictures/cb526cd80395447a8d3bd38aa91c4143.jpg\"\n" +
-                        "        }\n" +
-                        "      ],\n" +
-                        "      [\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"1\",\n" +
-                        "          \"id\": \"jRwMG7bc1YEi5Z3zHbT\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/7ce39244aeb243789cdf2ad3e4709e91.jpg\",\n" +
-                        "          \"url\": \"file/pictures/0dade70a804b4ad699985538623732fa.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"2\",\n" +
-                        "          \"id\": \"ymyCsnoGek9dcNEjCGb\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/c956a15b2dc7456ba26aa5b098c15116.jpg\",\n" +
-                        "          \"url\": \"file/pictures/9bdca5c8dd744588a928faef1e399bdd.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"3\",\n" +
-                        "          \"id\": \"bjvWpdphcAniJTbcxW3\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/pictures/94bd4420692d43c1ab320fb8f23ca24b.jpg\",\n" +
-                        "          \"url\": \"file/pictures/94bd4420692d43c1ab320fb8f23ca24b.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"4\",\n" +
-                        "          \"id\": \"OJ6v2F9MN4M0FQ5BMlG\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/4b105f8e014846109e4521d6eff787f9.jpg\",\n" +
-                        "          \"url\": \"file/pictures/953e4bf357594187b3d18b0b69355463.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"5\",\n" +
-                        "          \"id\": \"J25HKelRJeR13Sj0NKJ\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/962a5d6b95a646b5a6ba7145a4d3854f.jpg\",\n" +
-                        "          \"url\": \"file/pictures/33b5559c54e44b0980ac8744f329ceb3.jpg\"\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"plate\": \"1\",\n" +
-                        "          \"position\": \"6\",\n" +
-                        "          \"id\": \"b8VK349u5ljLMxo8VWo\",\n" +
-                        "          \"groupId\": \"1\",\n" +
-                        "          \"searchUrl\": \"file/searchPictures/0bb441f5fe634dc3975b7d3a03da967f.jpg\",\n" +
-                        "          \"url\": \"file/pictures/cb526cd80395447a8d3bd38aa91c4143.jpg\"\n" +
-                        "        }\n" +
-                        "      ]\n" +
-                        "    ]\n" +
-                        "  }";
                 Gson gson = new Gson();
                 HomeListModel list = gson.fromJson(result, HomeListModel.class);
+                int totalNum = list.getTotalrecord();
+                if (totalNum % limit == 0) {
+                    maxPage = totalNum / limit;
+                } else {
+                    maxPage = (totalNum / limit) + 1;
+                }
                 if (list != null && list.getObj() != null) {
                     switch (loadType) {
                         case REFRESH:
                             if (list.getObj().size() == 0) {
+                                overStyle.add(plate);
                                 refreshOver(code, ISNULL);
                             } else if (page == maxPage) {
-                                isOver = 1;
+                                overStyle.add(plate);
                                 refreshOver(code, ISOVER);
                             } else {
-                                page++;
                                 refreshOver(code, CLICK_MORE);
                             }
                             refreshItems(list.getObj());
                             break;
                         case LOADMORE:
-                            if (page != maxPage) {
-                                page++;
-                                loadMoreOver(code, CLICK_MORE);
-                            } else {
-                                isOver = 1;
+                            if (list.getObj().size() == 0) {
+                                overStyle.add(plate);
+                                loadMoreOver(code, ISNULL);
+                            } else if (page == maxPage) {
+                                overStyle.add(plate);
                                 loadMoreOver(code, ISOVER);
+                            } else {
+                                loadMoreOver(code, CLICK_MORE);
                             }
                             addItems(list.getObj());
                             break;
@@ -187,10 +93,10 @@ public class HomeAdapter extends SuperAdapter {
                 } else {
                     switch (loadType) {
                         case REFRESH:
-                            refreshOver(code, ISNULL);
+                            refreshOver(-1, ISNULL);
                             break;
                         case LOADMORE:
-                            loadMoreOver(code, ISOVER);
+                            loadMoreOver(-1, ISOVER);
                             break;
                     }
                 }
@@ -201,10 +107,10 @@ public class HomeAdapter extends SuperAdapter {
             public void onResponseFailed(int code, String msg) {
                 switch (loadType) {
                     case REFRESH:
-                        refreshOver(code, msg);
+                        refreshOver(-1, msg);
                         break;
                     case LOADMORE:
-                        loadMoreOver(code, msg);
+                        loadMoreOver(-1, msg);
                         break;
                 }
                 isRequest = false;
@@ -309,8 +215,8 @@ public class HomeAdapter extends SuperAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        ArrayList<HomeModel> list = (ArrayList<HomeModel>) getItem(position);
-        return list.get(0).getPlate();
+        HomeOrgModel model = (HomeOrgModel) getItem(position);
+        return model.getGroupData().get(0).getPlate();
     }
 
     static class ViewHolder {
@@ -363,26 +269,42 @@ public class HomeAdapter extends SuperAdapter {
 
     @Override
     public void loadMore() {
-        if (isOver == 1) {
+        if (overStyle.size() == 6) {
             loadMoreOver(0, ISOVER);
         } else {
             if (!isRequest) {
                 this.isRequest = true;
                 this.loadType = LOADMORE;
                 if (plate == 6) {
-                    page++;
                     plate = 1;
+                    page++;
                 } else {
                     plate++;
                 }
+                getPlate();
                 HomeParams params = new HomeParams(page, limit, plate);
                 AsyncHttpTask.post(params.getUrl(), params, responseHandler);
             }
         }
     }
 
+    private void getPlate() {
+        for (int i = 0; i < overStyle.size(); i++) {
+            if (plate == overStyle.get(i)) {
+                if (plate == 6) {
+                    plate = 1;
+                    page++;
+                } else {
+                    plate++;
+                }
+                getPlate();
+            }
+        }
+        return;
+    }
+
     public boolean getIsOver() {
-        return (isOver == 1) ? true : false;
+        return (overStyle.size() == 6);
     }
 
     /**
@@ -393,8 +315,10 @@ public class HomeAdapter extends SuperAdapter {
             this.isRequest = true;
             this.loadType = REFRESH;
             this.page = 1;
-            isOver = 0;
             this.plate = plate;
+            if (overStyle != null) {
+                overStyle.clear();
+            }
             HomeParams params = new HomeParams(page, limit, plate);
             AsyncHttpTask.post(params.getUrl(), params, responseHandler);
         }

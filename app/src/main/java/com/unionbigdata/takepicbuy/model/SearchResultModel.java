@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class SearchResultModel implements Serializable {
 
     private String img_url;//图片地址
-    private int id;//商品Id
+    private String id;//商品Id
     private String title;//AMII极简2015新款飘逸显瘦长裙雪纺半身裙长裙11480107 绿色 L
     private double distance;//9836.7099609375
     private double price;//	239
@@ -27,11 +27,11 @@ public class SearchResultModel implements Serializable {
         this.img_url = img_url;
     }
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return (id != null ? id : "");
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

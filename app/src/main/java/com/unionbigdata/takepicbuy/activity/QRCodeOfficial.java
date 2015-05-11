@@ -1,5 +1,6 @@
 package com.unionbigdata.takepicbuy.activity;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -7,9 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Toast;
 
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
+import com.unionbigdata.takepicbuy.constant.Constant;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
 
 import butterknife.OnClick;
@@ -52,7 +55,18 @@ public class QRCodeOfficial extends BaseActivity {
                     msc = new MediaScannerConnection(QRCodeOfficial.this, new MediaScannerConnection.MediaScannerConnectionClient() {
                         @Override
                         public void onMediaScannerConnected() {
-                            msc.scanFile(uri, "image/jpeg");
+                            Uri uri1 = Uri.parse(uri);
+                            String[] imgInfo = {MediaStore.Images.Media.DATA};
+                            Cursor imgCursor = managedQuery(uri1, imgInfo, null, null, null);
+                            if (imgCursor != null) {
+                                int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                                imgCursor.moveToFirst();
+                                msc.scanFile(imgCursor.getString(index), "image/jpeg");
+                            } else {
+                                if (Constant.SHOW_LOG) {
+                                    Toast.makeText(QRCodeOfficial.this, "图片刷新失败", Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }
 
                         @Override
@@ -60,6 +74,7 @@ public class QRCodeOfficial extends BaseActivity {
                             msc.disconnect();
                         }
                     });
+                    msc.connect();
                 } else {
                     toast("保存失败");
                 }

@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -28,8 +28,8 @@ import butterknife.InjectView;
  */
 public class HomeSearchResult extends BaseActivity {
 
-    @InjectView(R.id.listView)
-    ListView listView;
+    @InjectView(R.id.gridView)
+    GridView gridView;
     @InjectView(R.id.llLoading)
     LinearLayout llLoading;
     @InjectView(R.id.llNoResult)
@@ -63,7 +63,7 @@ public class HomeSearchResult extends BaseActivity {
                 }
             });
             this.adapter = new HomeSearchResultAdapter(HomeSearchResult.this);
-            this.listView.setAdapter(adapter);
+            this.gridView.setAdapter(adapter);
             this.initView();
         } else {
             toast("搜索图片信息错误");
@@ -87,7 +87,7 @@ public class HomeSearchResult extends BaseActivity {
                 Gson gson = new Gson();
                 SearchResultListModel list = gson.fromJson(result, SearchResultListModel.class);
                 if (list != null && list.getSearchresult() != null) {
-                    if (list.getSearchresult().size() == 0) {
+                    if (list.getSearchresult().size() != 0) {
                         adapter.setHomeSearchList(list.getSearchresult());
                         rightVisible();
                     } else {
@@ -115,9 +115,9 @@ public class HomeSearchResult extends BaseActivity {
         if (llNoResult.isShown()) {
             llNoResult.setVisibility(View.GONE);
         }
-        if (!listView.isShown()) {
-            listView.setVisibility(View.VISIBLE);
-            listView.startAnimation(alphaIn);
+        if (!gridView.isShown()) {
+            gridView.setVisibility(View.VISIBLE);
+            gridView.startAnimation(alphaIn);
         }
     }
 
@@ -133,8 +133,8 @@ public class HomeSearchResult extends BaseActivity {
             tvNoResult.setText(msg);
             llNoResult.startAnimation(alphaIn);
         }
-        if (listView.isShown()) {
-            listView.setVisibility(View.GONE);
+        if (gridView.isShown()) {
+            gridView.setVisibility(View.GONE);
         }
     }
 
@@ -148,8 +148,8 @@ public class HomeSearchResult extends BaseActivity {
         if (!llLoading.isShown()) {
             llLoading.setVisibility(View.VISIBLE);
         }
-        if (listView.isShown()) {
-            listView.setVisibility(View.GONE);
+        if (gridView.isShown()) {
+            gridView.setVisibility(View.GONE);
         }
     }
 }

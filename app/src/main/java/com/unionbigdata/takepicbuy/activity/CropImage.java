@@ -222,17 +222,6 @@ public class CropImage extends BaseActivity {
         } else if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_PICK) {
                 Uri uri = result.getData();
-//                ContentResolver cr = getContentResolver();
-//                Cursor cursor = cr.query(uri, null, null, null, null);
-//                cursor.moveToFirst();
-//                String imgPath = cursor.getString(1);
-//                if (uri != null) {
-//                    try {
-//                        imageView.SetImage(imgPath);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
                 String[] imgInfo = {MediaStore.Images.Media.DATA};
                 Cursor imgCursor = managedQuery(uri, imgInfo, null, null, null);
                 if (imgCursor != null) {

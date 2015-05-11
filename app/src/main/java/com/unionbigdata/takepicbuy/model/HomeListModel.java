@@ -46,7 +46,7 @@ public class HomeListModel {
     }
 
     public ArrayList<HomeOrgModel> getObj() {
-        return (obj != null ? obj : new ArrayList<HomeOrgModel>());
+        return obj;
     }
 
     public void setObj(ArrayList<HomeOrgModel> obj) {

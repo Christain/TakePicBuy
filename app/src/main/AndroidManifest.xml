@@ -51,10 +51,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.CropImageActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".activity.QRCodeOfficial"
             android:screenOrientation="portrait">
         </activity>
