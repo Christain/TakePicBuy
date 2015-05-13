@@ -9,10 +9,12 @@ import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,7 @@ import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
 import com.unionbigdata.takepicbuy.http.ResponseHandler;
 import com.unionbigdata.takepicbuy.params.UploadFileParam;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
+import com.unionbigdata.takepicbuy.utils.IntentManage;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
 import com.unionbigdata.takepicbuy.widget.CircleProgress;
 
@@ -61,7 +64,7 @@ public class CropImage extends BaseActivity {
     private boolean hasType = false;
     private File mTempDir, cropFile;
     private Bitmap cutBitmap;
-    private String CameraPath = "";
+    private Uri CameraUri = null;
     private MediaScannerConnection msc;
 
     private static final int REQUEST_CODE_CAPTURE_CAMEIA = 1458;
@@ -194,7 +197,6 @@ public class CropImage extends BaseActivity {
      * 相册选择
      */
     protected void getImageFromAlbum() {
-        CameraPath = "";
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
         startActivityForResult(intent, REQUEST_PICK);
     }
@@ -203,12 +205,11 @@ public class CropImage extends BaseActivity {
      * 拍照
      */
     protected void getImageFromCamera() {
-        CameraPath = "";
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
         File cropFile = new File(mTempDir, fileName);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cropFile));
-        CameraPath = cropFile.getAbsolutePath();
+        CameraUri = Uri.fromFile(cropFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, CameraUri);
         startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMEIA);
     }
 
@@ -222,21 +223,48 @@ public class CropImage extends BaseActivity {
         } else if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_PICK) {
                 Uri uri = result.getData();
-                String[] imgInfo = {MediaStore.Images.Media.DATA};
-                Cursor imgCursor = managedQuery(uri, imgInfo, null, null, null);
-                if (imgCursor != null) {
-                    int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    imgCursor.moveToFirst();
-                    imageView.SetImage(imgCursor.getString(index));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    String url = IntentManage.getPath(CropImage.this, uri);
+                    if (url != null) {
+                        recycleCutViewBmp();
+                        imageView.SetImage(url);
+                    } else {
+                        toast("选择图片失败，请重试");
+                    }
                 } else {
-                    Toast.makeText(CropImage.this, "选择图片失败，请重试", Toast.LENGTH_SHORT).show();
+                    String[] imgInfo = {MediaStore.Images.Media.DATA};
+                    Cursor imgCursor = managedQuery(uri, imgInfo, null, null, null);
+                    if (imgCursor != null) {
+                        int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        imgCursor.moveToFirst();
+                        recycleCutViewBmp();
+                        imageView.SetImage(imgCursor.getString(index));
+                    } else {
+                        toast("选择图片失败，请重试");
+                    }
                 }
             } else if (requestCode == REQUEST_CODE_CAPTURE_CAMEIA) {
-                if (CameraPath != null && !CameraPath.equals("")) {
-                    imageView.SetImage(CameraPath);
-                    savePhotoToAlbum();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    String url = IntentManage.getPath(CropImage.this, CameraUri);
+                    if (url != null) {
+                        recycleCutViewBmp();
+                        imageView.SetImage(url);
+                        savePhotoToAlbum(url);
+                    } else {
+                        toast("加载图片失败，请重试");
+                    }
                 } else {
-                    toast("拍照图片获取失败，请重试");
+                    String[] imgInfo = {MediaStore.Images.Media.DATA};
+                    Cursor imgCursor = managedQuery(CameraUri, imgInfo, null, null, null);
+                    if (imgCursor != null) {
+                        int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        imgCursor.moveToFirst();
+                        recycleCutViewBmp();
+                        imageView.SetImage(imgCursor.getString(index));
+                        savePhotoToAlbum(imgCursor.getString(index));
+                    } else {
+                        toast("加载图片失败，请重试");
+                    }
                 }
             }
         }
@@ -245,7 +273,7 @@ public class CropImage extends BaseActivity {
     /**
      * 保存拍照图片到手机相册
      */
-    private void savePhotoToAlbum() {
+    private void savePhotoToAlbum(final String CameraPath) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -311,6 +339,22 @@ public class CropImage extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (CameraUri != null && !TextUtils.isEmpty(CameraUri.toString())){
+            outState.putString("URI", CameraUri.toString());
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (CameraUri != null && TextUtils.isEmpty(CameraUri.toString())) {
+            CameraUri = Uri.parse(savedInstanceState.getString("URI"));
+        }
+    }
+
     /**
      * 正常状态
      */
@@ -351,6 +395,14 @@ public class CropImage extends BaseActivity {
             System.gc();
         }
         cutBitmap = null;
+    }
+
+    private void recycleCutViewBmp() {
+        if (imageView.m_bmp != null && !imageView.m_bmp.isRecycled()) {
+            imageView.m_bmp.recycle();
+            System.gc();
+        }
+        imageView.m_bmp = null;
     }
 
     /**

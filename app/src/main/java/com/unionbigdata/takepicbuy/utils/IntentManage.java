@@ -66,23 +66,31 @@ public class IntentManage {
     //以下是关键，原本uri返回的是file:///...来着的，android4.4返回的是content:///...
     @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {
+
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
+
                 if ("primary".equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
+
             }
-            // DownloadsProvider  
+            // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
                 return getDataColumn(context, contentUri, null, null);
             }
-            // MediaProvider  
+            // MediaProvider
             else if (isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
@@ -105,16 +113,15 @@ public class IntentManage {
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         }
-        // MediaStore (and general)  
+        // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            // Return the remote address  
-            if (isGooglePhotosUri(uri)) {
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
-            }
 
             return getDataColumn(context, uri, null, null);
         }
-        // File  
+        // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
@@ -132,7 +139,8 @@ public class IntentManage {
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
-    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -141,7 +149,8 @@ public class IntentManage {
         };
 
         try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
             if (cursor != null && cursor.moveToFirst()) {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
@@ -185,5 +194,4 @@ public class IntentManage {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
-
 }

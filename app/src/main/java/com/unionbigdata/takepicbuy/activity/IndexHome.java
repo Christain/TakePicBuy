@@ -86,7 +86,7 @@ public class IndexHome extends BaseActivity {
         pathButton.init(new int[]{R.mipmap.icon_select_pic_canmar, R.mipmap.icon_select_pic_album},
                 R.mipmap.icon_path_red_bg,
                 R.mipmap.icon_path_cross,
-                ComposerLayout.LEFTBOTTOM,
+                ComposerLayout.RIGHTBOTTOM,
                 getResources().getDimensionPixelOffset(R.dimen.path_radius), 300);
         pathButton.setButtonsOnClickListener(new PathOnClickListener());
 

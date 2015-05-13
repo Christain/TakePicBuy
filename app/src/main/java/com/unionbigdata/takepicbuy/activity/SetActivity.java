@@ -113,8 +113,8 @@ public class SetActivity extends BaseActivity {
                     clear.setMessage("您确定要清理缓存？").withDuration(300).withEffect(Effectstype.Fadein).setOnClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View arg0) {
-                            new ProgressClear().execute();
                             clear.dismiss();
+                            new ProgressClear().execute();
                         }
                     }).show();
                     break;
@@ -213,7 +213,7 @@ public class SetActivity extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mLoadingDialog.setMessage("正在清理缓存");
+            mLoadingDialog.setMessage("正在清理");
             mLoadingDialog.show();
         }
 
@@ -222,14 +222,10 @@ public class SetActivity extends BaseActivity {
             File file = new File(PhoneManager.getAppRootPath());
             if (file.exists()) {
                 deleteFile(file);
+                return true;
             } else {
-                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-                    mLoadingDialog.dismiss();
-                }
-                toast("缓存文件不存在");
                 return false;
             }
-            return true;
         }
 
         @Override
@@ -241,7 +237,7 @@ public class SetActivity extends BaseActivity {
             if (result) {
                 toast("清理完成");
             } else {
-                toast("清理缓存失败，请重试");
+//                toast("清理缓存失败，请重试");
             }
         }
     }

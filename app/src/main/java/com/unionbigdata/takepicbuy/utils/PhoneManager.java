@@ -122,7 +122,7 @@ public class PhoneManager {
      */
     public static void vibrate(long duration) {
         Vibrator vibrator = (Vibrator) CONTEXT.getSystemService(Context.VIBRATOR_SERVICE);
-        long[] pattern = { 0, duration };
+        long[] pattern = {0, duration};
         vibrator.vibrate(pattern, -1);
     }
 
@@ -252,6 +252,7 @@ public class PhoneManager {
 
     /**
      * 可用存储大小
+     *
      * @param rootPath
      * @return
      */
@@ -266,6 +267,7 @@ public class PhoneManager {
 
     /**
      * 获取状态栏高度
+     *
      * @return
      */
     public static int getStatusBarHigh() {
@@ -286,15 +288,12 @@ public class PhoneManager {
         return 0;
     }
 
-    /***
+    /**
      * 图片的缩放方法
      *
-     * @param bgimage
-     *            ：源图片资源
-     * @param newWidth
-     *            ：缩放后宽度
-     * @param newHeight
-     *            ：缩放后高度
+     * @param bgimage   ：源图片资源
+     * @param newWidth  ：缩放后宽度
+     * @param newHeight ：缩放后高度
      * @return
      */
     public static Bitmap zoomImage(Bitmap bgimage, float newWidth, float newHeight) {
@@ -342,23 +341,21 @@ public class PhoneManager {
     /**
      * 将图片文件转换成bitmap
      *
-     * @param imgFile
-     * @param maxNumOfPixels
      * @return
      */
-    public static Bitmap getBitmapFromFile(File imgFile, int maxNumOfPixels) {
+    public static Bitmap getBitmapFromPath(String path, int maxNumOfPixels) {
         Bitmap bitmap = null;
         try {
             BitmapFactory.Options opts = new BitmapFactory.Options();
             opts.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(imgFile.getAbsolutePath(), opts);
+            BitmapFactory.decodeFile(path, opts);
             opts.inJustDecodeBounds = false;
             if (maxNumOfPixels <= 0) {
-                opts.inSampleSize = computeSampleSize(opts, 1000 * 1000);
+                opts.inSampleSize = computeSampleSize(opts, 3000 * 3000);
             } else {
                 opts.inSampleSize = computeSampleSize(opts, maxNumOfPixels);
             }
-            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), opts);
+            bitmap = BitmapFactory.decodeFile(path, opts);
         } catch (Exception e) {
             e.printStackTrace();
             bitmap = null;

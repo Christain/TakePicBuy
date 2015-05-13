@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="正在加载"
+        android:singleLine="true"
         android:textColor="@color/login_text"
         android:textSize="15sp" />
 

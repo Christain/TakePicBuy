@@ -2,7 +2,7 @@ package com.unionbigdata.takepicbuy.baseclass;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
@@ -15,7 +15,7 @@ import butterknife.InjectView;
 import butterknife.Optional;
 
 
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
 	private Context context;
 

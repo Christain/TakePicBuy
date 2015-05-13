@@ -16,6 +16,8 @@ import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.unionbigdata.takepicbuy.utils.PhoneManager;
+
 public class CutView extends View {
     public Object m_obj;
 
@@ -80,7 +82,8 @@ public class CutView extends View {
 
         if (m_bmp == null && getWidth() > 0 && getHeight() > 0) {
             if (m_obj instanceof String) {
-                m_bmp = BitmapFactory.decodeFile((String) m_obj);
+                m_bmp = PhoneManager.getBitmapFromPath((String) m_obj, -1);
+//                m_bmp = BitmapFactory.decodeFile((String) m_obj);
             } else if (m_obj instanceof Integer) {
                 m_bmp = BitmapFactory.decodeResource(getResources(),
                         (Integer) m_obj);
