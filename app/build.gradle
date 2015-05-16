@@ -35,9 +35,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.facebook.fresco:fresco:0.4.0'
     compile 'com.jakewharton:butterknife:6.1.0'
-    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
-        exclude group: 'com.google.android', module: 'support-v4'
-    }
     compile files('libs/android-async-http-1.4.5.jar')
     compile files('libs/qq_login.jar')
     compile files('libs/weibosdkcore.jar')

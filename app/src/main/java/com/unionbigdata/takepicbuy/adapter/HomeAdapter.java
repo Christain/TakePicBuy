@@ -54,7 +54,7 @@ public class HomeAdapter extends SuperAdapter {
     private void initListener() {
         responseHandler = new ResponseHandler() {
             @Override
-            public void onResponseSuccess(int code, Header[] headers, String result) {
+            public void onResponseSuccess(int returnCode, Header[] headers, String result) {
                 Gson gson = new Gson();
                 HomeListModel list = gson.fromJson(result, HomeListModel.class);
                 int totalNum = list.getTotalrecord();
@@ -68,24 +68,24 @@ public class HomeAdapter extends SuperAdapter {
                         case REFRESH:
                             if (list.getObj().size() == 0) {
                                 overStyle.add(plate);
-                                refreshOver(code, ISNULL);
+                                refreshOver(returnCode, ISNULL);
                             } else if (page == maxPage) {
                                 overStyle.add(plate);
-                                refreshOver(code, ISOVER);
+                                refreshOver(returnCode, ISOVER);
                             } else {
-                                refreshOver(code, CLICK_MORE);
+                                refreshOver(returnCode, CLICK_MORE);
                             }
                             refreshItems(list.getObj());
                             break;
                         case LOADMORE:
                             if (list.getObj().size() == 0) {
                                 overStyle.add(plate);
-                                loadMoreOver(code, ISNULL);
+                                loadMoreOver(returnCode, ISNULL);
                             } else if (page == maxPage) {
                                 overStyle.add(plate);
-                                loadMoreOver(code, ISOVER);
+                                loadMoreOver(returnCode, ISOVER);
                             } else {
-                                loadMoreOver(code, CLICK_MORE);
+                                loadMoreOver(returnCode, CLICK_MORE);
                             }
                             addItems(list.getObj());
                             break;
@@ -104,13 +104,13 @@ public class HomeAdapter extends SuperAdapter {
             }
 
             @Override
-            public void onResponseFailed(int code, String msg) {
+            public void onResponseFailed(int returnCode, String errorMsg) {
                 switch (loadType) {
                     case REFRESH:
-                        refreshOver(-1, msg);
+                        refreshOver(-1, errorMsg);
                         break;
                     case LOADMORE:
-                        loadMoreOver(-1, msg);
+                        loadMoreOver(-1, errorMsg);
                         break;
                 }
                 isRequest = false;

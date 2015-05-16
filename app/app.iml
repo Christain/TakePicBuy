@@ -90,7 +90,6 @@
     <orderEntry type="library" exported="" name="weibosdkcore" level="project" />
     <orderEntry type="library" exported="" name="qq_login" level="project" />
     <orderEntry type="library" exported="" name="multidex-1.0.0" level="project" />
-    <orderEntry type="library" exported="" name="crouton-1.8.5" level="project" />
     <orderEntry type="library" exported="" name="fbcore-0.4.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="butterknife-6.1.0" level="project" />

@@ -52,7 +52,7 @@ public class SearchResultAdapter extends SuperAdapter {
     private void initListener() {
         responseHandler = new ResponseHandler() {
             @Override
-            public void onResponseSuccess(int code, Header[] headers, String result) {
+            public void onResponseSuccess(int returnCode, Header[] headers, String result) {
                 Gson gson = new Gson();
                 SearchResultListModel list = gson.fromJson(result, SearchResultListModel.class);
                 if (page == 0) {
@@ -65,22 +65,22 @@ public class SearchResultAdapter extends SuperAdapter {
                         case REFRESH:
                             refreshItems(list.getSearchresult());
                             if (list.getSearchresult().size() == 0) {
-                                refreshOver(code, ISNULL);
+                                refreshOver(returnCode, ISNULL);
                             } else if (page == maxPage - 1) {
                                 isOver = 1;
-                                refreshOver(code, ISOVER);
+                                refreshOver(returnCode, ISOVER);
                             } else {
                                 page++;
-                                refreshOver(code, CLICK_MORE);
+                                refreshOver(returnCode, CLICK_MORE);
                             }
                             break;
                         case LOADMORE:
                             if (page != maxPage - 1) {
                                 page++;
-                                loadMoreOver(code, CLICK_MORE);
+                                loadMoreOver(returnCode, CLICK_MORE);
                             } else {
                                 isOver = 1;
-                                loadMoreOver(code, ISOVER);
+                                loadMoreOver(returnCode, ISOVER);
                             }
                             addItems(list.getSearchresult());
                             break;
@@ -88,10 +88,10 @@ public class SearchResultAdapter extends SuperAdapter {
                 } else {
                     switch (loadType) {
                         case REFRESH:
-                            refreshOver(code, ISNULL);
+                            refreshOver(returnCode, ISNULL);
                             break;
                         case LOADMORE:
-                            loadMoreOver(code, ISOVER);
+                            loadMoreOver(returnCode, ISOVER);
                             break;
                     }
                 }
@@ -99,13 +99,13 @@ public class SearchResultAdapter extends SuperAdapter {
             }
 
             @Override
-            public void onResponseFailed(int code, String msg) {
+            public void onResponseFailed(int returnCode, String errorMsg) {
                 switch (loadType) {
                     case REFRESH:
-                        refreshOver(code, msg);
+                        refreshOver(-1, errorMsg);
                         break;
                     case LOADMORE:
-                        loadMoreOver(code, msg);
+                        loadMoreOver(-1, errorMsg);
                         break;
                 }
                 isRequest = false;

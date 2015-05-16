@@ -747,7 +747,8 @@ public class CutView extends View {
             Bitmap out;
 
             if (m_obj instanceof String) {
-                out = BitmapFactory.decodeFile((String) m_obj);
+                out = PhoneManager.getBitmapFromPath((String) m_obj, -1);
+//                out = BitmapFactory.decodeFile((String) m_obj);
             } else if (m_obj instanceof Integer) {
                 out = BitmapFactory.decodeResource(getResources(),
                         (Integer) m_obj);

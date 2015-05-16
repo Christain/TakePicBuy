@@ -138,7 +138,7 @@ public class SearchResult extends BaseActivity {
                         if (msg.equals(SuperAdapter.ISNULL)) {
                             if (!llNoResult.isShown()) {
                                 llNoResult.setVisibility(View.VISIBLE);
-                                tvNoResult.setText("  没有搜索到商品");
+                                tvNoResult.setText("没有搜索到商品");
                             }
                             if (refreshLayout.isShown()) {
                                 refreshLayout.setVisibility(View.INVISIBLE);
@@ -165,7 +165,7 @@ public class SearchResult extends BaseActivity {
                         if (msg.equals(SuperAdapter.ISNULL)) {
                             if (!llNoResult.isShown()) {
                                 llNoResult.setVisibility(View.VISIBLE);
-                                tvNoResult.setText("  没有搜索到商品");
+                                tvNoResult.setText("没有搜索到商品");
                             }
                             if (refreshLayout.isShown()) {
                                 refreshLayout.setVisibility(View.INVISIBLE);

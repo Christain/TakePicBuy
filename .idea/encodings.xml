@@ -2,8 +2,12 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/activity/CropImage.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/baseclass/BaseParams.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/cropper/CutView.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/cropper/MakeBmp.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/http/ObjectCallback.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/http/ObjectsCallback.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/http/TextCallback.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/params/FeedBackParam.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/unionbigdata/takepicbuy/params/HomePicSearchParam.java" charset="UTF-8" />
   </component>
