@@ -20,7 +20,6 @@ public final class Constant {
     public static final String SINA_SCOPE = "all"; //新浪授权的种类
 
     public static final String IMAGE_CACHE_DIR_PATH = PhoneManager.getSdCardRootPath() + "/TakePicBuy/cache/";// 图片SD卡缓存路径
-    public static final String IMAGE_CACHE_APP_PATH = PhoneManager.getAppRootPath() + "/cache"; //图片系统缓存路径，app卸载时会自动删除
     public static final String UPLOAD_FILES_DIR_PATH = PhoneManager.getSdCardRootPath() + "/TakePicBuy/upload/";// 上传图片SD卡缓存路径
 
     public static void checkSDPath() {

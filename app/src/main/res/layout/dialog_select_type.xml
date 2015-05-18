@@ -17,7 +17,7 @@
             android:layout_width="@dimen/search_result_dialog_width"
             android:layout_height="@dimen/search_result_dialog_high"
             android:background="@drawable/shape_select_type_top"
-            android:text="All"
+            android:text="不限"
             android:textColor="@drawable/dialog_select_type_text_color"
             android:textSize="@dimen/search_result_dialog_text_size"/>
         <View

@@ -259,13 +259,15 @@ public class UserCenter extends BaseActivity {
     private ArrayList<SearchPicModel> searchList(File file) {
         ArrayList<SearchPicModel> list = new ArrayList<SearchPicModel>();
         File[] files = file.listFiles();
-        for (File f : files) {
-            if (f.getAbsolutePath().endsWith("_SEARCH.jpg")) {
-                SearchPicModel model = new SearchPicModel();
-                model.setImg(f.getAbsolutePath());
-                model.setStatus(0);
-                model.setLastModified(f.lastModified());
-                list.add(model);
+        if (files != null) {
+            for (File f : files) {
+                if (f.getAbsolutePath().endsWith("_SEARCH.jpg")) {
+                    SearchPicModel model = new SearchPicModel();
+                    model.setImg(f.getAbsolutePath());
+                    model.setStatus(0);
+                    model.setLastModified(f.lastModified());
+                    list.add(model);
+                }
             }
         }
         Collections.sort(list, new FileComparator());
@@ -383,9 +385,6 @@ public class UserCenter extends BaseActivity {
                     String token = object.getString("access_token");
                     String expires_in = object.getString("expires_in");
                     AppPreference.save(UserCenter.this, AppPreference.QQ_EXPIRES, expires_in);
-                    if (Constant.SHOW_LOG) {
-                        Log.e("QQ验证", arg0.toString());
-                    }
                     Login(1, openid, token);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -468,7 +467,20 @@ public class UserCenter extends BaseActivity {
                     }
                     break;
                 case 500://设置页有退出操作
-                    noLoginView();
+                    if (data != null) {
+                        if (data.hasExtra("LOGIN")) {
+                            noLoginView();
+                        }
+                        if (data.hasExtra("HISTORY")) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    list = searchList(new File(Constant.UPLOAD_FILES_DIR_PATH));
+                                    handler.sendEmptyMessage(0);
+                                }
+                            }).start();
+                        }
+                    }
                     break;
             }
         }

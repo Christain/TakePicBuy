@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -15,6 +14,7 @@ import com.unionbigdata.takepicbuy.AppPreference;
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.TakePicBuyApplication;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
+import com.unionbigdata.takepicbuy.constant.Constant;
 import com.unionbigdata.takepicbuy.dialog.DialogChoiceBuilder;
 import com.unionbigdata.takepicbuy.dialog.DialogTipsBuilder;
 import com.unionbigdata.takepicbuy.dialog.DialogVersionUpdate;
@@ -40,24 +40,18 @@ import butterknife.OnClick;
  */
 public class SetActivity extends BaseActivity {
 
-    @InjectView(R.id.tvClean)
-    TextView tvClean;
-    @InjectView(R.id.llVersion)
-    LinearLayout llVersion;
     @InjectView(R.id.ivVersion)
     ImageView ivVersion;
-    @InjectView(R.id.llFeedback)
-    LinearLayout llFeedback;
-    @InjectView(R.id.llWeibo)
-    LinearLayout llWeibo;
-    @InjectView(R.id.llWechat)
-    LinearLayout llWechat;
     @InjectView(R.id.tvExit)
     TextView tvExit;
+    @InjectView(R.id.tvHistory)
+    TextView tvHistory;
+    @InjectView(R.id.historyLine)
+    View historyLine;
 
     private LoadingDialog mLoadingDialog;
     private DialogTipsBuilder dialog;
-    private boolean hasLogin = true, loginStatusChanged = false;
+    private boolean hasLogin = true, loginStatusChanged = false, historyClear = false;
 
     @Override
     protected int layoutResId() {
@@ -75,8 +69,15 @@ public class SetActivity extends BaseActivity {
         getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (loginStatusChanged) {
-                    setResult(RESULT_OK);
+                if (loginStatusChanged || historyClear) {
+                    Intent intent = new Intent();
+                    if (loginStatusChanged) {
+                        intent.putExtra("LOGIN", "");
+                    }
+                    if (historyClear) {
+                        intent.putExtra("HISTORY", "");
+                    }
+                    setResult(RESULT_OK, intent);
                 }
                 finish();
             }
@@ -88,8 +89,12 @@ public class SetActivity extends BaseActivity {
         hasLogin = AppPreference.hasLogin(SetActivity.this);
         if (hasLogin) {
             tvExit.setVisibility(View.VISIBLE);
+            tvHistory.setVisibility(View.VISIBLE);
+            historyLine.setVisibility(View.VISIBLE);
         } else {
             tvExit.setVisibility(View.GONE);
+            tvHistory.setVisibility(View.GONE);
+            historyLine.setVisibility(View.GONE);
         }
         if (!TakePicBuyApplication.getInstance().isCheckViersion()) {
             getVersionInfo();
@@ -104,17 +109,27 @@ public class SetActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.tvClean, R.id.llVersion, R.id.llFeedback, R.id.llWeibo, R.id.llWechat, R.id.tvExit})
+    @OnClick({R.id.tvClean, R.id.tvHistory, R.id.llVersion, R.id.llFeedback, R.id.llWeibo, R.id.llWechat, R.id.tvExit})
     void OnItemClick(View v) {
         if (!ClickUtil.isFastClick()) {
             switch (v.getId()) {
                 case R.id.tvClean:
                     final DialogChoiceBuilder clear = DialogChoiceBuilder.getInstance(SetActivity.this);
-                    clear.setMessage("您确定要清理缓存？").withDuration(300).withEffect(Effectstype.Fadein).setOnClick(new View.OnClickListener() {
+                    clear.setMessage("您确定要清除缓存？").withDuration(300).withEffect(Effectstype.Fadein).setOnClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View arg0) {
                             clear.dismiss();
                             new ProgressClear().execute();
+                        }
+                    }).show();
+                    break;
+                case R.id.tvHistory:
+                    final DialogChoiceBuilder history = DialogChoiceBuilder.getInstance(SetActivity.this);
+                    history.setMessage("您确定要清除搜索记录？").withDuration(300).withEffect(Effectstype.Fadein).setOnClick(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View arg0) {
+                            history.dismiss();
+                            new ProgressClearHistory().execute();
                         }
                     }).show();
                     break;
@@ -149,6 +164,8 @@ public class SetActivity extends BaseActivity {
                             hasLogin = false;
                             loginStatusChanged = true;
                             tvExit.setVisibility(View.GONE);
+                            tvHistory.setVisibility(View.GONE);
+                            historyLine.setVisibility(View.GONE);
                         }
                     }).show();
                     break;
@@ -213,7 +230,7 @@ public class SetActivity extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mLoadingDialog.setMessage("正在清理");
+            mLoadingDialog.setMessage("正在清除");
             mLoadingDialog.show();
         }
 
@@ -235,7 +252,44 @@ public class SetActivity extends BaseActivity {
                 mLoadingDialog.dismiss();
             }
             if (result) {
-                toast("清理完成");
+                toast("清除完成");
+            } else {
+//                toast("清理缓存失败，请重试");
+            }
+        }
+    }
+
+    /**
+     * 清除搜索记录
+     */
+    private class ProgressClearHistory extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mLoadingDialog.setMessage("正在清除");
+            mLoadingDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            File file = new File(Constant.UPLOAD_FILES_DIR_PATH);
+            if (file.exists()) {
+                deleteFile(file);
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }
+            if (result) {
+                historyClear = true;
+                toast("清除完成");
             } else {
 //                toast("清理缓存失败，请重试");
             }
@@ -256,15 +310,22 @@ public class SetActivity extends BaseActivity {
             for (File f : childFile) {
                 deleteFile(f);
             }
-            file.delete();
+//            file.delete();
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (loginStatusChanged) {
-                setResult(RESULT_OK);
+            if (loginStatusChanged || historyClear) {
+                Intent intent = new Intent();
+                if (loginStatusChanged) {
+                    intent.putExtra("LOGIN", "");
+                }
+                if (historyClear) {
+                    intent.putExtra("HISTORY", "");
+                }
+                setResult(RESULT_OK, intent);
             }
             finish();
         }
