@@ -320,7 +320,8 @@ public class UserCenter extends BaseActivity {
                         JSONObject object = new JSONObject(result);
                         UserInfoModel model = new UserInfoModel();
                         model.setName(object.getString("nickname"));
-                        model.setUser_photo(object.getString("figureurl"));
+                        model.setUser_photo(object.getString("figureurl_qq_2"));
+                        toast("object.getString(\"figureurl_qq_2\")");
                         AppPreference.saveUserInfo(UserCenter.this, model);
                         AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_QQ, opendId, access_token, Long.parseLong(AppPreference.getUserPersistent(UserCenter.this, AppPreference.QQ_EXPIRES)));
                         isLoginView();

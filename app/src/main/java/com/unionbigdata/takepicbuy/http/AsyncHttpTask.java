@@ -28,7 +28,7 @@ public class AsyncHttpTask {
 	private static PersistentCookieStore cookieStore = new PersistentCookieStore(context);
 
 	static {
-		client.setTimeout(10000);
+		client.setTimeout(20000);
 		client.setMaxRetriesAndTimeout(10, 10000);
 		client.setUserAgent(Build.MODEL);
 		client.addHeader(HEADER_DEVICE_NAME, Build.MODEL);

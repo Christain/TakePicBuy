@@ -34,7 +34,7 @@
             android:layout_width="@dimen/user_center_user_icon_size"
             android:layout_height="@dimen/user_center_user_icon_size"
             android:layout_centerInParent="true"
-            fresco:actualImageScaleType="center"
+            fresco:actualImageScaleType="centerCrop"
             fresco:placeholderImage="@mipmap/icon_user_default"
             fresco:roundAsCircle="true"/>
 
