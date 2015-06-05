@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/select"
-        android:title="选择图片"
+        android:title="图片选择"
         app:showAsAction="always" />
 
 

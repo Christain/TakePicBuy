@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize"
+    android:layout_height="@dimen/toolbar_high"
     android:background="@color/style_color_primary">
 
     <LinearLayout
@@ -13,7 +12,7 @@
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:background="@drawable/toolbar_menu_click_style"
-        android:layout_height="42dp">
+        android:layout_height="45dp">
 
         <TextView
             android:layout_gravity="center"

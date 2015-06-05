@@ -11,6 +11,7 @@
         <item name="colorAccent">@color/style_color_accent</item>
         <item name="selectableItemBackground">@drawable/toolbar_menu_click_style</item>
         <item name="android:windowAnimationStyle">@style/actAnimation</item>
+        <item name="windowActionBar">false</item>
     </style>
 
 

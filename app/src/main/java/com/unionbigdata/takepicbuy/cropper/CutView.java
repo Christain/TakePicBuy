@@ -471,10 +471,20 @@ public class CutView extends View {
                     }
                 } else if (mode == DOUBLE_POINT_ZOOM) {
                     if (m_scale == FREESCALE) {
-                        m_rect.m_x = x - dist_x / 2;
-                        m_rect.m_y = y - dist_y / 2;
-                        m_rect.m_w = w + dist_x;
-                        m_rect.m_h = h + dist_y;
+                        if (event.getY(0) > event.getY(1)) {
+                            m_rect.m_h = h + dist_y;
+                            m_rect.m_y = y - dist_y / 2;
+                        } else {
+                            m_rect.m_h = h - dist_y;
+                            m_rect.m_y = dist_y / 2 + y;
+                        }
+                        if (event.getX(0) > event.getX(1)) {
+                            m_rect.m_x = x - dist_x / 2 ;
+                            m_rect.m_w = w + dist_x;
+                        } else {
+                            m_rect.m_x = dist_x / 2 + x;
+                            m_rect.m_w = w - dist_x;
+                        }
 
                         if (m_rect.m_w <= MIN_LEN)
                             m_rect.m_w = MIN_LEN;
@@ -746,7 +756,7 @@ public class CutView extends View {
             Bitmap out;
 
             if (m_obj instanceof String) {
-                out = PhoneManager.getBitmapFromPath((String) m_obj, -1);
+                out = PhoneManager.getBitmapFromPath((String) m_obj, 500 * 500);
 //                out = BitmapFactory.decodeFile((String) m_obj);
             } else if (m_obj instanceof Integer) {
                 out = BitmapFactory.decodeResource(getResources(),

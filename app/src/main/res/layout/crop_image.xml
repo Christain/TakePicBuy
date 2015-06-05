@@ -19,31 +19,39 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.unionbigdata.takepicbuy.cropper.CutView
-                android:id="@+id/crop_image"
+            <FrameLayout
+                android:id="@+id/frCutView"
                 android:layout_width="match_parent"
                 android:layout_height="0.0dp"
-                android:layout_weight="1.0"/>
+                android:layout_weight="1">
+            </FrameLayout>
+
+            <!--<com.unionbigdata.takepicbuy.cropper.CutView-->
+                <!--android:id="@+id/crop_image"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.0dp"-->
+                <!--android:layout_weight="1.0"/>-->
 
             <FrameLayout
                 android:id="@+id/flSearch"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_width="@dimen/crop_image_search_button_size"
-                android:layout_height="@dimen/crop_image_search_button_size"
-                android:layout_gravity="center"
-                android:background="@mipmap/bg_crop_image_button">
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
                 <ImageView
                     android:layout_gravity="center"
-                    android:layout_width="@dimen/crop_image_search_icon_size"
-                    android:layout_height="@dimen/crop_image_search_icon_size"
+                    android:padding="16dp"
+                    android:background="@mipmap/bg_crop_image_button"
+                    android:layout_width="@dimen/crop_image_search_button_size"
+                    android:layout_height="@dimen/crop_image_search_button_size"
                     android:src="@mipmap/icon_crop_search"/>
             </FrameLayout>
         </LinearLayout>
 
         <com.unionbigdata.takepicbuy.widget.CircleProgress
             android:id="@+id/progress"
+            android:visibility="gone"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_margin="30dp"

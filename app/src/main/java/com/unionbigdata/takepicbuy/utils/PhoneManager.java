@@ -349,12 +349,17 @@ public class PhoneManager {
             BitmapFactory.Options opts = new BitmapFactory.Options();
             opts.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(path, opts);
-            opts.inJustDecodeBounds = false;
             if (maxNumOfPixels <= 0) {
-                opts.inSampleSize = computeSampleSize(opts, 3000 * 3000);
+                int high = CONTEXT.getResources().getDisplayMetrics().heightPixels;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    opts.inSampleSize = computeSampleSize(opts, (int)(high * high * 1.5));
+                } else {
+                    opts.inSampleSize = computeSampleSize(opts, high * high);
+                }
             } else {
                 opts.inSampleSize = computeSampleSize(opts, maxNumOfPixels);
             }
+            opts.inJustDecodeBounds = false;
             bitmap = BitmapFactory.decodeFile(path, opts);
         } catch (Exception e) {
             e.printStackTrace();

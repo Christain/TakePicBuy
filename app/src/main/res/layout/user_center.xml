@@ -34,9 +34,9 @@
             android:layout_width="@dimen/user_center_user_icon_size"
             android:layout_height="@dimen/user_center_user_icon_size"
             android:layout_centerInParent="true"
+            fresco:roundAsCircle="true"
             fresco:actualImageScaleType="centerCrop"
-            fresco:placeholderImage="@mipmap/icon_user_default"
-            fresco:roundAsCircle="true"/>
+            fresco:placeholderImage="@mipmap/icon_user_default"/>
 
         <TextView
             android:id="@+id/tvUserName"

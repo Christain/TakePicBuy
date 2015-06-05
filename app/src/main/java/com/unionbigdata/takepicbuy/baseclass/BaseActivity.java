@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.http.AsyncHttpTask;
 import com.unionbigdata.takepicbuy.utils.AppManage;
@@ -60,11 +61,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+        MobclickAgent.onResume(context);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+        MobclickAgent.onPause(context);
 	}
 
 	@Override
@@ -82,7 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 	}
 
 	protected abstract int layoutResId();
-
 
 	protected abstract void onCreateActivity(Bundle savedInstanceState);
 

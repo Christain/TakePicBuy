@@ -15,10 +15,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,23 +54,25 @@ import butterknife.OnClick;
  */
 public class CropImage extends BaseActivity {
 
-    @InjectView(R.id.crop_image)
-    CutView imageView;
+    private CutView imageView;
     @InjectView(R.id.llCrop)
     LinearLayout llCrop;
     @InjectView(R.id.progress)
     CircleProgress progress;
+    @InjectView(R.id.frCutView)
+    FrameLayout frCutview;
     private Thread searchThread;
 
     private MenuItem menuItem;
     private boolean hasType = false;
-    private File mTempDir, cropFile;
+    private File mTempDir, cropFile, cameraFile;
     private Bitmap cutBitmap;
     private Uri CameraUri = null;
     private MediaScannerConnection msc;
 
     private static final int REQUEST_CODE_CAPTURE_CAMEIA = 1458;
     public static final int REQUEST_PICK = 9162;
+    private boolean isBack = false;
 
     @Override
     protected int layoutResId() {
@@ -77,6 +81,7 @@ public class CropImage extends BaseActivity {
 
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
+        isBack = false;
         getToolbar().setTitle("上传图片");
         getToolbar().setTitleTextColor(0xFFFFFFFF);
         getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
@@ -85,6 +90,7 @@ public class CropImage extends BaseActivity {
             @Override
             public void onClick(View view) {
                 recycleBmp();
+                isBack = true;
                 finish();
             }
         });
@@ -92,6 +98,10 @@ public class CropImage extends BaseActivity {
         if (!mTempDir.exists()) {
             mTempDir.mkdirs();
         }
+        FrameLayout.LayoutParams fl = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        imageView = new CutView(this);
+        imageView.setLayoutParams(fl);
+        frCutview.addView(imageView);
         llCrop.setVisibility(View.VISIBLE);
         progress.setVisibility(View.GONE);
         Intent intent = getIntent();
@@ -111,6 +121,17 @@ public class CropImage extends BaseActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            recycleBmp();
+            isBack = true;
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_crop, menu);
         menuItem = menu.findItem(R.id.select);
@@ -126,6 +147,17 @@ public class CropImage extends BaseActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.select) {
+            SelectPicDialog dialog = new SelectPicDialog(CropImage.this, R.style.LoadingDialogTheme);
+            dialog.show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.flSearch)
@@ -151,32 +183,36 @@ public class CropImage extends BaseActivity {
         AsyncHttpTask.post(param.getUrl(), param, new ResponseHandler() {
             @Override
             public void onResponseSuccess(int returnCode, Header[] headers, String result) {
-                try {
-                    JSONObject object = new JSONObject(result);
-                    String imgUrl = object.getString("srcimageurl");
-                    String fileName = imgUrl.substring(imgUrl.lastIndexOf("/"), imgUrl.lastIndexOf("."));
-                    file.renameTo(new File(Constant.UPLOAD_FILES_DIR_PATH + fileName + "_SEARCH.jpg"));
-                    Intent intent = new Intent(CropImage.this, SearchResult.class);
-                    intent.putExtra("IMGURL", imgUrl);
-                    startActivity(intent);
-                    uploadFailStatus();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    if (file.exists()) {
-                        file.delete();
+                if (!isBack) {
+                    try {
+                        JSONObject object = new JSONObject(result);
+                        String imgUrl = object.getString("srcimageurl");
+                        String fileName = imgUrl.substring(imgUrl.lastIndexOf("/"), imgUrl.lastIndexOf("."));
+                        file.renameTo(new File(Constant.UPLOAD_FILES_DIR_PATH + fileName + "_SEARCH.jpg"));
+                        Intent intent = new Intent(CropImage.this, SearchResult.class);
+                        intent.putExtra("IMGURL", imgUrl);
+                        startActivity(intent);
+                        uploadFailStatus();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        uploadFailStatus();
+                        toast("搜索失败，请重试");
                     }
-                    uploadFailStatus();
-                    toast("搜索失败，请重试");
                 }
             }
 
             @Override
             public void onResponseFailed(int returnCode, String errorMsg) {
-                uploadFailStatus();
-                if (file.exists()) {
-                    file.delete();
+                if (!isBack) {
+                    uploadFailStatus();
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                    toast("搜索失败，请重试");
                 }
-                toast("搜索失败，请重试");
             }
         });
     }
@@ -207,8 +243,8 @@ public class CropImage extends BaseActivity {
     protected void getImageFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
-        File cropFile = new File(mTempDir, fileName);
-        CameraUri = Uri.fromFile(cropFile);
+        cameraFile = new File(mTempDir, fileName);
+        CameraUri = Uri.fromFile(cameraFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, CameraUri);
         startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMEIA);
     }
@@ -233,15 +269,15 @@ public class CropImage extends BaseActivity {
                     }
                 } else {
                     String[] imgInfo = {MediaStore.Images.Media.DATA};
-                    Cursor imgCursor = managedQuery(uri, imgInfo, null, null, null);
-                    if (imgCursor != null) {
+                    Cursor imgCursor = getContentResolver().query(uri, imgInfo, null, null, null);
+                    if (imgCursor.moveToFirst()) {
                         int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        imgCursor.moveToFirst();
                         recycleCutViewBmp();
                         imageView.SetImage(imgCursor.getString(index));
                     } else {
                         toast("选择图片失败，请重试");
                     }
+                    imgCursor.close();
                 }
             } else if (requestCode == REQUEST_CODE_CAPTURE_CAMEIA) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -254,17 +290,20 @@ public class CropImage extends BaseActivity {
                         toast("加载图片失败，请重试");
                     }
                 } else {
-                    String[] imgInfo = {MediaStore.Images.Media.DATA};
-                    Cursor imgCursor = managedQuery(CameraUri, imgInfo, null, null, null);
-                    if (imgCursor != null) {
-                        int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        imgCursor.moveToFirst();
-                        recycleCutViewBmp();
-                        imageView.SetImage(imgCursor.getString(index));
-                        savePhotoToAlbum(imgCursor.getString(index));
-                    } else {
-                        toast("加载图片失败，请重试");
-                    }
+                    recycleCutViewBmp();
+                    imageView.SetImage(cameraFile.getAbsolutePath());
+                    savePhotoToAlbum(cameraFile.getAbsolutePath());
+//                    String[] imgInfo = {MediaStore.Images.Media.DATA};
+//                    Cursor imgCursor = getContentResolver().query(CameraUri, imgInfo, null, null, null);
+//                    if (imgCursor.moveToFirst()) {
+//                        int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        recycleCutViewBmp();
+//                        imageView.SetImage(imgCursor.getString(index));
+//                        savePhotoToAlbum(imgCursor.getString(index));
+//                    } else {
+//                        toast("加载图片失败，请重试");
+//                    }
+//                    imgCursor.close();
                 }
             }
         }
@@ -286,16 +325,16 @@ public class CropImage extends BaseActivity {
                             public void onMediaScannerConnected() {
                                 Uri uri1 = Uri.parse(uri);
                                 String[] imgInfo = {MediaStore.Images.Media.DATA};
-                                Cursor imgCursor = managedQuery(uri1, imgInfo, null, null, null);
-                                if (imgCursor != null) {
+                                Cursor imgCursor = getContentResolver().query(uri1, imgInfo, null, null, null);
+                                if (imgCursor.moveToFirst()) {
                                     int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                                    imgCursor.moveToFirst();
                                     msc.scanFile(imgCursor.getString(index), "image/jpeg");
                                 } else {
                                     if (Constant.SHOW_LOG) {
                                         Toast.makeText(CropImage.this, "图片刷新失败", Toast.LENGTH_SHORT).show();
                                     }
                                 }
+                                imgCursor.close();
                             }
 
                             @Override
@@ -330,6 +369,7 @@ public class CropImage extends BaseActivity {
             }
             String fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
             cropFile = new File(mTempDir, fileName);
+
             if (PhoneManager.saveBitmapToImageFile(CropImage.this, Bitmap.CompressFormat.PNG, cutBitmap, cropFile, 100)) {
                 mHandler.sendEmptyMessage(0);
             } else {

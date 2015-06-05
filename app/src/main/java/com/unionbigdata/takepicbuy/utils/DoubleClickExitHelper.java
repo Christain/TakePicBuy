@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.unionbigdata.takepicbuy.TakePicBuyApplication;
 
 /**
@@ -36,6 +37,7 @@ public class DoubleClickExitHelper {
 			if(mBackToast != null){
 				mBackToast.cancel();
 			}
+            MobclickAgent.onKillProcess(TakePicBuyApplication.getInstance());
             AppManage.getInstance().exit(TakePicBuyApplication.getInstance());
             mActivity.finish();
 			return true;

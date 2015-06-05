@@ -191,35 +191,37 @@ public class PullToRefreshLayout extends RelativeLayout {
      * @param refreshResult PullToRefreshLayout.SUCCEED代表成功，PullToRefreshLayout.FAIL代表失败
      */
     public void refreshFinish(int refreshResult) {
-        refreshingView.clearAnimation();
-        refreshingView.setVisibility(View.GONE);
-        switch (refreshResult) {
-            case SUCCEED:
-                // 刷新成功
-                refreshStateImageView.setVisibility(View.GONE);
-                refreshStateTextView.setText(R.string.refresh_succeed);
-                refreshStateImageView.setBackgroundResource(R.mipmap.refresh_succeed);
-                break;
-            case FAIL:
-            default:
-                // 刷新失败
-                refreshStateImageView.setVisibility(View.GONE);
-                refreshStateTextView.setText(R.string.refresh_fail);
-                refreshStateImageView.setBackgroundResource(R.mipmap.refresh_failed);
-                break;
-        }
-        if (pullDownY > 0) {
-            // 刷新结果停留1秒
-            new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    changeState(DONE);
-                    hide();
-                }
-            }.sendEmptyMessage(0);
-        } else {
-            changeState(DONE);
-            hide();
+        if (refreshingView != null) {
+            refreshingView.clearAnimation();
+            refreshingView.setVisibility(View.GONE);
+            switch (refreshResult) {
+                case SUCCEED:
+                    // 刷新成功
+                    refreshStateImageView.setVisibility(View.GONE);
+                    refreshStateTextView.setText(R.string.refresh_succeed);
+                    refreshStateImageView.setBackgroundResource(R.mipmap.refresh_succeed);
+                    break;
+                case FAIL:
+                default:
+                    // 刷新失败
+                    refreshStateImageView.setVisibility(View.GONE);
+                    refreshStateTextView.setText(R.string.refresh_fail);
+                    refreshStateImageView.setBackgroundResource(R.mipmap.refresh_failed);
+                    break;
+            }
+            if (pullDownY > 0) {
+                // 刷新结果停留1秒
+                new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        changeState(DONE);
+                        hide();
+                    }
+                }.sendEmptyMessage(0);
+            } else {
+                changeState(DONE);
+                hide();
+            }
         }
     }
 
@@ -451,11 +453,11 @@ public class PullToRefreshLayout extends RelativeLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (!isLayout) {
+            isLayout = true;
             // 这里是第一次进来的时候做一些初始化
             refreshView = getChildAt(0);
             pullableView = getChildAt(1);
             loadmoreView = getChildAt(2);
-            isLayout = true;
             initView();
             refreshDist = ((ViewGroup) refreshView).getChildAt(0)
                     .getMeasuredHeight();

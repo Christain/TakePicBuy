@@ -13,8 +13,4 @@
     <string name="load_succeed">加载成功</string>
     <string name="load_fail">加载失败</string>
 
-    <string name="crop__saving" translatable="false">保存图片中...</string>
-    <string name="crop__wait" translatable="false">请等待...</string>
-    <string name="crop__pick_error" translatable="false">图片不可用</string>
-
 </resources>

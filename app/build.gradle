@@ -9,6 +9,7 @@ android {
             storePassword 'unionbigdata'
         }
     }
+
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
     defaultConfig {
@@ -18,25 +19,95 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wap"]
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            zipAlignEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+
+
+//    productFlavors {
+//        yingyongbao {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yingyongbao"]
+//        }
+//        wandoujia {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+//        }
+//        _91zhushou {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "_91zhushou"]
+//        }
+//        baiduzhushou {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baiduzhushou"]
+//        }
+//        anzhuoshichang {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "anzhuoshichang"]
+//        }
+//        anzhishichang {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "anzhishichang"]
+//        }
+//        miuishichang {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "miuishichang"]
+//        }
+//        huaweishichang {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "huaweishichang"]
+//        }
+//        lenovomm {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "lenovomm"]
+//        }
+//        taobaoshoujizhushou {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "taobaoshoujizhushou"]
+//        }
+//        nearme {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "nearme"]
+//        }
+//        _360shoujizhushou {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "_360shoujizhushou"]
+//        }
+//        jifeng {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "jifeng"]
+//        }
+//        sougou {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "sougou"]
+//        }
+//        samsung {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "samsung"]
+//        }
+//        yidong {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yidong"]
+//        }
+//        liantong {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "liantong"]
+//        }
+//        dianxin {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "dianxin"]
+//        }
+//        wap {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wap"]
+//        }
+//    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:22.1.1'
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.facebook.fresco:fresco:0.4.0'
+    compile 'com.facebook.fresco:fresco:0.5.0'
     compile 'com.jakewharton:butterknife:6.1.0'
-    compile files('libs/android-async-http-1.4.5.jar')
-    compile files('libs/qq_login.jar')
-    compile files('libs/weibosdkcore.jar')
-    compile files('libs/mta-sdk-1.6.2.jar')
 }

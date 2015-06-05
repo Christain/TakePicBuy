@@ -57,16 +57,16 @@ public class QRCodeOfficial extends BaseActivity {
                         public void onMediaScannerConnected() {
                             Uri uri1 = Uri.parse(uri);
                             String[] imgInfo = {MediaStore.Images.Media.DATA};
-                            Cursor imgCursor = managedQuery(uri1, imgInfo, null, null, null);
-                            if (imgCursor != null) {
+                            Cursor imgCursor = getContentResolver().query(uri1, imgInfo, null, null, null);
+                            if (imgCursor.moveToFirst()) {
                                 int index = imgCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                                imgCursor.moveToFirst();
                                 msc.scanFile(imgCursor.getString(index), "image/jpeg");
                             } else {
                                 if (Constant.SHOW_LOG) {
                                     Toast.makeText(QRCodeOfficial.this, "图片刷新失败", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            imgCursor.close();
                         }
 
                         @Override

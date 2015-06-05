@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.unionbigdata.takepicbuy.R;
@@ -30,7 +29,6 @@ public class StartActivity extends BaseActivity implements Runnable {
 
     @Override
     protected int layoutResId() {
-        getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN );
         return R.layout.start_activity;
     }
 

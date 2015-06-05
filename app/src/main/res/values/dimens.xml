@@ -8,7 +8,7 @@
     <dimen name="dialog_sure_cancel_text_size">15sp</dimen>
     <dimen name="dialog_margin_left_right">50dp</dimen>
 
-    <dimen name="toolbar_high">50dp</dimen>
+    <dimen name="toolbar_high">56dp</dimen>
     <dimen name="line_high">1.0px</dimen>
     <dimen name="toolbar_icon_menu_size">45dp</dimen>
     <dimen name="toolbar_icon_menu_padding">12dp</dimen>

@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.sina.weibo.sdk.auth.WeiboAuth;
+import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -85,7 +85,7 @@ public class UserCenter extends BaseActivity {
      */
     private Tencent mTencent;
     private IUiListener listener;
-    private WeiboAuth mWeiboAuth;
+    private AuthInfo mWeiboAuth;
     private Oauth2AccessToken mAccessToken;
     private SsoHandler mSsoHandler;
 
@@ -110,7 +110,6 @@ public class UserCenter extends BaseActivity {
         } else {
             noLoginView();
         }
-
     }
 
     /**
@@ -143,7 +142,7 @@ public class UserCenter extends BaseActivity {
         tvUserName.setText("");
         if (mTencent == null) {
             this.mTencent = Tencent.createInstance(Constant.TENCENT_APPID, this.getApplicationContext());
-            this.mWeiboAuth = new WeiboAuth(this, Constant.SINA_APPID, Constant.SINA_CALLBACK_URL, Constant.SINA_SCOPE);
+            this.mWeiboAuth = new AuthInfo(this, Constant.SINA_APPID, Constant.SINA_CALLBACK_URL, Constant.SINA_SCOPE);
         }
     }
 
@@ -321,7 +320,6 @@ public class UserCenter extends BaseActivity {
                         UserInfoModel model = new UserInfoModel();
                         model.setName(object.getString("nickname"));
                         model.setUser_photo(object.getString("figureurl_qq_2"));
-                        toast("object.getString(\"figureurl_qq_2\")");
                         AppPreference.saveUserInfo(UserCenter.this, model);
                         AppPreference.saveThirdLoginInfo(UserCenter.this, AppPreference.TYPE_QQ, opendId, access_token, Long.parseLong(AppPreference.getUserPersistent(UserCenter.this, AppPreference.QQ_EXPIRES)));
                         isLoginView();
@@ -404,12 +402,8 @@ public class UserCenter extends BaseActivity {
      * 新浪微博登录验证
      */
     private void SinaOauth() {
-        if (checkSinaPackage()) {
-            mSsoHandler = new SsoHandler(UserCenter.this, mWeiboAuth);
-            mSsoHandler.authorize(new AuthListener());
-        } else {
-            mWeiboAuth.anthorize(new AuthListener());
-        }
+        mSsoHandler = new SsoHandler(UserCenter.this, mWeiboAuth);
+        mSsoHandler.authorize(new AuthListener());
     }
 
     class AuthListener implements WeiboAuthListener {

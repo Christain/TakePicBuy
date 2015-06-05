@@ -3,14 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize"
+    android:layout_height="@dimen/toolbar_high"
     android:background="@color/style_color_primary" >
 
     <FrameLayout
         android:layout_gravity="right"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_width="@dimen/toolbar_high"
+        android:layout_height="@dimen/toolbar_high">
         <TextView
             android:layout_gravity="center"
             android:layout_width="@dimen/toolbar_icon_menu_size"

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -69,7 +68,6 @@ public class IndexHome extends BaseActivity {
 
     private View footerView;
     private HomeAdapter adapter;
-    private MenuItem menuItemSet, menuItemUser;
     private int toolbarHigh;
 
 
@@ -82,7 +80,21 @@ public class IndexHome extends BaseActivity {
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
         getToolbar().setTitle("");
-        setSupportActionBar(getToolbar());
+        getToolbar().inflateMenu(R.menu.menu_home);
+        MenuItem menuItemUser = getToolbar().getMenu().findItem(R.id.user);
+        menuItemUser.setActionView(R.layout.menu_item_view);
+        LinearLayout userlayout = (LinearLayout) menuItemUser.getActionView();
+        ImageView user = (ImageView) userlayout.findViewById(R.id.ivItem);
+        user.setImageResource(R.mipmap.icon_toolbar_user);
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!ClickUtil.isFastClick()) {
+                    Intent intent = new Intent(IndexHome.this, UserCenter.class);
+                    startActivity(intent);
+                }
+            }
+        });
         pathButton.init(new int[]{R.mipmap.icon_select_pic_canmar, R.mipmap.icon_select_pic_album},
                 R.mipmap.icon_path_red_bg,
                 R.mipmap.icon_path_cross,
@@ -101,10 +113,7 @@ public class IndexHome extends BaseActivity {
         this.refreshHeader.setBackgroundColor(0xFFF1F1F1);
         this.refreshFooter.setBackgroundColor(0xFFF1F1F1);
 
-        TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(R.attr.actionBarSize, tv, true)) {
-            toolbarHigh = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-        }
+        toolbarHigh = getResources().getDimensionPixelOffset(R.dimen.toolbar_high);
         this.adapter = new HomeAdapter(IndexHome.this, toolbarHigh);
         this.listView.addFooterView(footerView);
         this.listView.setAdapter(adapter);
@@ -124,10 +133,10 @@ public class IndexHome extends BaseActivity {
             @Override
             public void refreshOver(int code, String msg) {
                 listView.setContentOver(adapter.getIsOver());
-                refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                 if (code == -1) {
                     EmptyViewVisible();
                     tvEmpty.setText("获取出错啦~~");
+                    refreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
                 } else {
                     if (msg.equals(SuperAdapter.ISNULL)) {
                         EmptyViewVisible();
@@ -137,6 +146,7 @@ public class IndexHome extends BaseActivity {
                             EmptyViewGone();
                         }
                     }
+                    refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                 }
             }
         });
@@ -144,13 +154,14 @@ public class IndexHome extends BaseActivity {
             @Override
             public void loadMoreOver(int code, String msg) {
                 listView.setContentOver(adapter.getIsOver());
-                refreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
                 if (code == -1) {
                     toast("加载失败，请重试");
+                    refreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
                 } else {
                     if (isFooterVisible) {
                         EmptyViewGone();
                     }
+                    refreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                 }
             }
         });
@@ -206,36 +217,26 @@ public class IndexHome extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        menuItemSet = menu.findItem(R.id.set);
-        menuItemUser = menu.findItem(R.id.user);
-        menuItemSet.setActionView(R.layout.menu_item_view);
-        menuItemUser.setActionView(R.layout.menu_item_view);
-        LinearLayout layout = (LinearLayout) menuItemSet.getActionView();
-        ImageView btn = (ImageView) layout.findViewById(R.id.ivItem);
-        btn.setImageResource(R.mipmap.icon_toolbar_set);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!ClickUtil.isFastClick()) {
-                    Intent intent = new Intent(IndexHome.this, SetActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-        LinearLayout userlayout = (LinearLayout) menuItemUser.getActionView();
-        ImageView user = (ImageView) userlayout.findViewById(R.id.ivItem);
-        user.setImageResource(R.mipmap.icon_toolbar_user);
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!ClickUtil.isFastClick()) {
-                    Intent intent = new Intent(IndexHome.this, UserCenter.class);
-                    startActivity(intent);
-                }
-            }
-        });
+        getMenuInflater().inflate(R.menu.menu_exit, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.user) {
+            if (!ClickUtil.isFastClick()) {
+                Intent intent = new Intent(IndexHome.this, UserCenter.class);
+                startActivity(intent);
+            }
+            return true;
+        } else if (id == R.id.exit) {
+            if (!ClickUtil.isFastClick()) {
+                exitApp();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
