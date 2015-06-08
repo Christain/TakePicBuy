@@ -258,6 +258,7 @@ public class IndexHome extends BaseActivity {
                 } else {
                     TakePicBuyApplication.getInstance().setCheckViersion(false);
                 }
+
             }
 
             @Override
