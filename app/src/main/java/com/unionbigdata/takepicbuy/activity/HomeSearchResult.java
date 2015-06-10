@@ -36,6 +36,12 @@ public class HomeSearchResult extends BaseActivity {
     LinearLayout llNoResult;
     @InjectView(R.id.tvNoResult)
     TextView tvNoResult;
+    @InjectView(R.id.llBack)
+    LinearLayout llBack;
+    @InjectView(R.id.tvBack)
+    TextView tvBack;
+    @InjectView(R.id.tvTitle)
+    TextView tvTitle;
 
     private Animation alphaIn;
     private String imageId;
@@ -52,16 +58,25 @@ public class HomeSearchResult extends BaseActivity {
         if (intent.hasExtra("IAMGEID")) {
             this.imageId = intent.getStringExtra("IAMGEID");
             this.alphaIn = AnimationUtils.loadAnimation(this, R.anim.alpha_in);
-            getToolbar().setTitle("搜索结果");
-            getToolbar().setTitleTextColor(0xFFFFFFFF);
-            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-            setSupportActionBar(getToolbar());
-            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+            getToolbar().setTitle("");
+//            getToolbar().setTitleTextColor(0xFFFFFFFF);
+//            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+            llBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     finish();
                 }
             });
+            tvTitle.setText("搜索结果");
+            tvBack.setText("返回");
+
+            setSupportActionBar(getToolbar());
+//            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    finish();
+//                }
+//            });
             this.adapter = new HomeSearchResultAdapter(HomeSearchResult.this);
             this.gridView.setAdapter(adapter);
             this.initView();

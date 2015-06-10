@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.unionbigdata.takepicbuy.R;
@@ -15,6 +17,7 @@ import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
 import com.unionbigdata.takepicbuy.constant.Constant;
 import com.unionbigdata.takepicbuy.utils.ClickUtil;
 
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -25,6 +28,13 @@ public class QRCodeOfficial extends BaseActivity {
 
     private MediaScannerConnection msc = null;
 
+    @InjectView(R.id.llBack)
+    LinearLayout llBack;
+    @InjectView(R.id.tvBack)
+    TextView tvBack;
+    @InjectView(R.id.tvTitle)
+    TextView tvTitle;
+
     @Override
     protected int layoutResId() {
         return R.layout.qrcode_official;
@@ -32,16 +42,24 @@ public class QRCodeOfficial extends BaseActivity {
 
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
-        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-        getToolbar().setTitle("拍图购微信");
-        getToolbar().setTitleTextColor(0xFFFFFFFF);
-        setSupportActionBar(getToolbar());
-        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+        getToolbar().setTitle("");
+//        getToolbar().setTitleTextColor(0xFFFFFFFF);
+        llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+        tvTitle.setText("搜拍图购微信");
+        tvBack.setText("设置");
+        setSupportActionBar(getToolbar());
+//        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
     }
 
     @OnClick(R.id.ivQRCode)

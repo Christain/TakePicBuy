@@ -6,6 +6,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.adapter.SearchPicAdapter;
@@ -25,6 +27,12 @@ public class SearchHistory extends BaseActivity {
 
     @InjectView(R.id.gridView)
     GridView gridView;
+    @InjectView(R.id.llBack)
+    LinearLayout llBack;
+    @InjectView(R.id.tvBack)
+    TextView tvBack;
+    @InjectView(R.id.tvTitle)
+    TextView tvTitle;
 
     private boolean isCancelStatus = false;
     private SearchPicAdapter adapter;
@@ -40,11 +48,10 @@ public class SearchHistory extends BaseActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("LIST")) {
             this.list = (ArrayList<SearchPicModel>) intent.getSerializableExtra("LIST");
-            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-            getToolbar().setTitle("历史搜索");
-            getToolbar().setTitleTextColor(0xFFFFFFFF);
-            setSupportActionBar(getToolbar());
-            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+            getToolbar().setTitle("");
+//            getToolbar().setTitleTextColor(0xFFFFFFFF);
+            llBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (isCancelStatus) {
@@ -59,6 +66,24 @@ public class SearchHistory extends BaseActivity {
                     }
                 }
             });
+            tvTitle.setText("历史搜索");
+            tvBack.setText("返回");
+            setSupportActionBar(getToolbar());
+//            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (isCancelStatus) {
+//                        CancelDismiss();
+//                    } else {
+//                        if (adapter != null && adapter.isHasChange()) {
+//                            Intent intent = new Intent();
+//                            intent.putExtra("LIST", list);
+//                            setResult(RESULT_OK, intent);
+//                        }
+//                        finish();
+//                    }
+//                }
+//            });
             this.adapter = new SearchPicAdapter(SearchHistory.this, "ALL");
             this.gridView.setAdapter(adapter);
             this.adapter.setSearchList(list);

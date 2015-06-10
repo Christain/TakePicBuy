@@ -28,13 +28,13 @@
                 android:layout_height="wrap_content"
                 android:text="立即体验"
                 android:textColor="#FF959595"
-                android:textSize="15sp"/>
+                android:textSize="17sp"/>
             <ImageView
                 android:layout_toLeftOf="@id/tvOk"
                 android:layout_marginRight="5dp"
                 android:layout_centerVertical="true"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:src="@mipmap/icon_guide_one_arrow"/>
             </RelativeLayout>
         </FrameLayout>

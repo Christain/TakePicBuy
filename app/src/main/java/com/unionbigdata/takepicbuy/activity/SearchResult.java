@@ -54,6 +54,11 @@ public class SearchResult extends BaseActivity {
     @InjectView(R.id.tvNoResult)
     TextView tvNoResult;
 
+    @InjectView(R.id.llBack)
+    LinearLayout llBack;
+    @InjectView(R.id.tvBack)
+    TextView tvBack;
+
     private SearchResultAdapter adapter;
     private PopupWindow popWind;
     private String filterString = "all";//平台分类
@@ -73,15 +78,22 @@ public class SearchResult extends BaseActivity {
             imgUrl = intent.getStringExtra("IMGURL");
             this.mLoadingDialog = LoadingDialog.createDialog(SearchResult.this, true);
             getToolbar().setTitle("");
-            getToolbar().setTitleTextColor(0xFFFFFFFF);
-            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-            setSupportActionBar(getToolbar());
-            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//            getToolbar().setTitleTextColor(0xFFFFFFFF);
+//            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+            llBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     finish();
                 }
             });
+            tvBack.setText("返回");
+            setSupportActionBar(getToolbar());
+//            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    finish();
+//                }
+//            });
             this.refreshHeader = (RelativeLayout) findViewById(R.id.head_view);
             this.refreshFooter = (RelativeLayout) findViewById(R.id.loadmore_view);
             this.refreshHeader.setBackgroundColor(0xFFF1F1F1);

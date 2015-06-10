@@ -8,7 +8,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
@@ -26,6 +28,12 @@ public class WebViewActivity extends BaseActivity {
     ProgressBar pbWebView;
     @InjectView(R.id.webView)
     WebView webView;
+    @InjectView(R.id.llBack)
+    LinearLayout llBack;
+    @InjectView(R.id.tvBack)
+    TextView tvBack;
+    @InjectView(R.id.tvTitle)
+    TextView tvTitle;
 
     private String url, title;
 
@@ -40,11 +48,10 @@ public class WebViewActivity extends BaseActivity {
         if (intent.hasExtra("URL") && intent.hasExtra("TITLE")) {
             this.title = intent.getStringExtra("TITLE");
             this.url = intent.getStringExtra("URL");
-            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-            getToolbar().setTitle(title);
-            getToolbar().setTitleTextColor(0xFFFFFFFF);
-            setSupportActionBar(getToolbar());
-            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+            getToolbar().setTitle("");
+//            getToolbar().setTitleTextColor(0xFFFFFFFF);
+            llBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (webView.canGoBack()) {
@@ -54,6 +61,23 @@ public class WebViewActivity extends BaseActivity {
                     }
                 }
             });
+            tvTitle.setText(title);
+            if (title.contains("拍图购")) {
+                tvBack.setText("设置");
+            } else {
+                tvBack.setText("返回");
+            }
+            setSupportActionBar(getToolbar());
+//            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (webView.canGoBack()) {
+//                        webView.goBack();
+//                    } else {
+//                        finish();
+//                    }
+//                }
+//            });
             pbWebView.setVisibility(View.VISIBLE);
             pbWebView.setMax(100);
             webView.getSettings().setJavaScriptEnabled(true);

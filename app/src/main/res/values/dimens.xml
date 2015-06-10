@@ -8,11 +8,15 @@
     <dimen name="dialog_sure_cancel_text_size">15sp</dimen>
     <dimen name="dialog_margin_left_right">50dp</dimen>
 
-    <dimen name="toolbar_high">56dp</dimen>
+    <dimen name="toolbar_high">50dp</dimen>
+    <dimen name="toolbar_title_size">19sp</dimen>
     <dimen name="line_high">1.0px</dimen>
-    <dimen name="toolbar_icon_menu_size">45dp</dimen>
-    <dimen name="toolbar_icon_menu_padding">12dp</dimen>
+    <dimen name="toolbar_icon_menu_size">43dp</dimen>
+    <dimen name="toolbar_icon_menu_padding">11dp</dimen>
     <dimen name="path_radius">90dp</dimen>
+    <dimen name="toolbar_back_icon_size">17dp</dimen>
+    <dimen name="toolbar_back_text_size">16sp</dimen>
+    <dimen name="toolbar_back_padding">5dp</dimen>
 
     <!-- 设置-->
     <dimen name="set_item_high">50dp</dimen>
