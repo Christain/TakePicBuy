@@ -8,41 +8,6 @@
     android:background="@color/style_color_primary"
     app:theme="@style/Toolbar.AppCompat.Responsive">
 
-    <LinearLayout
-        android:id="@+id/llBack"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@drawable/toolbar_menu_click_style"
-        android:gravity="center"
-        android:minWidth="@dimen/toolbar_high"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/toolbar_back_padding"
-        android:paddingRight="@dimen/toolbar_back_padding">
-
-        <ImageView
-            android:layout_width="@dimen/toolbar_back_icon_size"
-            android:layout_height="@dimen/toolbar_back_icon_size"
-            android:src="@mipmap/icon_toolbar_white_back"/>
-
-        <TextView
-            android:id="@+id/tvBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="1dp"
-            android:text="返回"
-            android:textColor="@color/bg_white"
-            android:textSize="@dimen/toolbar_back_text_size"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="意见反馈"
-        android:textColor="@color/bg_white"
-        android:textSize="@dimen/toolbar_title_size"/>
-
     <FrameLayout
         android:layout_width="@dimen/toolbar_high"
         android:layout_height="@dimen/toolbar_high"

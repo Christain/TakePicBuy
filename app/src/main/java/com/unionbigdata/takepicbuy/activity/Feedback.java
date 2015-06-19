@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.baseclass.BaseActivity;
@@ -30,12 +28,6 @@ public class Feedback extends BaseActivity {
 
     @InjectView(R.id.etContent)
     EditText etContent;
-    @InjectView(R.id.llBack)
-    LinearLayout llBack;
-    @InjectView(R.id.tvBack)
-    TextView tvBack;
-    @InjectView(R.id.tvTitle)
-    TextView tvTitle;
 
     private DialogTipsBuilder dialog;
     private LoadingDialog mLoadingDialog;
@@ -48,24 +40,17 @@ public class Feedback extends BaseActivity {
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
         this.mLoadingDialog = LoadingDialog.createDialog(Feedback.this, true);
-        getToolbar().setTitle("");
-//        getToolbar().setTitleTextColor(0xFFFFFFFF);
-//        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-        llBack.setOnClickListener(new View.OnClickListener() {
+        getToolbar().setTitle("意见反馈");
+        getToolbar().setTitleTextColor(0xFFFFFFFF);
+        getToolbar().setTitleTextAppearance(Feedback.this, R.style.AppTheme_ActionBar_TitleText);
+        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+        setSupportActionBar(getToolbar());
+        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        tvTitle.setText("意见反馈");
-        tvBack.setText("设置");
-        setSupportActionBar(getToolbar());
-//        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
         this.dialog = DialogTipsBuilder.getInstance(Feedback.this);
     }
 

@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/toolbar_high"
     android:background="@color/style_color_primary"
     app:theme="@style/Toolbar.AppCompat.Responsive">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/toolbar_high">
+        android:layout_height="@dimen/toolbar_high"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
+            android:layout_width="37dp"
+            android:layout_height="37dp"
             android:layout_marginLeft="13dp"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
             android:src="@mipmap/icon_home_navigation"/>
 
         <TextView
-            android:layout_marginLeft="4dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
             android:id="@+id/tvType"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拍图购"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
             android:gravity="center"
+            android:text="拍图购"
             android:textColor="@color/bg_white"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/toolbar_title_size"/>
 
 
     </LinearLayout>

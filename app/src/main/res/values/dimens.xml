@@ -13,17 +13,15 @@
     <dimen name="line_high">1.0px</dimen>
     <dimen name="toolbar_icon_menu_size">43dp</dimen>
     <dimen name="toolbar_icon_menu_padding">11dp</dimen>
+    <dimen name="toolbar_icon_menu_select_pic_padding">12dp</dimen>
     <dimen name="path_radius">90dp</dimen>
-    <dimen name="toolbar_back_icon_size">17dp</dimen>
-    <dimen name="toolbar_back_text_size">16sp</dimen>
-    <dimen name="toolbar_back_padding">5dp</dimen>
 
     <!-- 设置-->
     <dimen name="set_item_high">50dp</dimen>
     <dimen name="set_item_padding_left_right">20dp</dimen>
     <dimen name="set_item_text_size">17sp</dimen>
     <dimen name="set_item_between_item_high">30dp</dimen>
-    <dimen name="set_item_arrow_margin_right">7dp</dimen>
+    <dimen name="set_item_arrow_margin_right">1dp</dimen>
     <dimen name="set_exit_text_size">19sp</dimen>
     <dimen name="set_arrow_size">16dp</dimen>
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -49,12 +48,6 @@ public class SetActivity extends BaseActivity {
     TextView tvHistory;
     @InjectView(R.id.historyLine)
     View historyLine;
-    @InjectView(R.id.llBack)
-    LinearLayout llBack;
-    @InjectView(R.id.tvBack)
-    TextView tvBack;
-    @InjectView(R.id.tvTitle)
-    TextView tvTitle;
 
     private LoadingDialog mLoadingDialog;
     private DialogTipsBuilder dialog;
@@ -69,10 +62,12 @@ public class SetActivity extends BaseActivity {
     protected void onCreateActivity(Bundle savedInstanceState) {
         this.mLoadingDialog = LoadingDialog.createDialog(SetActivity.this, true);
         this.dialog = DialogTipsBuilder.getInstance(SetActivity.this);
-//        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-        getToolbar().setTitle("");
-//        getToolbar().setTitleTextColor(0xFFFFFFFF);
-        llBack.setOnClickListener(new View.OnClickListener() {
+        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+        getToolbar().setTitleTextAppearance(SetActivity.this, R.style.AppTheme_ActionBar_TitleText);
+        getToolbar().setTitle("设置");
+        getToolbar().setTitleTextColor(0xFFFFFFFF);
+        setSupportActionBar(getToolbar());
+        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (loginStatusChanged || historyClear) {
@@ -88,25 +83,6 @@ public class SetActivity extends BaseActivity {
                 finish();
             }
         });
-        tvTitle.setText("设置");
-        tvBack.setText("返回");
-        setSupportActionBar(getToolbar());
-//        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (loginStatusChanged || historyClear) {
-//                    Intent intent = new Intent();
-//                    if (loginStatusChanged) {
-//                        intent.putExtra("LOGIN", "");
-//                    }
-//                    if (historyClear) {
-//                        intent.putExtra("HISTORY", "");
-//                    }
-//                    setResult(RESULT_OK, intent);
-//                }
-//                finish();
-//            }
-//        });
         this.initView();
     }
 

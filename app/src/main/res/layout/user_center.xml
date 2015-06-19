@@ -17,8 +17,9 @@
             android:layout_width="@dimen/user_center_icon_title_size"
             android:layout_height="@dimen/user_center_icon_title_size"
             android:background="@drawable/user_center_menu_click_style"
-            android:padding="15dp"
+            android:padding="16dp"
             android:src="@mipmap/icon_toolbar_white_back"/>
+
 
         <ImageView
             android:id="@+id/ibtSet"

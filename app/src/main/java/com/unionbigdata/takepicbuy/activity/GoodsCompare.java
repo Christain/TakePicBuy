@@ -3,9 +3,7 @@ package com.unionbigdata.takepicbuy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.unionbigdata.takepicbuy.R;
 import com.unionbigdata.takepicbuy.adapter.GoodsCompareAdapter;
@@ -24,12 +22,6 @@ public class GoodsCompare extends BaseActivity {
 
     @InjectView(R.id.listView)
     ListView listView;
-    @InjectView(R.id.llBack)
-    LinearLayout llBack;
-    @InjectView(R.id.tvBack)
-    TextView tvBack;
-    @InjectView(R.id.tvTitle)
-    TextView tvTitle;
 
     private GoodsCompareAdapter adapter;
     private ArrayList<SearchResultModel> list;
@@ -44,24 +36,17 @@ public class GoodsCompare extends BaseActivity {
         Intent intent = getIntent();
         if (intent.hasExtra("LIST")) {
             this.list = (ArrayList<SearchResultModel>) intent.getSerializableExtra("LIST");
-            getToolbar().setTitle("");
-//            getToolbar().setTitleTextColor(0xFFFFFFFF);
-//            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-            llBack.setOnClickListener(new View.OnClickListener() {
+            getToolbar().setTitle("商品对比");
+            getToolbar().setTitleTextColor(0xFFFFFFFF);
+            getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+            getToolbar().setTitleTextAppearance(GoodsCompare.this, R.style.AppTheme_ActionBar_TitleText);
+            setSupportActionBar(getToolbar());
+            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     finish();
                 }
             });
-            tvTitle.setText("商品对比");
-            tvBack.setText("返回");
-            setSupportActionBar(getToolbar());
-//            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    finish();
-//                }
-//            });
 
             this.adapter = new GoodsCompareAdapter(GoodsCompare.this, list);
             this.listView.setAdapter(adapter);

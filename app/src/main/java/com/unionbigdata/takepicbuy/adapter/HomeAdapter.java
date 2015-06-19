@@ -210,7 +210,7 @@ public class HomeAdapter extends SuperAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return 6;
+        return 7;
     }
 
     @Override

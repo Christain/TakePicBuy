@@ -61,12 +61,6 @@ public class CropImage extends BaseActivity {
     CircleProgress progress;
     @InjectView(R.id.frCutView)
     FrameLayout frCutview;
-    @InjectView(R.id.llBack)
-    LinearLayout llBack;
-    @InjectView(R.id.tvBack)
-    TextView tvBack;
-    @InjectView(R.id.tvTitle)
-    TextView tvTitle;
     private Thread searchThread;
 
     private MenuItem menuItem;
@@ -88,10 +82,12 @@ public class CropImage extends BaseActivity {
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
         isBack = false;
-        getToolbar().setTitle("");
-//        getToolbar().setTitleTextColor(0xFFFFFFFF);
-//        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
-        llBack.setOnClickListener(new View.OnClickListener() {
+        getToolbar().setTitle("上传图片");
+        getToolbar().setTitleTextColor(0xFFFFFFFF);
+        getToolbar().setNavigationIcon(R.mipmap.icon_toolbar_white_back);
+        getToolbar().setTitleTextAppearance(CropImage.this, R.style.AppTheme_ActionBar_TitleText);
+        setSupportActionBar(getToolbar());
+        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 recycleBmp();
@@ -99,17 +95,6 @@ public class CropImage extends BaseActivity {
                 finish();
             }
         });
-        tvTitle.setText("上传图片");
-        tvBack.setText("返回");
-        setSupportActionBar(getToolbar());
-//        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                recycleBmp();
-//                isBack = true;
-//                finish();
-//            }
-//        });
         mTempDir = new File(Constant.UPLOAD_FILES_DIR_PATH);
         if (!mTempDir.exists()) {
             mTempDir.mkdirs();
@@ -151,7 +136,7 @@ public class CropImage extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_crop, menu);
         menuItem = menu.findItem(R.id.select);
-        menuItem.setActionView(R.layout.menu_item_view);
+        menuItem.setActionView(R.layout.menu_select_pic_item_view);
         LinearLayout layout = (LinearLayout) menuItem.getActionView();
         ImageView btn = (ImageView) layout.findViewById(R.id.ivItem);
         btn.setImageResource(R.mipmap.icon_toolbar_select_pic);
@@ -415,7 +400,7 @@ public class CropImage extends BaseActivity {
      * 正常状态
      */
     private void normalStatus() {
-        getToolbar().setTitle("");
+        getToolbar().setTitle("上传图片");
         menuItem.setVisible(true);
         progress.setVisibility(View.GONE);
         SelectPicDialog dialog = new SelectPicDialog(CropImage.this, R.style.LoadingDialogTheme);
@@ -427,7 +412,7 @@ public class CropImage extends BaseActivity {
      * 上传失败状态
      */
     private void uploadFailStatus() {
-        getToolbar().setTitle("");
+        getToolbar().setTitle("上传图片");
         menuItem.setVisible(true);
         progress.stopAnim();
         progress.setVisibility(View.GONE);
@@ -438,7 +423,7 @@ public class CropImage extends BaseActivity {
      * 搜索状态
      */
     private void progressStatus() {
-        getToolbar().setTitle("");
+        getToolbar().setTitle("搜索中...");
         menuItem.setVisible(false);
         progress.setVisibility(View.VISIBLE);
         progress.startAnim();

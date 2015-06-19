@@ -19,8 +19,23 @@ import android.view.View;
 import com.unionbigdata.takepicbuy.utils.PhoneManager;
 
 public class CutView extends View {
+    public static final float FREESCALE = 100;
+    private final float RADIO = 24;
+    private final int NONE_EVENT = 0;
+    private final int LEFT_TOP_DOWN = 1;
+    private final int RIGHT_TOP_DOWN = 2;
+    private final int LEFT_BOTTOM_DOWN = 3;
+    private final int RIGHT_BOTTOM_DOWN = 4;
+    private final int DOUBLE_POINT_DOWN = 5;
+    private final int NONE = 0;
+    private final int MOVE = 1;
+    private final int LEFT_TOP_ZOOM = 2;
+    private final int RIGHT_TOP_ZOOM = 3;
+    private final int LEFT_BOTTOM_ZOOM = 4;
+    private final int RIGHT_BOTTOM_ZOOM = 5;
+    private final int DOUBLE_POINT_ZOOM = 6;
+    private final float MIN_LEN = 0.1f;
     public Object m_obj;
-
     public Bitmap m_bmp;
     public int m_bmpW;
     public int m_bmpH;
@@ -28,32 +43,43 @@ public class CutView extends View {
     public int m_x;
     public int m_y;
     public Matrix m_matrix;
+    public CutRect m_rect;
+    public float m_scale = FREESCALE;
     private float m_sx = 1f;
     private float m_sy = 1f;
-
-    public CutRect m_rect;
-    private final float RADIO = 24;
-    public float m_scale = FREESCALE;
     private boolean isDisplay = true;
-
-    private final int NONE_EVENT = 0;
-    private final int LEFT_TOP_DOWN = 1;
-    private final int RIGHT_TOP_DOWN = 2;
-    private final int LEFT_BOTTOM_DOWN = 3;
-    private final int RIGHT_BOTTOM_DOWN = 4;
-    private final int DOUBLE_POINT_DOWN = 5;
     private int m_event = NONE_EVENT;
-
     private float max_x = 0f, max_y = 0f, max_w = 0f, max_h = 0f;
-
+    private Paint temp_paint = new Paint();
+    private float[] temp_src = new float[4];
+    private float[] temp_dst = new float[4];
+    private Canvas m_canvas;
+    private float[] temp_dst2;
+    private PointF downPoint = new PointF();
+    private PointF tempPoint = new PointF();
+    private float dist_x;
+    private float dist_y;
+    private int mode = NONE;
+    private Matrix temp_matrix = new Matrix(); // 逆矩阵
+    private float x;
+    private float y;
+    private float w;
+    private float h;
+    private float[] temp_src4 = new float[8];
+    private float[] temp_dst4 = new float[8];
+    private float[] temp_src_pointer = new float[4];
+    private float[] temp_dst_pointer = new float[4];
+    private float start_dist;
+    private float move_dist;
+    private float temp_h;
+    // 旋转
+    private float scale = 1f;
     public CutView(Context context) {
         super(context);
     }
-
     public CutView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
     public CutView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -70,11 +96,6 @@ public class CutView extends View {
         m_rect = new CutRect();
         invalidate();
     }
-
-    private Paint temp_paint = new Paint();
-    private float[] temp_src = new float[4];
-    private float[] temp_dst = new float[4];
-    private Canvas m_canvas;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -161,7 +182,7 @@ public class CutView extends View {
                                 temp_paint);
                         break;
                     case LEFT_TOP_DOWN:
-                        temp_paint.setColor(0xFF2C8CFF);
+                        temp_paint.setColor(0xfffe5c71);
                         canvas.drawCircle(temp_dst[0], temp_dst[1], RADIO,
                                 temp_paint);
                         temp_paint.setColor(0xFFFFFFFF);
@@ -175,7 +196,7 @@ public class CutView extends View {
                     case RIGHT_TOP_DOWN:
                         canvas.drawCircle(temp_dst[0], temp_dst[1], RADIO,
                                 temp_paint);
-                        temp_paint.setColor(0xFF2C8CFF);
+                        temp_paint.setColor(0xfffe5c71);
                         canvas.drawCircle(temp_dst[2], temp_dst[1], RADIO,
                                 temp_paint);
                         temp_paint.setColor(0xFFFFFFFF);
@@ -189,7 +210,7 @@ public class CutView extends View {
                                 temp_paint);
                         canvas.drawCircle(temp_dst[2], temp_dst[1], RADIO,
                                 temp_paint);
-                        temp_paint.setColor(0xFF2C8CFF);
+                        temp_paint.setColor(0xfffe5c71);
                         canvas.drawCircle(temp_dst[0], temp_dst[3], RADIO,
                                 temp_paint);
                         temp_paint.setColor(0xFFFFFFFF);
@@ -203,13 +224,13 @@ public class CutView extends View {
                                 temp_paint);
                         canvas.drawCircle(temp_dst[0], temp_dst[3], RADIO,
                                 temp_paint);
-                        temp_paint.setColor(0xFF2C8CFF);
+                        temp_paint.setColor(0xfffe5c71);
                         canvas.drawCircle(temp_dst[2], temp_dst[3], RADIO,
                                 temp_paint);
                         temp_paint.setColor(0xFFFFFFFF);
                         break;
                     case DOUBLE_POINT_DOWN:
-                        temp_paint.setColor(0xFF2C8CFF);
+                        temp_paint.setColor(0xfffe5c71);
                         canvas.drawCircle(temp_dst[0], temp_dst[1], RADIO,
                                 temp_paint);
                         canvas.drawCircle(temp_dst[2], temp_dst[1], RADIO,
@@ -260,8 +281,6 @@ public class CutView extends View {
         }
     }
 
-    private float[] temp_dst2;
-
     float[] FixPoints(float[] src) // 旋转后重新排序
     {
         float[] dst = new float[4];
@@ -271,31 +290,6 @@ public class CutView extends View {
         dst[3] = (src[1] < src[3]) ? src[3] : src[1];
         return dst;
     }
-
-    private PointF downPoint = new PointF();
-    private PointF tempPoint = new PointF();
-    private float dist_x;
-    private float dist_y;
-    private final int NONE = 0;
-    private final int MOVE = 1;
-    private final int LEFT_TOP_ZOOM = 2;
-    private final int RIGHT_TOP_ZOOM = 3;
-    private final int LEFT_BOTTOM_ZOOM = 4;
-    private final int RIGHT_BOTTOM_ZOOM = 5;
-    private final int DOUBLE_POINT_ZOOM = 6;
-    private int mode = NONE;
-    private Matrix temp_matrix = new Matrix(); // 逆矩阵
-    private float x;
-    private float y;
-    private float w;
-    private float h;
-    private final float MIN_LEN = 0.1f;
-    private float[] temp_src4 = new float[8];
-    private float[] temp_dst4 = new float[8];
-    private float[] temp_src_pointer = new float[4];
-    private float[] temp_dst_pointer = new float[4];
-    private float start_dist;
-    private float move_dist;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -479,7 +473,7 @@ public class CutView extends View {
                             m_rect.m_y = dist_y / 2 + y;
                         }
                         if (event.getX(0) > event.getX(1)) {
-                            m_rect.m_x = x - dist_x / 2 ;
+                            m_rect.m_x = x - dist_x / 2;
                             m_rect.m_w = w + dist_x;
                         } else {
                             m_rect.m_x = dist_x / 2 + x;
@@ -555,15 +549,11 @@ public class CutView extends View {
         return FloatMath.sqrt(x * x + y * y);
     }
 
-    public static final float FREESCALE = 100;
-
     public void setFree() {
         m_scale = FREESCALE;
         m_matrix = null;
         invalidate();
     }
-
-    private float temp_h;
 
     public void setScale(float s) // 设置矩形的宽高比
     {
@@ -646,9 +636,6 @@ public class CutView extends View {
         if (m_rect.m_y + m_rect.m_h >= 1f)
             m_rect.m_h = 1f - m_rect.m_y;
     }
-
-    // 旋转
-    private float scale = 1f;
 
     public void setRotate(int r) {
         m_r = r;
@@ -735,21 +722,6 @@ public class CutView extends View {
         }
     }
 
-    public class CutRect {
-        // 默认位置为图片中心
-        public float m_x = 0.25f;
-        public float m_y = 0.25f;
-        public float m_w = 0.5f;
-        public float m_h = 0.5f;
-
-        public void rectReset() {
-            m_x = 0.25f;
-            m_y = 0.25f;
-            m_w = 0.5f;
-            m_h = 0.5f;
-        }
-    }
-
     // 获取裁剪后的图片
     public Bitmap GetCutImage() {
         if (m_bmp != null) {
@@ -801,5 +773,20 @@ public class CutView extends View {
         }
 
         return null;
+    }
+
+    public class CutRect {
+        // 默认位置为图片中心
+        public float m_x = 0.25f;
+        public float m_y = 0.25f;
+        public float m_w = 0.5f;
+        public float m_h = 0.5f;
+
+        public void rectReset() {
+            m_x = 0.25f;
+            m_y = 0.25f;
+            m_w = 0.5f;
+            m_h = 0.5f;
+        }
     }
 }
