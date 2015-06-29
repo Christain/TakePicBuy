@@ -48,6 +48,8 @@ public class SetActivity extends BaseActivity {
     TextView tvHistory;
     @InjectView(R.id.historyLine)
     View historyLine;
+    @InjectView(R.id.tvVersion)
+    TextView tvVersion;
 
     private LoadingDialog mLoadingDialog;
     private DialogTipsBuilder dialog;
@@ -108,6 +110,7 @@ public class SetActivity extends BaseActivity {
                 }
             }
         }
+        tvVersion.setText("当前版本号:" + PhoneManager.getVersionInfo().versionName);
     }
 
     @OnClick({R.id.tvClean, R.id.tvHistory, R.id.llVersion, R.id.llFeedback, R.id.llWeibo, R.id.llWechat, R.id.tvExit})

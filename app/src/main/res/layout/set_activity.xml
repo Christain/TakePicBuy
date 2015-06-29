@@ -1,218 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_app">
+    android:background="@color/bg_app"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
     <LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/bg_white">
-
-    <TextView
-        android:id="@+id/tvClean"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/set_item_high"
-        android:gravity="center_vertical"
-        android:background="@drawable/shape_set_item_click_style"
-        android:paddingLeft="@dimen/set_item_padding_left_right"
-        android:paddingRight="@dimen/set_item_padding_left_right"
-        android:textSize="@dimen/set_item_text_size"
-        android:textColor="@color/set_item_text_color"
-        android:text="清除缓存" />
+        android:layout_height="wrap_content"
+        android:background="@color/bg_white"
+        android:orientation="vertical">
 
-    <View
-        android:layout_marginLeft="@dimen/set_item_padding_left_right"
-        android:layout_marginRight="@dimen/set_item_padding_left_right"
-        android:background="@color/set_line_color"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_high" />
+        <TextView
+            android:id="@+id/tvClean"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/set_item_high"
+            android:background="@drawable/shape_set_item_click_style"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/set_item_padding_left_right"
+            android:paddingRight="@dimen/set_item_padding_left_right"
+            android:text="清除缓存"
+            android:textColor="@color/set_item_text_color"
+            android:textSize="@dimen/set_item_text_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_high"
+            android:layout_marginLeft="@dimen/set_item_padding_left_right"
+            android:layout_marginRight="@dimen/set_item_padding_left_right"
+            android:background="@color/set_line_color" />
 
         <TextView
             android:id="@+id/tvHistory"
             android:layout_width="match_parent"
             android:layout_height="@dimen/set_item_high"
-            android:gravity="center_vertical"
             android:background="@drawable/shape_set_item_click_style"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/set_item_padding_left_right"
             android:paddingRight="@dimen/set_item_padding_left_right"
-            android:textSize="@dimen/set_item_text_size"
+            android:text="清除搜索记录"
             android:textColor="@color/set_item_text_color"
-            android:text="清除搜索记录" />
+            android:textSize="@dimen/set_item_text_size" />
 
         <View
             android:id="@+id/historyLine"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_high"
             android:layout_marginLeft="@dimen/set_item_padding_left_right"
             android:layout_marginRight="@dimen/set_item_padding_left_right"
-            android:background="@color/set_line_color"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_high" />
+            android:background="@color/set_line_color" />
 
         <LinearLayout
-            android:background="@drawable/shape_set_item_click_style"
             android:id="@+id/llVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_set_item_click_style"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/set_item_padding_left_right"
-            android:paddingRight="@dimen/set_item_padding_left_right"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:paddingRight="@dimen/set_item_padding_left_right">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:gravity="center_vertical"
                 android:layout_height="@dimen/set_item_high"
-                android:textSize="@dimen/set_item_text_size"
+                android:gravity="center_vertical"
+                android:text="检查更新"
                 android:textColor="@color/set_item_text_color"
-                android:text="检查更新" />
+                android:textSize="@dimen/set_item_text_size" />
 
             <ImageView
                 android:id="@+id/ivVersion"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
-                android:layout_gravity="center_vertical"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:visibility="gone"
-                android:src="@mipmap/icon_version_new"/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
+                android:src="@mipmap/icon_version_new"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="0.0dp"
+                android:layout_height="@dimen/set_item_high"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1.0"
+                android:gravity="right|center_horizontal"
+                android:text="当前版本号:1.0"
+                android:textColor="#FFABABAB"
+                android:textSize="13sp" />
         </LinearLayout>
 
-    <View
-        android:layout_marginLeft="@dimen/set_item_padding_left_right"
-        android:layout_marginRight="@dimen/set_item_padding_left_right"
-        android:background="@color/set_line_color"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_high" />
-
-    <LinearLayout
-        android:background="@drawable/shape_set_item_click_style"
-        android:id="@+id/llFeedback"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/set_item_padding_left_right"
-        android:paddingRight="@dimen/set_item_padding_left_right"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <TextView
-            android:layout_width="0.0dp"
-            android:layout_weight="1.0"
-            android:gravity="center_vertical"
-            android:layout_height="@dimen/set_item_high"
-            android:textSize="@dimen/set_item_text_size"
-            android:textColor="@color/set_item_text_color"
-            android:text="意见反馈" />
-
-        <ImageView
-            android:layout_marginRight="@dimen/set_item_arrow_margin_right"
-            android:layout_gravity="center_vertical"
-            android:layout_width="@dimen/set_arrow_size"
-            android:layout_height="@dimen/set_arrow_size"
-            android:src="@mipmap/icon_set_gray_arrow"/>
-    </LinearLayout>
-</LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="@dimen/set_item_between_item_high"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bg_white">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_high"
+            android:layout_marginLeft="@dimen/set_item_padding_left_right"
+            android:layout_marginRight="@dimen/set_item_padding_left_right"
+            android:background="@color/set_line_color" />
 
         <LinearLayout
-            android:id="@+id/llWeibo"
+            android:id="@+id/llFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/shape_set_item_click_style"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/set_item_padding_left_right"
-            android:paddingRight="@dimen/set_item_padding_left_right"
+            android:paddingRight="@dimen/set_item_padding_left_right">
+
+
+            <TextView
+                android:layout_width="0.0dp"
+                android:layout_height="@dimen/set_item_high"
+                android:layout_weight="1.0"
+                android:gravity="center_vertical"
+                android:text="意见反馈"
+                android:textColor="@color/set_item_text_color"
+                android:textSize="@dimen/set_item_text_size" />
+
+            <ImageView
+                android:layout_width="@dimen/set_arrow_size"
+                android:layout_height="@dimen/set_arrow_size"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
+                android:src="@mipmap/icon_set_gray_arrow" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/set_item_between_item_high"
+        android:background="@color/bg_white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llWeibo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_set_item_click_style"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/set_item_padding_left_right"
+            android:paddingRight="@dimen/set_item_padding_left_right">
 
             <ImageView
                 android:layout_width="23dp"
                 android:layout_height="23dp"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/icon_set_sina"/>
+                android:src="@mipmap/icon_set_sina" />
 
             <TextView
-                android:layout_marginLeft="8dp"
                 android:layout_width="0.0dp"
+                android:layout_height="@dimen/set_item_high"
+                android:layout_marginLeft="8dp"
                 android:layout_weight="1.0"
                 android:gravity="center_vertical"
-                android:layout_height="@dimen/set_item_high"
-                android:textSize="@dimen/set_item_text_size"
+                android:text="拍图购官方微博"
                 android:textColor="@color/set_item_text_color"
-                android:text="拍图购官方微博" />
+                android:textSize="@dimen/set_item_text_size" />
 
             <ImageView
-                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
-                android:layout_gravity="center_vertical"
                 android:layout_width="@dimen/set_arrow_size"
                 android:layout_height="@dimen/set_arrow_size"
-                android:src="@mipmap/icon_set_gray_arrow"/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
+                android:src="@mipmap/icon_set_gray_arrow" />
         </LinearLayout>
 
         <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_high"
             android:layout_marginLeft="@dimen/set_item_padding_left_right"
             android:layout_marginRight="@dimen/set_item_padding_left_right"
-            android:background="@color/set_line_color"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_high" />
+            android:background="@color/set_line_color" />
 
 
         <LinearLayout
             android:id="@+id/llWechat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/shape_set_item_click_style"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/set_item_padding_left_right"
-            android:paddingRight="@dimen/set_item_padding_left_right"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:paddingRight="@dimen/set_item_padding_left_right">
+
             <ImageView
                 android:layout_width="23dp"
                 android:layout_height="23dp"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/icon_set_wechat"/>
+                android:src="@mipmap/icon_set_wechat" />
 
             <TextView
                 android:layout_width="0.0dp"
-                android:layout_weight="1.0"
-                android:layout_marginLeft="8dp"
-                android:gravity="center_vertical"
                 android:layout_height="@dimen/set_item_high"
-                android:textSize="@dimen/set_item_text_size"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1.0"
+                android:gravity="center_vertical"
+                android:text="拍图购官方微信"
                 android:textColor="@color/set_item_text_color"
-                android:text="拍图购官方微信" />
+                android:textSize="@dimen/set_item_text_size" />
 
             <ImageView
-                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
-                android:layout_gravity="center_vertical"
                 android:layout_width="@dimen/set_arrow_size"
                 android:layout_height="@dimen/set_arrow_size"
-                android:src="@mipmap/icon_set_gray_arrow"/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/set_item_arrow_margin_right"
+                android:src="@mipmap/icon_set_gray_arrow" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="@dimen/set_item_between_item_high"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_white">
+        android:layout_marginTop="@dimen/set_item_between_item_high"
+        android:background="@color/bg_white"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvExit"
-        android:background="@drawable/shape_set_item_click_style"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/set_item_high"
-        android:gravity="center"
-        android:textSize="@dimen/set_exit_text_size"
-        android:textColor="@color/set_item_text_color"
-        android:text="退出登录" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvExit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/set_item_high"
+            android:background="@drawable/shape_set_item_click_style"
+            android:gravity="center"
+            android:text="退出登录"
+            android:textColor="@color/set_item_text_color"
+            android:textSize="@dimen/set_exit_text_size" />
+    </LinearLayout>
 
 
 </LinearLayout>

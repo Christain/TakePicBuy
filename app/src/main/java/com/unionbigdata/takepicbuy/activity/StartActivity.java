@@ -38,8 +38,6 @@ public class StartActivity extends BaseActivity implements Runnable {
         new Thread(this).start();
     }
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
